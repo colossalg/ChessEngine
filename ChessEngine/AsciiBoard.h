@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "IPortableNotation.h"
+#include "PortableNotation.h"
 
 namespace ChessEngine
 {
@@ -10,9 +10,9 @@ namespace ChessEngine
 	{
 	public:
 		AsciiBoard();
-		AsciiBoard(const IPortableNotation& pn);
+		AsciiBoard(const PortableNotation& pn);
 
-		void UpdateAscii(const IPortableNotation& pn);
+		void UpdateAscii(const PortableNotation& pn);
 
 		const std::string& GetAscii() const;
 

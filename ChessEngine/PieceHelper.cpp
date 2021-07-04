@@ -56,7 +56,7 @@ namespace ChessEngine
 			}
 			else
 			{
-				std::string error = "Invalid piece " + std::to_string(p) + ".";
+				std::string error = "Invalid Piece " + std::to_string(p) + ".";
 				throw std::invalid_argument(error);
 			}
 		}

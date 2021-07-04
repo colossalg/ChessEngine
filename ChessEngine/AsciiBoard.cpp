@@ -5,7 +5,7 @@
 namespace ChessEngine
 {
 	const std::string DefaultAsciiBoard =
-		"kqKQ +                       \r\n"
+		"w kqKQ -                     \r\n"
 		"  +------------------------+ \r\n"
 		"8 |*R *N:*B *Q:*K *B:*N *R:| \r\n"
 		"7 |*P:*P *P:*P *P:*P *P:*P | \r\n"
@@ -23,12 +23,12 @@ namespace ChessEngine
 	{
 	}
 
-	AsciiBoard::AsciiBoard(const IPortableNotation& pn)
+	AsciiBoard::AsciiBoard(const PortableNotation& pn)
 	{
 		throw std::logic_error("Constructor not yet implemented.");
 	}
 
-	void AsciiBoard::UpdateAscii(const IPortableNotation& pn)
+	void AsciiBoard::UpdateAscii(const PortableNotation& pn)
 	{
 		throw std::logic_error("Method not yet implemented.");
 	}

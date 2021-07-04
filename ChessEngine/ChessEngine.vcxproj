@@ -141,17 +141,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsciiBoard.h" />
+    <ClInclude Include="BoardHelper.h" />
     <ClInclude Include="Definitions.h" />
-    <ClInclude Include="FEN.h" />
-    <ClInclude Include="IPortableNotation.h" />
-    <ClInclude Include="PGN.h" />
+    <ClInclude Include="PortableNotation.h" />
     <ClInclude Include="PieceHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsciiBoard.cpp" />
-    <ClCompile Include="FEN.cpp" />
+    <ClCompile Include="BoardHelper.cpp" />
+    <ClCompile Include="PortableNotation.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PGN.cpp" />
     <ClCompile Include="PieceHelper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
