@@ -28,7 +28,7 @@ namespace ChessEngine
 
 		Piece MakePiece(PieceType type, bool isWhite, bool hasMoved = false);
 
-		const std::string&& GetAscii(Piece p);
+		char GetAscii(Piece p);
 
 		inline bool IsEmpty(Piece p) { return ((IsEmptyBitMap & p) == 0); }
 		inline bool IsPawn(Piece p) { return ((static_cast<int>(PieceType::Pawn) & p) != 0); }

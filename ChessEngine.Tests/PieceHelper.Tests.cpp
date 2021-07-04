@@ -22,13 +22,14 @@ namespace ChessEngineTests
 	{
 	public:
 
-		void TestPiece(ChessEngine::PieceHelper::PieceType type)
+		void TestPiece(ChessEngine::PieceHelper::PieceType type, char whiteAscii, char blackAscii)
 		{
 			using namespace ChessEngine;
 			using namespace ChessEngine::PieceHelper;
 
-			// Test the Is**Piece** functions
 			Piece p = MakePiece(type, true);
+
+			// Test the Is**Piece** functions
 			IS_PIECE_CONDITIONAL(p, type, Empty, IsEmpty);
 			IS_PIECE_CONDITIONAL(p, type, Pawn, IsPawn);
 			IS_PIECE_CONDITIONAL(p, type, Knight, IsKnight);
@@ -36,6 +37,22 @@ namespace ChessEngineTests
 			IS_PIECE_CONDITIONAL(p, type, Rook, IsRook);
 			IS_PIECE_CONDITIONAL(p, type, Queen, IsQueen);
 			IS_PIECE_CONDITIONAL(p, type, King, IsKing);
+
+			// Test the GetAscii function
+			char asciiResult;
+			std::wstringstream wss;
+
+			p = MakePiece(type, true);
+			asciiResult = GetAscii(p);
+			wss << whiteAscii << " == " << asciiResult;
+			Assert::AreEqual(whiteAscii, asciiResult, wss.str().c_str());
+
+			wss.clear();
+
+			p = MakePiece(type, false);
+			asciiResult = GetAscii(p);
+			wss << blackAscii << " == " << asciiResult;
+			Assert::AreEqual(blackAscii, asciiResult, wss.str().c_str());
 		}
 
 		TEST_METHOD(TestAllPieces)
@@ -44,13 +61,13 @@ namespace ChessEngineTests
 			using namespace ChessEngine::PieceHelper;
 
 			// Test each piece type
-			TestPiece(PieceType::Empty);
-			TestPiece(PieceType::Pawn);
-			TestPiece(PieceType::Knight);
-			TestPiece(PieceType::Bishop);
-			TestPiece(PieceType::Rook);
-			TestPiece(PieceType::Queen);
-			TestPiece(PieceType::King);
+			TestPiece(PieceType::Empty, ' ', ' ');
+			TestPiece(PieceType::Pawn, 'p', 'P');
+			TestPiece(PieceType::Knight, 'n', 'N');
+			TestPiece(PieceType::Bishop, 'b', 'B');
+			TestPiece(PieceType::Rook, 'r', 'R');
+			TestPiece(PieceType::Queen, 'q', 'Q');
+			TestPiece(PieceType::King, 'k', 'K');
 		}
 
 		TEST_METHOD(TestIsWhite)

@@ -1,40 +1,76 @@
 #include "AsciiBoard.h"
 
+#include <iostream>
+#include <sstream>
 #include <stdexcept>
+
+#include "BoardHelper.h"
+#include "PieceHelper.h"
 
 namespace ChessEngine
 {
-	const std::string DefaultAsciiBoard =
-		"w kqKQ -                     \r\n"
-		"  +------------------------+ \r\n"
-		"8 |*R *N:*B *Q:*K *B:*N *R:| \r\n"
-		"7 |*P:*P *P:*P *P:*P *P:*P | \r\n"
-		"6 |   :::   :::   :::   :::| \r\n"
-		"5 |:::   :::   :::   :::   | \r\n"
-		"4 |   :::   :::   :::   :::| \r\n"
-		"3 |:::   :::   :::   :::   | \r\n"
-		"2 | P :P: P :P: P :P: P :P:| \r\n"
-		"1 |:R: N :B: Q :K: B :N: R | \r\n"
-		"  +------------------------+ \r\n"
-		"    a  b  c  d  e  f  g  h   \r\n";
-
-	AsciiBoard::AsciiBoard() :
-		m_ascii(DefaultAsciiBoard)
+	std::string AsciiBoard::GetAscii()
 	{
+		std::stringstream ss;
+
+		ss << "    ";
+		ss << (m_whiteToPlay ? 'W' : 'B');
+		ss << "    ";
+		ss << (m_whiteKingside ? 'k' : ' ');
+		ss << (m_blackKingside ? 'K' : ' ');
+		ss << (m_whiteQueenside ? 'q' : ' ');
+		ss << (m_blackQueenside ? 'Q' : ' ');
+		ss << "    ";
+		ss << (m_enPassantPossible ? std::to_string(m_enPassantSquare) : "-");
+		ss << std::endl;
+		
+		ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
+		for (unsigned int row = 7; BoardHelper::IsValidRow(row); row--)
+		{
+			ss << " " << row + 1 << " |";
+			for (unsigned int col = 0; BoardHelper::IsValidCol(col); col++)
+			{
+				Square square = BoardHelper::SquareFromRowAndCol(row, col);
+				Piece piece = m_pieces[square];
+
+				char squareChar = (BoardHelper::IsSquareWhite(square) ? ' ' : ':');
+				char pieceChar = PieceHelper::GetAscii(piece);
+
+				if (PieceHelper::IsEmpty(piece))
+				{
+					ss << squareChar << squareChar << squareChar;
+				}
+				else
+				{
+					ss << squareChar << pieceChar << squareChar;
+				}
+				ss <<  "|";
+			}
+			ss << std::endl;
+			ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
+		}
+
+		ss << "     a   b   c   d   e   f   g   h    " << std::endl;
+
+		return ss.str();
 	}
 
-	AsciiBoard::AsciiBoard(const PortableNotation& pn)
+	void AsciiBoard::SetPieces(std::array<Piece, 64>& pieces)
 	{
-		throw std::logic_error("Constructor not yet implemented.");
+		m_pieces = pieces;
 	}
 
-	void AsciiBoard::UpdateAscii(const PortableNotation& pn)
+	void AsciiBoard::SetCastling(bool whiteKingside, bool blackKingside, bool whiteQueenside, bool blackQueenside)
 	{
-		throw std::logic_error("Method not yet implemented.");
+		m_whiteKingside = whiteKingside;
+		m_blackKingside = blackKingside;
+		m_whiteQueenside = whiteQueenside;
+		m_blackQueenside = blackQueenside;
 	}
 
-	const std::string& AsciiBoard::GetAscii() const
+	void AsciiBoard::SetEnPassant(bool possible, Square square)
 	{
-		return m_ascii;
+		m_enPassantPossible = possible;
+		m_enPassantSquare = square;
 	}
 }

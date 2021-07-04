@@ -1,6 +1,5 @@
 #include "PieceHelper.h"
 
-#include <map>
 #include <stdexcept>
 
 namespace ChessEngine
@@ -24,35 +23,35 @@ namespace ChessEngine
 			return p;
 		}
 
-		const std::string&& GetAscii(Piece p)
+		char GetAscii(Piece p)
 		{
 			if (IsEmpty(p))
 			{
-				return " ";
+				return ' ';
 			}
 			else if (IsPawn(p))
 			{
-				return (IsWhite(p) ? "p" : "P");
+				return (IsWhite(p) ? 'p' : 'P');
 			}
 			else if (IsKnight(p))
 			{
-				return (IsWhite(p) ? "n" : "n");
+				return (IsWhite(p) ? 'n' : 'N');
 			}
 			else if (IsBishop(p))
 			{
-				return (IsWhite(p) ? "b" : "B");
+				return (IsWhite(p) ? 'b' : 'B');
 			}
 			else if (IsRook(p))
 			{
-				return (IsWhite(p) ? "r" : "R");
+				return (IsWhite(p) ? 'r' : 'R');
 			}
 			else if (IsQueen(p))
 			{
-				return (IsWhite(p) ? "q" : "Q");
+				return (IsWhite(p) ? 'q' : 'Q');
 			}
 			else if (IsKing(p))
 			{
-				return (IsWhite(p) ? "k" : "K");
+				return (IsWhite(p) ? 'k' : 'K');
 			}
 			else
 			{
