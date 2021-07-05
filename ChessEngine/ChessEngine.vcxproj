@@ -140,13 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AsciiBoard.h" />
+    <ClInclude Include="AsciiUI.h" />
     <ClInclude Include="BoardHelper.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="PieceHelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsciiBoard.cpp" />
+    <ClCompile Include="AsciiUI.cpp" />
     <ClCompile Include="BoardHelper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PieceHelper.cpp" />

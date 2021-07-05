@@ -7,15 +7,15 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessEngineTests
 {
+	using namespace ChessEngine;
+	using namespace ChessEngine::BoardHelper;
+
 	TEST_CLASS(BoardHelperTests)
 	{
 	public:
 
 		TEST_METHOD(TestRowFromSquare)
 		{
-			using namespace ChessEngine;
-			using namespace ChessEngine::BoardHelper;
-
 			// Test that the RowFromSquare helper function works
 			// No point in testing out of bounds cases as the function is inline
 			// and does no checking for valid arguments as we can't throw
@@ -27,9 +27,6 @@ namespace ChessEngineTests
 
 		TEST_METHOD(TestColFromSquare)
 		{
-			using namespace ChessEngine;
-			using namespace ChessEngine::BoardHelper;
-
 			// Test that the ColFromSquare helper function works
 			// No point in testing out of bounds cases as the function is inline
 			// and does no checking for valid arguments as we can't throw
@@ -41,9 +38,6 @@ namespace ChessEngineTests
 
 		TEST_METHOD(TestSquareFromRowAndCol)
 		{
-			using namespace ChessEngine;
-			using namespace ChessEngine::BoardHelper;
-
 			// Test that the SquareFromRowAndCol helper function works
 			// No point in testing out of bounds cases as the function is inline
 			// and does no checking for valid arguments as we can't throw
@@ -51,6 +45,20 @@ namespace ChessEngineTests
 			Assert::AreEqual(SquareFromRowAndCol(0, 7), Square(7));
 			Assert::AreEqual(SquareFromRowAndCol(7, 0), Square(56));
 			Assert::AreEqual(SquareFromRowAndCol(7, 7), Square(63));
+		}
+
+		TEST_METHOD(TestIsSquareWhite)
+		{
+			// Test that the IsSquareWhite helper function works
+			Assert::IsFalse(IsSquareWhite(0));
+			Assert::IsFalse(IsSquareWhite(63));
+			Assert::IsTrue(IsSquareWhite(7));
+			Assert::IsTrue(IsSquareWhite(56));
+
+			Assert::IsFalse(IsSquareWhite(0, 0));
+			Assert::IsFalse(IsSquareWhite(7, 7));
+			Assert::IsTrue(IsSquareWhite(0, 7));
+			Assert::IsTrue(IsSquareWhite(7, 0));
 		}
 	};
 }

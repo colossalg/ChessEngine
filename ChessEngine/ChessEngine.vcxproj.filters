@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AsciiBoard.h">
+    <ClInclude Include="AsciiUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Definitions.h">
@@ -35,7 +35,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsciiBoard.cpp">
+    <ClCompile Include="AsciiUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
