@@ -61,5 +61,28 @@ namespace ChessEngine
 
 		// Set that the piece has moved
 		inline bool SetHasMoved(Piece& p) { p &= (~HasMovedBitMap); }
+
+		namespace
+		{
+			const Piece ee = MakePiece(PieceType::Empty, true);
+
+			const Piece wp = MakePiece(PieceType::Pawn, true);
+			const Piece bp = MakePiece(PieceType::Pawn, false);
+
+			const Piece wn = MakePiece(PieceType::Knight, true);
+			const Piece bn = MakePiece(PieceType::Knight, false);
+
+			const Piece wb = MakePiece(PieceType::Bishop, true);
+			const Piece bb = MakePiece(PieceType::Bishop, false);
+
+			const Piece wr = MakePiece(PieceType::Rook, true);
+			const Piece br = MakePiece(PieceType::Rook, false);
+
+			const Piece wq = MakePiece(PieceType::Queen, true);
+			const Piece bq = MakePiece(PieceType::Queen, false);
+
+			const Piece wk = MakePiece(PieceType::Pawn, true);
+			const Piece bk = MakePiece(PieceType::Pawn, false);
+		}
 	}
 }

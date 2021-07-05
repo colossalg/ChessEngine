@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include <tuple>
+#include <optional>
 
 namespace ChessEngine
 {
@@ -10,4 +10,7 @@ namespace ChessEngine
 	using Square = unsigned char;
 
 	using Piece = unsigned char;
+	using PieceArray = std::array<Piece, 64>;
+
+	using EnPassant = std::optional<Square>;
 }

@@ -4,8 +4,8 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "BoardHelper.h"
 #include "PieceHelper.h"
+#include "SquareHelper.h"
 
 namespace ChessEngine
 {
@@ -22,20 +22,20 @@ namespace ChessEngine
 		ss << (m_blackKingside ? 'K' : ' ');
 		ss << (m_blackQueenside ? 'Q' : ' ');
 		ss << "    ";
-		ss << (m_enPassantPossible ? std::to_string(m_enPassantSquare) : "-");
+		ss << (m_enPassant ? std::to_string(*m_enPassant) : "-");
 		ss << std::endl;
 		
 		// The actual board (squares, pieces, rows/columns labels, etc.)
 		ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
-		for (unsigned int row = 7; BoardHelper::IsValidRow(row); row--)
+		for (unsigned int row = 7; SquareHelper::IsValidRow(row); row--)
 		{
 			ss << " " << row + 1 << " |";
-			for (unsigned int col = 0; BoardHelper::IsValidCol(col); col++)
+			for (unsigned int col = 0; SquareHelper::IsValidCol(col); col++)
 			{
-				Square square = BoardHelper::SquareFromRowAndCol(row, col);
+				Square square = SquareHelper::SquareFromRowAndCol(row, col);
 				Piece piece = m_pieces[square];
 
-				char squChar = (BoardHelper::IsSquareWhite(square) ? ' ' : ':');
+				char squChar = (SquareHelper::IsSquareWhite(square) ? ' ' : ':');
 				char pceChar = PieceHelper::GetAscii(piece);
 
 				if (PieceHelper::IsEmpty(piece))
@@ -58,27 +58,11 @@ namespace ChessEngine
 		return ss.str();
 	}
 
-	void AsciiUI::SetPieces(std::array<Piece, 64>& pieces)
-	{
-		m_pieces = pieces;
-	}
-
-	void AsciiUI::SetWhiteToPlay(bool whiteToPlay)
-	{
-		m_whiteToPlay = whiteToPlay;
-	}
-
 	void AsciiUI::SetCastling(bool whiteKingside, bool whiteQueenside, bool blackKingside, bool blackQueenside)
 	{
 		m_whiteKingside = whiteKingside;
 		m_whiteQueenside = whiteQueenside;
 		m_blackKingside = blackKingside;
 		m_blackQueenside = blackQueenside;
-	}
-
-	void AsciiUI::SetEnPassant(bool possible, Square square)
-	{
-		m_enPassantPossible = possible;
-		m_enPassantSquare = square;
 	}
 }

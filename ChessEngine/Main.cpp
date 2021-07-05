@@ -2,18 +2,17 @@
 #include <iostream>
 
 #include "Definitions.h"
-#include "BoardHelper.h"
 #include "PieceHelper.h"
+#include "SquareHelper.h"
 #include "AsciiUI.h"
+#include "Board.h"
 
 using namespace ChessEngine;
 
 int main()
 {
 	ChessEngine::AsciiUI asciiBoard;
-	asciiBoard.SetPieces(BoardHelper::StartingBoard);
-	asciiBoard.SetCastling(true, true, true, true);
-	asciiBoard.SetEnPassant(false, 0);
+	asciiBoard.SetPieces(Board::StartingPieces);
 
 	std::cout << asciiBoard.GetAscii() << std::endl;
 

@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include "BoardHelper.h"
+#include "SquareHelper.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessEngineTests
 {
 	using namespace ChessEngine;
-	using namespace ChessEngine::BoardHelper;
+	using namespace ChessEngine::SquareHelper;
 
 	TEST_CLASS(BoardHelperTests)
 	{
