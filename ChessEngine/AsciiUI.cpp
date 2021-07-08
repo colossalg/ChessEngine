@@ -4,8 +4,8 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "PieceHelper.h"
-#include "SquareHelper.h"
+#include "Helper.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
@@ -27,18 +27,18 @@ namespace ChessEngine
 		
 		// The actual board (squares, pieces, rows/columns labels, etc.)
 		ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
-		for (unsigned int row = 7; SquareHelper::IsValidRow(row); row--)
+		for (unsigned int row = 7; Helper::IsValidRow(row); row--)
 		{
 			ss << " " << row + 1 << " |";
-			for (unsigned int col = 0; SquareHelper::IsValidCol(col); col++)
+			for (unsigned int col = 0; Helper::IsValidCol(col); col++)
 			{
-				Square square = SquareHelper::SquareFromRowAndCol(row, col);
+				Square square = Helper::SquareFromRowAndCol(row, col);
 				Piece piece = m_pieces[square];
 
-				char squChar = (SquareHelper::IsSquareWhite(square) ? ' ' : ':');
-				char pceChar = PieceHelper::GetAscii(piece);
+				char squChar = (Helper::IsSquareWhite(square) ? ' ' : ':');
+				char pceChar = piece.GetAscii();
 
-				if (PieceHelper::IsEmpty(piece))
+				if (piece.IsEmpty())
 				{
 					// Empty square eg. "   " or ":::"
 					ss << squChar << squChar << squChar;

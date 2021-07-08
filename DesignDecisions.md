@@ -45,8 +45,35 @@ store most of the information of the board in a single 64-Byte array. I
 think that this works well with the overrall board representation
 outlined below.
 
+To implement this I have used a class called Pieces which has a single
+data member (s_pieces). Most of the methods are inline for efficiency,
+I think that this abstraction makes the code much more readable and does
+not really add any overhead to efficiency.
+
 ## Board
 
+For the overall board representation, I have chosen to use a 64-byte
+array. Each byte representing a piece as per the above subsection. I
+will supplement this with two piece lists, one for white and one for
+black. The hope with this is that it will simplify and potentially speed
+up the move generation algorithms.
 
+- Piece Array - 64 bytes.
+- White Piece List - Up to 16 bytes.
+- Black Piece List - Up to 16 bytes.
+
+As seen, this gives a total of 96 bytes for the representation of the
+pieces (plus whatever overhead the standard library array and list
+containers have).
+
+I will also need to store some meta information for things such as En
+Passant. The space required for these will be negligable compared to the
+pieces however.
+
+To implement this I have created a class called Board.
 
 # Resources and References
+
+1. https://www.chessprogramming.org/ This is without a doubt the most
+helpful resource out there for somebody keen on writing their own chess
+engine.

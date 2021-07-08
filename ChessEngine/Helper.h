@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Definitions.h"
-#include "PieceHelper.h"
 
 namespace ChessEngine
 {
-	namespace SquareHelper
+	namespace Helper
 	{
 		// Get the index of a square given the row and col: (0 to 63)
 		inline Square SquareFromRowAndCol(Row r, Col c) { return r * 8 + c; }

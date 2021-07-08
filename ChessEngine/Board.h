@@ -1,15 +1,20 @@
 #pragma once
 
 #include "Definitions.h"
-#include "PieceHelper.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
+	class MoveGenerator; // Forward declaration
+
 	class Board
 	{
 	public:
 		// The starting pieces for a board
 		const static PieceArray StartingPieces;
+
+		// Constructor
+		Board();
 
 		// Set the array representing the piece's locations on the board
 		void SetPieces(const PieceArray& pieces) { m_pieces = pieces; }
@@ -31,6 +36,8 @@ namespace ChessEngine
 
 	private:
 		PieceArray m_pieces;		// The pieces locations on the board
+		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board
+		PieceList m_blackPieceList; // A list of each of the black pieces as well as their square on the board
 
 		EnPassant m_enPassant;		// The en passant square (if en passant is possible)
 

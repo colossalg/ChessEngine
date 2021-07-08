@@ -1,22 +1,27 @@
 #include "Board.h"
 
-namespace ChessEngine
-{
-	using namespace PieceHelper;
-
-	const PieceArray Board::StartingPieces{
-		wr, wn, wb, wq, wk, wb, wn, wr,
-		wp, wp, wp, wp, wp, wp, wp, wp,
-		ee, ee, ee, ee, ee, ee, ee, ee,
-		ee, ee, ee, ee, ee, ee, ee, ee,
-		ee, ee, ee, ee, ee, ee, ee, ee,
-		ee, ee, ee, ee, ee, ee, ee, ee,
-		bp, bp, bp, bp, bp, bp, bp, bp,
-		br, bn, bb, bq, bk, bb, bn, br
-	};
-}
+#include "Helper.h"
 
 namespace ChessEngine
 {
+	Board::Board():
+		m_pieces(StartingPieces)
+	{
+		for (Square square = 0; Helper::IsValidSquare(square); square++)
+		{
+			const Piece& piece = m_pieces[square];
 
+			if (!piece.IsEmpty())
+			{
+				if (piece.IsWhite())
+				{
+					m_whitePieceList.push_back(std::make_pair(piece, square));
+				}
+				else
+				{
+					m_blackPieceList.push_back(std::make_pair(piece, square));
+				}
+			}
+		}
+	}
 }
