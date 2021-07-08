@@ -27,11 +27,11 @@ namespace ChessEngine
 		// Create a new piece
 		Piece() = default;
 
-		// Create a new piece from another piece
-		Piece(const Piece& other) = default;
-
 		// Create a new piece with the given properties (type, whether it is white, whether it has moved)
 		Piece(Type type, bool isWhite, bool hasMoved = false);
+
+		// Create a new piece from another piece
+		Piece(const Piece& other) = default;
 
 		// Copy one piece to another
 		Piece& operator=(const Piece& other) = default;

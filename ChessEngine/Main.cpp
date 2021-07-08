@@ -11,11 +11,6 @@ using namespace ChessEngine;
 
 int main()
 {
-	Piece p1(Piece::Type::Pawn, true, false);
-
-	Piece p2 = p1;
-	p2.SetHasMoved();
-
 	Board board;
 
 	ChessEngine::AsciiUI asciiBoard;
