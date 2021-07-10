@@ -5,8 +5,6 @@
 
 #include "Helper.h"
 
-#include "AsciiUI.h"
-
 namespace ChessEngine
 {
 	Board::Board():
@@ -116,8 +114,7 @@ namespace ChessEngine
 			m_enPassant = Helper::SquareFromString(enPassant);
 		}
 
-		// For now I will not be using the half or full move numbers as I don't yet plan to implement the 50 move rule
-		// I still need to parse them though for the purposes of testing the FEN parsing
+		// Get the number of half and full moves
 		int halfMoves;
 		int fullMoves;
 		FENStream >> halfMoves;
