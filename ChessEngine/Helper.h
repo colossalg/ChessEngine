@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Definitions.h"
 
 namespace ChessEngine
@@ -29,5 +31,11 @@ namespace ChessEngine
 
 		// Get whether a square is white given the index of the square
 		inline bool IsSquareWhite(Square s) { return IsSquareWhite(RowFromSquare(s), ColFromSquare(s)); }
+
+		// Get the square from a string (ex. h8 -> 63)
+		Square SquareFromString(const std::string& s);
+
+		// Get the string from a square (ex. 63 -> h8)
+		std::string StringFromSquare(Square s);
 	}
 }

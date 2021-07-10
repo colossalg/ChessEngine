@@ -5,7 +5,7 @@
 
 namespace ChessEngine
 {
-	Piece::Piece(Type type, bool isWhite, bool hasMoved)
+	Piece::Piece(Type type, bool isWhite)
 	{
 		m_piece = static_cast<int>(type);
 
@@ -13,10 +13,44 @@ namespace ChessEngine
 		{
 			m_piece |= IsWhiteBitMap;
 		}
+	}
 
-		if (hasMoved)
+	Piece::Piece(char ascii)
+	{
+		switch (ascii)
 		{
-			m_piece |= HasMovedBitMap;
+		case 'P':
+		case 'p':
+			m_piece = static_cast<unsigned char>(Type::Pawn);
+			break;
+		case 'N':
+		case 'n':
+			m_piece = static_cast<unsigned char>(Type::Knight);
+			break;
+		case 'B':
+		case 'b':
+			m_piece = static_cast<unsigned char>(Type::Bishop);
+			break;
+		case 'R':
+		case 'r':
+			m_piece = static_cast<unsigned char>(Type::Rook);
+			break;
+		case 'Q':
+		case 'q':
+			m_piece = static_cast<unsigned char>(Type::Queen);
+			break;
+		case 'K':
+		case 'k':
+			m_piece = static_cast<unsigned char>(Type::King);
+			break;
+		default:
+			std::string error = "Invalid ascii " + std::to_string(ascii) + ".";
+			throw std::invalid_argument(error);
+		}
+
+		if (std::isupper(ascii))
+		{
+			m_piece |= IsWhiteBitMap;
 		}
 	}
 
@@ -28,27 +62,27 @@ namespace ChessEngine
 		}
 		else if (IsPawn())
 		{
-			return (IsWhite() ? 'p' : 'P');
+			return (IsWhite() ? 'P' : 'p');
 		}
 		else if (IsKnight())
 		{
-			return (IsWhite() ? 'n' : 'N');
+			return (IsWhite() ? 'N' : 'n');
 		}
 		else if (IsBishop())
 		{
-			return (IsWhite() ? 'b' : 'B');
+			return (IsWhite() ? 'B' : 'b');
 		}
 		else if (IsRook())
 		{
-			return (IsWhite() ? 'r' : 'R');
+			return (IsWhite() ? 'R' : 'r');
 		}
 		else if (IsQueen())
 		{
-			return (IsWhite() ? 'q' : 'Q');
+			return (IsWhite() ? 'Q' : 'q');
 		}
 		else if (IsKing())
 		{
-			return (IsWhite() ? 'k' : 'K');
+			return (IsWhite() ? 'K' : 'k');
 		}
 		else
 		{

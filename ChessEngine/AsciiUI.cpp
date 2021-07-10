@@ -17,10 +17,10 @@ namespace ChessEngine
 		ss << "    ";
 		ss << (m_whiteToPlay ? 'W' : 'B');
 		ss << "    ";
-		ss << (m_whiteKingside ? 'k' : ' ');
-		ss << (m_whiteQueenside ? 'q' : ' ');
-		ss << (m_blackKingside ? 'K' : ' ');
-		ss << (m_blackQueenside ? 'Q' : ' ');
+		ss << (m_whiteKingside ? 'K' : ' ');
+		ss << (m_whiteQueenside ? 'Q' : ' ');
+		ss << (m_blackKingside ? 'k' : ' ');
+		ss << (m_blackQueenside ? 'q' : ' ');
 		ss << "    ";
 		ss << (m_enPassant ? std::to_string(*m_enPassant) : "-");
 		ss << std::endl;
@@ -45,7 +45,7 @@ namespace ChessEngine
 				}
 				else
 				{
-					// Piece square eg. " p " or ":p:"
+					// Piece square eg. " P " or ":P:"
 					ss << squChar << pceChar << squChar;
 				}
 				ss <<  "|";

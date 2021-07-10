@@ -10,7 +10,7 @@ namespace ChessEngineTests
 	using namespace ChessEngine;
 	using namespace ChessEngine::Helper;
 
-	TEST_CLASS(BoardHelperTests)
+	TEST_CLASS(HelperTests)
 	{
 	public:
 
