@@ -67,6 +67,9 @@ namespace ChessEngine
 		std::string GetFEN() const;
 
 	private:
+		// Helper function which updates the piece lists based upon the piece array
+		void UpdatePieceLists();
+
 		PieceArray m_pieces;		// The pieces locations on the board
 		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board
 		PieceList m_blackPieceList; // A list of each of the black pieces as well as their square on the board

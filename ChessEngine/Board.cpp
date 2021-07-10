@@ -12,23 +12,7 @@ namespace ChessEngine
 	Board::Board():
 		m_pieces(StartingPieces)
 	{
-		// Fill piece lists based upon piece array
-		for (Square square = 0; Helper::IsValidSquare(square); square++)
-		{
-			const Piece& piece = m_pieces[square];
-
-			if (!piece.IsEmpty())
-			{
-				if (piece.IsWhite())
-				{
-					m_whitePieceList.push_back(std::make_pair(piece, square));
-				}
-				else
-				{
-					m_blackPieceList.push_back(std::make_pair(piece, square));
-				}
-			}
-		}
+		UpdatePieceLists();
 	}
 
 	Board::Board(const std::string& FEN)
@@ -78,23 +62,7 @@ namespace ChessEngine
 			throw std::invalid_argument(error);
 		}
 
-		// Fill piece lists based upon piece array
-		for (Square square = 0; Helper::IsValidSquare(square); square++)
-		{
-			const Piece& piece = m_pieces[square];
-
-			if (!piece.IsEmpty())
-			{
-				if (piece.IsWhite())
-				{
-					m_whitePieceList.push_back(std::make_pair(piece, square));
-				}
-				else
-				{
-					m_blackPieceList.push_back(std::make_pair(piece, square));
-				}
-			}
-		}
+		UpdatePieceLists();
 
 		// Parse whose turn it is to play
 		if (toPlay == "w")
@@ -237,5 +205,28 @@ namespace ChessEngine
 		FENStream << static_cast<int>(m_fullMoves);
 
 		return FENStream.str();
+	}
+
+	void Board::UpdatePieceLists()
+	{
+		m_whitePieceList.clear();
+		m_blackPieceList.clear();
+
+		for (Square square = 0; Helper::IsValidSquare(square); square++)
+		{
+			const Piece& piece = m_pieces[square];
+
+			if (!piece.IsEmpty())
+			{
+				if (piece.IsWhite())
+				{
+					m_whitePieceList.push_back(std::make_pair(piece, square));
+				}
+				else
+				{
+					m_blackPieceList.push_back(std::make_pair(piece, square));
+				}
+			}
+		}
 	}
 }
