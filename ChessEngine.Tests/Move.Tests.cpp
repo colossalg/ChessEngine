@@ -44,7 +44,7 @@ namespace ChessEngineTests
 		TEST_METHOD(TestAllmoves)
 		{
 			// Test quiet moves
-			TestMove(Move(0, 7, false), 0, 7, true, false, false, false, false, false, false);
+			TestMove(Move(0, 7), 0, 7, true, false, false, false, false, false, false);
 
 			// Test double pawn push
 			TestMove(Move(8, 15, Move::Special::DoublePawnPush), 8, 15, false, true, false, false, false, false, false);

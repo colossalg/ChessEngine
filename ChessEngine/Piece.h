@@ -36,7 +36,7 @@ namespace ChessEngine
 		Piece& operator=(const Piece& other) = default;
 
 		// Compare one piece to another
-		bool operator==(const Piece& other) { return (m_piece == other.GetValue()); }
+		bool operator==(const Piece& other) const { return (m_piece == other.GetValue()); }
 
 		// Get whether the piece is an empty square
 		inline bool IsEmpty() const { return ((m_piece & IsEmptyBitMap) == 0); }

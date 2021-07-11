@@ -58,7 +58,7 @@ namespace ChessEngine
 	{
 		if (IsEmpty())
 		{
-			return ' ';
+			return (IsWhite() ? ' ' : ':');
 		}
 		else if (IsPawn())
 		{

@@ -35,7 +35,7 @@ namespace ChessEngine
 				m_move |= QueenPromotion;
 				break;
 			default:
-				std::string error = "Invalid promotion type " + std::to_string(static_cast<unsigned char>(promotionType)) + ".";
+				std::string error = "Invalid promotion type (" + std::to_string(static_cast<unsigned char>(promotionType)) + ").";
 				throw std::invalid_argument(error);
 			}
 		}
@@ -69,7 +69,7 @@ namespace ChessEngine
 		case QueenPromotion:
 			return Piece::Type::Queen;
 		default:
-			std::string error = "Invalid promotion type " + std::to_string(promotionType) + ".";
+			std::string error = "Invalid promotion type (" + std::to_string(promotionType) + ").";
 			throw std::runtime_error(error);
 		}
 	}

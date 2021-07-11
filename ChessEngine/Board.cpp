@@ -205,9 +205,45 @@ namespace ChessEngine
 
 	void Board::MakeMove(Move move)
 	{
+		// It is assumed that the move provided is a valid move. Checking of whether a
+		// move is valid will be done at the point where the user move is parsed.
+
+		Piece piece = m_pieces[move.GetInitSquare()];
+
 		if (move.IsQuiet())
 		{
+			// Update piece array
+			m_pieces[move.GetDestSquare()] = piece;
+			m_pieces[move.GetInitSquare()] = Piece::ee;
 
+			// Update piece lists
+			if (m_whiteToPlay)
+			{
+				for (auto& [pce, squ] : m_whitePieceList)
+				{
+					if (pce == piece)
+					{
+						squ = move.GetDestSquare();
+					}
+				}
+			}
+			else
+			{
+				for (auto& [pce, squ] : m_blackPieceList)
+				{
+					if (pce == piece)
+					{
+						squ = move.GetDestSquare();
+					}
+				}
+			}
+
+			// Update half and full move counters
+			if (piece.IsPawn())
+			{
+				m_halfMoves = 0;
+			}
+			m_fullMoves++;
 		}
 		else if (move.IsKingsideCastles())
 		{

@@ -17,7 +17,7 @@ namespace ChessEngine
 		};
 
 		// Create a new move with the given properties (init/dest squares, is a capture, is a promotion and to what piece)
-		Move(Square init, Square dest, bool isCapture, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
+		Move(Square init, Square dest, bool isCapture = false, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
 
 		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
 		Move(Square init, Square dest, Special specialType);

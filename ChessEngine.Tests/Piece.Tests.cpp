@@ -74,7 +74,7 @@ namespace ChessEngineTests
 		TEST_METHOD(TestAllPieces)
 		{
 			// Test each piece type
-			TestPiece(Piece::Type::Empty, ' ', ' ');
+			TestPiece(Piece::Type::Empty, ' ', ':');
 			TestPiece(Piece::Type::Pawn, 'P', 'p');
 			TestPiece(Piece::Type::Knight, 'N', 'n');
 			TestPiece(Piece::Type::Bishop, 'B', 'b');

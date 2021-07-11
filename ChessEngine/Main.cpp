@@ -11,9 +11,13 @@ using namespace ChessEngine;
 
 int main()
 {
-	std::string FEN = "r1bq1rk1/4bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 b - a3 0 11";
+	Board board;
 
-	Board board(FEN);
+	// board.MakeMove(Move(Helper::SquareFromString("e2"), Helper::SquareFromString("e4"), Move::Special::DoublePawnPush));
+	// board.MakeMove(Move(Helper::SquareFromString("e2"), Helper::SquareFromString("e4"), Move::Special::DoublePawnPush));
+
+	board.MakeMove(Move(Helper::SquareFromString("g1"), Helper::SquareFromString("f3")));
+	board.MakeMove(Move(Helper::SquareFromString("g8"), Helper::SquareFromString("f6")));
 
 	ChessEngine::AsciiUI asciiBoard;
 	asciiBoard.SetPieces(board.GetPieces());
