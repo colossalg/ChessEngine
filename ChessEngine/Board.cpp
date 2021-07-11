@@ -1,6 +1,5 @@
 #include "Board.h"
 
-#include <iostream>
 #include <sstream>
 
 #include "Helper.h"
@@ -10,7 +9,7 @@ namespace ChessEngine
 	Board::Board():
 		m_pieces(StartingPieces)
 	{
-		UpdatePieceLists();
+		ResetPieceLists();
 	}
 
 	Board::Board(const std::string& FEN)
@@ -60,7 +59,7 @@ namespace ChessEngine
 			throw std::invalid_argument(error);
 		}
 
-		UpdatePieceLists();
+		ResetPieceLists();
 
 		// Parse whose turn it is to play
 		if (toPlay == "w")
@@ -114,7 +113,7 @@ namespace ChessEngine
 			m_enPassant = Helper::SquareFromString(enPassant);
 		}
 
-		// Get the number of half and full moves
+		// Parse the number of half and full moves
 		int halfMoves;
 		int fullMoves;
 		FENStream >> halfMoves;
@@ -204,7 +203,43 @@ namespace ChessEngine
 		return FENStream.str();
 	}
 
-	void Board::UpdatePieceLists()
+	void Board::MakeMove(Move move)
+	{
+		if (move.IsQuiet())
+		{
+
+		}
+		else if (move.IsKingsideCastles())
+		{
+
+		}
+		else if (move.IsQueensideCastles())
+		{
+
+		}
+		else if (move.IsDoublePawnPush())
+		{
+
+		}
+		else if (move.IsEnPassantCapture())
+		{
+
+		}
+		else if (move.IsPromotion())
+		{
+
+			if (move.IsCapture())
+			{
+
+			}
+		}
+		else if (move.IsCapture())
+		{
+
+		}
+	}
+
+	void Board::ResetPieceLists()
 	{
 		m_whitePieceList.clear();
 		m_blackPieceList.clear();

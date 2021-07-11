@@ -5,9 +5,6 @@ namespace ChessEngine
 	class Piece
 	{
 	public:
-		const static unsigned char IsEmptyBitMap = 0b11111100;	// Bitmap used to determine whether a piece is empty
-		const static unsigned char IsWhiteBitMap = 0b00000001;	// Bitmap used to determine whether a piece is white
-
 		// Pieces used to initialize boards, etc.
 		const static Piece ee, wp, bp, wn, bn, wb, bb, wr, br, wq, bq, wk, bk;
 
@@ -72,6 +69,9 @@ namespace ChessEngine
 		char GetAscii() const;
 
 	private:
+		const static unsigned char IsEmptyBitMap = 0b11111100;	// Bitmap used to determine whether a piece is empty
+		const static unsigned char IsWhiteBitMap = 0b00000001;	// Bitmap used to determine whether a piece is white
+
 		unsigned int m_piece = 0;	// Underlying bitmap
 	};
 }

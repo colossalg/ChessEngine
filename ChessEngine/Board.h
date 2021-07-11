@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Definitions.h"
+#include "Move.h"
 #include "Piece.h"
 
 namespace ChessEngine
@@ -20,6 +21,12 @@ namespace ChessEngine
 
 		// Create a new board from a FEN string
 		Board(const std::string& FEN);
+
+		// Get the FEN string for the board
+		std::string GetFEN() const;
+
+		// Update the board as per the given move
+		void MakeMove(Move move);
 
 		// Set the array representing the piece's locations on the board
 		void SetPieces(const PieceArray& pieces) { m_pieces = pieces; }
@@ -63,12 +70,9 @@ namespace ChessEngine
 		// Get whether it is white's turn to play
 		bool GetWhiteToPlay() const { return m_whiteToPlay; }
 
-		// Get the FEN string for the board
-		std::string GetFEN() const;
-
 	private:
-		// Helper function which updates the piece lists based upon the piece array
-		void UpdatePieceLists();
+		// Helper function which resets the piece lists based upon the piece array
+		void ResetPieceLists();
 
 		PieceArray m_pieces;		// The pieces locations on the board
 		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board
