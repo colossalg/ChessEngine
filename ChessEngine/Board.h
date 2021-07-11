@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Definitions.h"
+#include "Helper.h"
 #include "Move.h"
 #include "Piece.h"
 
@@ -13,8 +14,14 @@ namespace ChessEngine
 	class Board
 	{
 	public:
-		// The starting pieces for a board
-		const static PieceArray StartingPieces;
+		const static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
+		const static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
+		const static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
+		const static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
+		const static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
+		const static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
+
+		const static PieceArray StartingPieces; // The starting pieces for a board
 
 		// Create a new board
 		Board();
@@ -73,6 +80,9 @@ namespace ChessEngine
 	private:
 		// Helper function which resets the piece lists based upon the piece array
 		void ResetPieceLists();
+
+		// Helper function which updates the piece array and lists by moving a piece from 'init' to 'dest'
+		void MovePiece(Square init, Square dest);
 
 		PieceArray m_pieces;		// The pieces locations on the board
 		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board

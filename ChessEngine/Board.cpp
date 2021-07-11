@@ -210,48 +210,36 @@ namespace ChessEngine
 
 		Piece piece = m_pieces[move.GetInitSquare()];
 
+		// Update the piece array and lists
 		if (move.IsQuiet())
 		{
-			// Update piece array
-			m_pieces[move.GetDestSquare()] = piece;
-			m_pieces[move.GetInitSquare()] = Piece::ee;
-
-			// Update piece lists
-			if (m_whiteToPlay)
-			{
-				for (auto& [pce, squ] : m_whitePieceList)
-				{
-					if (pce == piece)
-					{
-						squ = move.GetDestSquare();
-					}
-				}
-			}
-			else
-			{
-				for (auto& [pce, squ] : m_blackPieceList)
-				{
-					if (pce == piece)
-					{
-						squ = move.GetDestSquare();
-					}
-				}
-			}
-
-			// Update half and full move counters
-			if (piece.IsPawn())
-			{
-				m_halfMoves = 0;
-			}
-			m_fullMoves++;
+			MovePiece(move.GetInitSquare(), move.GetDestSquare());
 		}
 		else if (move.IsKingsideCastles())
 		{
-
+			if (m_whiteToPlay)
+			{
+				MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare + 2);
+				MovePiece(WhiteKingsideRookStartingSquare, WhiteKingStartingSquare + 1);
+			}
+			else
+			{
+				MovePiece(BlackKingStartingSquare, BlackKingStartingSquare + 2);
+				MovePiece(BlackKingsideRookStartingSquare, BlackKingStartingSquare + 1);
+			}
 		}
 		else if (move.IsQueensideCastles())
 		{
-
+			if (m_whiteToPlay)
+			{
+				MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare - 2);
+				MovePiece(WhiteQueensideRookStartingSquare, WhiteKingStartingSquare - 1);
+			}
+			else
+			{
+				MovePiece(BlackKingStartingSquare, BlackKingStartingSquare - 2);
+				MovePiece(BlackQueensideRookStartingSquare, BlackKingStartingSquare - 1);
+			}
 		}
 		else if (move.IsDoublePawnPush())
 		{
@@ -273,6 +261,61 @@ namespace ChessEngine
 		{
 
 		}
+
+		// Update castling rights
+		if (piece.IsKing() || move.IsKingsideCastles() || move.IsQueensideCastles())
+		{
+			if (m_whiteToPlay)
+			{
+				m_whiteKingside = false;
+				m_whiteQueenside = false;
+			}
+			else
+			{
+				m_blackKingside = false;
+				m_blackQueenside = false;
+			}
+		}
+		else if (piece.IsRook())
+		{
+			if (m_whiteToPlay)
+			{
+				if (move.GetInitSquare() == WhiteKingsideRookStartingSquare)
+				{
+					m_whiteKingside = false;
+				}
+				else if (move.GetInitSquare() == WhiteQueensideRookStartingSquare)
+				{
+					m_whiteQueenside = false;
+				}
+			}
+			else
+			{
+				if (move.GetInitSquare() == BlackKingsideRookStartingSquare)
+				{
+					m_blackKingside = false;
+				}
+				else if (move.GetInitSquare() == BlackQueensideRookStartingSquare)
+				{
+					m_blackQueenside = false;
+				}
+			}
+		}
+
+		// Update half move counter
+		if (piece.IsPawn() || move.IsCapture() || move.IsKingsideCastles() || move.IsQueensideCastles())
+		{
+			m_halfMoves = 0;
+		}
+
+		// Update full move counter
+		if (m_whiteToPlay)
+		{
+			m_fullMoves++;
+		}
+
+		// Update whose turn it is to play
+		m_whiteToPlay = !m_whiteToPlay;
 	}
 
 	void Board::ResetPieceLists()
@@ -293,6 +336,39 @@ namespace ChessEngine
 				else
 				{
 					m_blackPieceList.push_back(std::make_pair(piece, square));
+				}
+			}
+		}
+	}
+
+	void Board::MovePiece(Square init, Square dest)
+	{
+		Piece piece = m_pieces[init];
+
+		// Update piece array
+		m_pieces[init] = Piece::ee;
+		m_pieces[dest] = piece;
+
+		// Update piece lists
+		if (m_whiteToPlay)
+		{
+			for (auto& [_, squ] : m_whitePieceList)
+			{
+				if (squ == init)
+				{
+					squ = dest;
+					break;
+				}
+			}
+		}
+		else
+		{
+			for (auto& [_, squ] : m_whitePieceList)
+			{
+				if (squ == init)
+				{
+					squ = dest;
+					break;
 				}
 			}
 		}
