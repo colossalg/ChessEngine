@@ -84,6 +84,21 @@ namespace ChessEngine
 		// Helper function which updates the piece array and lists by moving a piece from 'init' to 'dest'
 		void MovePiece(Square init, Square dest);
 
+		// Helper function which updates the piece array and lists by capturing the piece at 'dest' with the piece at 'init'
+		void TakePiece(Square init, Square dest);
+
+		// Helper function for handling kingside castles
+		void KCastles(Move move);
+
+		// Helper function for handling queenside castles
+		void QCastles(Move move);
+
+		// Helper function for handling en passant capture
+		void EPCapture(Move move);
+
+		// Helper function for handling promotion
+		void Promotion(Move move);
+
 		PieceArray m_pieces;		// The pieces locations on the board
 		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board
 		PieceList m_blackPieceList; // A list of each of the black pieces as well as their square on the board

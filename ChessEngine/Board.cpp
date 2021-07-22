@@ -1,5 +1,6 @@
 #include "Board.h"
 
+#include <algorithm>
 #include <sstream>
 
 #include "Helper.h"
@@ -206,60 +207,42 @@ namespace ChessEngine
 	void Board::MakeMove(Move move)
 	{
 		// It is assumed that the move provided is a valid move. Checking of whether a
-		// move is valid will be done at the point where the user move is parsed.
+		// move is valid will be done at the point where the user move is parsed. All
+		// computer generated moves should be legal.
 
-		Piece piece = m_pieces[move.GetInitSquare()];
+		const Square init = move.GetInitSquare();
+		const Square dest = move.GetDestSquare();
+
+		const Piece piece = m_pieces[move.GetInitSquare()];
 
 		// Update the piece array and lists
 		if (move.IsQuiet())
 		{
-			MovePiece(move.GetInitSquare(), move.GetDestSquare());
+			MovePiece(init, dest);
 		}
 		else if (move.IsKingsideCastles())
 		{
-			if (m_whiteToPlay)
-			{
-				MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare + 2);
-				MovePiece(WhiteKingsideRookStartingSquare, WhiteKingStartingSquare + 1);
-			}
-			else
-			{
-				MovePiece(BlackKingStartingSquare, BlackKingStartingSquare + 2);
-				MovePiece(BlackKingsideRookStartingSquare, BlackKingStartingSquare + 1);
-			}
+			KCastles(move);
 		}
 		else if (move.IsQueensideCastles())
 		{
-			if (m_whiteToPlay)
-			{
-				MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare - 2);
-				MovePiece(WhiteQueensideRookStartingSquare, WhiteKingStartingSquare - 1);
-			}
-			else
-			{
-				MovePiece(BlackKingStartingSquare, BlackKingStartingSquare - 2);
-				MovePiece(BlackQueensideRookStartingSquare, BlackKingStartingSquare - 1);
-			}
+			QCastles(move);
 		}
 		else if (move.IsDoublePawnPush())
 		{
-
+			MovePiece(init, dest);
 		}
 		else if (move.IsEnPassantCapture())
 		{
-
+			EPCapture(move);
 		}
 		else if (move.IsPromotion())
 		{
-
-			if (move.IsCapture())
-			{
-
-			}
+			Promotion(move);
 		}
 		else if (move.IsCapture())
 		{
-
+			TakePiece(init, dest);
 		}
 
 		// Update castling rights
@@ -280,26 +263,36 @@ namespace ChessEngine
 		{
 			if (m_whiteToPlay)
 			{
-				if (move.GetInitSquare() == WhiteKingsideRookStartingSquare)
+				if (init == WhiteKingsideRookStartingSquare)
 				{
 					m_whiteKingside = false;
 				}
-				else if (move.GetInitSquare() == WhiteQueensideRookStartingSquare)
+				else if (init == WhiteQueensideRookStartingSquare)
 				{
 					m_whiteQueenside = false;
 				}
 			}
 			else
 			{
-				if (move.GetInitSquare() == BlackKingsideRookStartingSquare)
+				if (init == BlackKingsideRookStartingSquare)
 				{
 					m_blackKingside = false;
 				}
-				else if (move.GetInitSquare() == BlackQueensideRookStartingSquare)
+				else if (init == BlackQueensideRookStartingSquare)
 				{
 					m_blackQueenside = false;
 				}
 			}
+		}
+
+		// Update en passan square
+		if (move.IsDoublePawnPush())
+		{
+			m_enPassant = init + (m_whiteToPlay ? +8 : -8);
+		}
+		else
+		{
+			m_enPassant.reset();
 		}
 
 		// Update half move counter
@@ -329,14 +322,8 @@ namespace ChessEngine
 
 			if (!piece.IsEmpty())
 			{
-				if (piece.IsWhite())
-				{
-					m_whitePieceList.push_back(std::make_pair(piece, square));
-				}
-				else
-				{
-					m_blackPieceList.push_back(std::make_pair(piece, square));
-				}
+				auto& pieceList = (piece.IsWhite() ? m_whitePieceList : m_blackPieceList);
+				pieceList.push_back(std::make_pair(piece, square));
 			}
 		}
 	}
@@ -350,27 +337,97 @@ namespace ChessEngine
 		m_pieces[dest] = piece;
 
 		// Update piece lists
+		auto& pieceList = (m_whiteToPlay ? m_whitePieceList : m_blackPieceList);
+		for (auto& [_, squ] : pieceList)
+		{
+			if (squ == init)
+			{
+				squ = dest;
+				break;
+			}
+		}
+	}
+
+	void Board::TakePiece(Square init, Square dest)
+	{
+		// Remove captured piece from piece lists
+		auto& pieceList = (m_whiteToPlay ? m_blackPieceList : m_whitePieceList);
+		std::remove_if(
+			pieceList.begin(),
+			pieceList.end(),
+			[dest](auto& elem) { return (elem.second == dest); }
+		);
+
+		MovePiece(init, dest);
+	}
+
+	void Board::KCastles(Move move)
+	{
 		if (m_whiteToPlay)
 		{
-			for (auto& [_, squ] : m_whitePieceList)
-			{
-				if (squ == init)
-				{
-					squ = dest;
-					break;
-				}
-			}
+			MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare + 2);
+			MovePiece(WhiteKingsideRookStartingSquare, WhiteKingStartingSquare + 1);
 		}
 		else
 		{
-			for (auto& [_, squ] : m_whitePieceList)
-			{
-				if (squ == init)
-				{
-					squ = dest;
-					break;
-				}
-			}
+			MovePiece(BlackKingStartingSquare, BlackKingStartingSquare + 2);
+			MovePiece(BlackKingsideRookStartingSquare, BlackKingStartingSquare + 1);
 		}
+	}
+
+	void Board::QCastles(Move move)
+	{
+		if (m_whiteToPlay)
+		{
+			MovePiece(WhiteKingStartingSquare, WhiteKingStartingSquare - 2);
+			MovePiece(WhiteQueensideRookStartingSquare, WhiteKingStartingSquare - 1);
+		}
+		else
+		{
+			MovePiece(BlackKingStartingSquare, BlackKingStartingSquare - 2);
+			MovePiece(BlackQueensideRookStartingSquare, BlackKingStartingSquare - 1);
+		}
+	}
+
+	void Board::EPCapture(Move move)
+	{
+		const Square init = move.GetInitSquare();
+		const Square dest = m_enPassant.value();
+
+		MovePiece(init, dest);
+
+		const Square captured = dest + (m_whiteToPlay ? +8 : -8);
+
+		auto & pieceList = (m_whiteToPlay ? m_blackPieceList : m_whitePieceList);
+		std::remove_if(
+			pieceList.begin(),
+			pieceList.end(),
+			[captured](auto& elem) { return (elem.second == captured); }
+		);
+	}
+
+	void Board::Promotion(Move move)
+	{
+		const Square init = move.GetInitSquare();
+		const Square dest = move.GetDestSquare();
+
+		if (move.IsCapture())
+		{
+			TakePiece(init, dest);
+		}
+		else
+		{
+			MovePiece(init, dest);
+		}
+
+		Piece promotionPiece = Piece(move.GetPromotionType(), m_whiteToPlay);
+
+		auto& pieceList = (m_whiteToPlay ? m_whitePieceList : m_blackPieceList);
+		std::replace_if(
+			pieceList.begin(),
+			pieceList.end(),
+			[dest](auto& entry) { return (entry.second == dest); },
+			std::make_pair(promotionPiece, dest)
+		);
 	}
 }
