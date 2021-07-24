@@ -52,25 +52,59 @@ not really add any overhead to efficiency.
 
 ## Board
 
+*(Ammended: I have decided to drop the piece lists for now as though
+they have the potential to speed up the aglorithms they are difficult to
+get under unit testing. For the sake of development speed, I will elect
+to not implement them for now. I hope they will not be too difficult to
+add in the future.)*
+
 For the overall board representation, I have chosen to use a 64-byte
-array. Each byte representing a piece as per the above subsection. I
+array. Each byte representing a piece as per the above subsection. ~~I
 will supplement this with two piece lists, one for white and one for
 black. The hope with this is that it will simplify and potentially speed
-up the move generation algorithms.
+up the move generation algorithms.~~
 
 - Piece Array - 64 bytes.
-- White Piece List - Up to 16 bytes.
-- Black Piece List - Up to 16 bytes.
+- ~~White Piece List - Up to 16 bytes.~~
+- ~~Black Piece List - Up to 16 bytes.~~
 
-As seen, this gives a total of 96 bytes for the representation of the
+~~As seen, this gives a total of 96 bytes for the representation of the
 pieces (plus whatever overhead the standard library array and list
-containers have).
+containers have).~~
 
 I will also need to store some meta information for things such as En
 Passant. The space required for these will be negligable compared to the
 pieces however.
 
 To implement this I have created a class called Board.
+
+## Moves
+
+For the representation of moves, I have chosen to use the encoding found
+here on the chess programming wiki:
+https://www.chessprogramming.org/Encoding_Moves
+
+This encoding uses a single 16-bit unsigned short to store each move.
+Bits [10-15] store the starting square of the move, referred to as the
+'init' square. Bits [4-9] store the ending square of the move referred
+to as the 'dest' square. Bit 3 indicates whether the move is a
+promotion. Bit 2 indicates whether the move is a capture. Bits 0 and 1
+indicate which type of piece the promotion is to.
+
+- Bits 0 to 1 - What type of piece the promotion is to.
+    - 00 - Knight
+    - 01 - Bishop
+    - 10 - Rook
+    - 11 - Queen
+- Bit 2 - Whether the move is a capture.
+- Bit 3 - Whether the move is a promotion.
+- Bits 4 to 9 - The 'init' square of the move.
+- Bits 10 to 15 - The 'dest' square of the move.
+
+To implement this I have used a class called Move which has a single
+data member (s_move). Most of the methods are inline for efficiency,
+I think that this abstraction makes the code much more readable and does
+not really add any overhead to efficiency.
 
 # Resources and References
 
