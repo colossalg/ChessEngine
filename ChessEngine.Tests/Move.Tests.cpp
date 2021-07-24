@@ -77,7 +77,7 @@ namespace ChessEngineTests
 			// Test that we can set and retrieve the promotion type
 			for (Piece::Type pieceType : pieceTypes)
 			{
-				Move m(0, 63, false, true, pieceType);
+				Move m(0, 63, true, true, pieceType);
 				Assert::IsTrue(pieceType == m.GetPromotionType());
 			}
 		}

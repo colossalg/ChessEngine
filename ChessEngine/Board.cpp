@@ -296,13 +296,17 @@ namespace ChessEngine
 		}
 
 		// Update half move counter
-		if (piece.IsPawn() || move.IsCapture() || move.IsKingsideCastles() || move.IsQueensideCastles())
+		if (piece.IsPawn() || move.IsCapture())
 		{
 			m_halfMoves = 0;
 		}
+		else
+		{
+			m_halfMoves++;
+		}
 
 		// Update full move counter
-		if (m_whiteToPlay)
+		if (!m_whiteToPlay)
 		{
 			m_fullMoves++;
 		}
@@ -396,7 +400,9 @@ namespace ChessEngine
 
 		MovePiece(init, dest);
 
-		const Square captured = dest + (m_whiteToPlay ? +8 : -8);
+		const Square captured = dest + (m_whiteToPlay ? -8 : +8);
+
+		m_pieces[captured] = Piece::ee;
 
 		auto & pieceList = (m_whiteToPlay ? m_blackPieceList : m_whitePieceList);
 		std::remove_if(
@@ -421,6 +427,8 @@ namespace ChessEngine
 		}
 
 		Piece promotionPiece = Piece(move.GetPromotionType(), m_whiteToPlay);
+
+		m_pieces[dest] = promotionPiece;
 
 		auto& pieceList = (m_whiteToPlay ? m_whitePieceList : m_blackPieceList);
 		std::replace_if(

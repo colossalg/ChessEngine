@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Definitions.h"
 
 namespace ChessEngine
@@ -19,8 +21,14 @@ namespace ChessEngine
 		// Create a new move with the given properties (init/dest squares, is a capture, is a promotion and to what piece)
 		Move(Square init, Square dest, bool isCapture = false, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
 
+		// Create a new move with the given properties (init/dest squares as strings, is a capture, is a promotion and to what piece)
+		Move(const std::string& init, const std::string& dest, bool isCapture = false, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
+
 		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
 		Move(Square init, Square dest, Special specialType);
+
+		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
+		Move(const std::string& init, const std::string& dest, Special specialType);
 
 		// Create a new move from another move
 		Move(const Move& other) = default;
@@ -67,6 +75,7 @@ namespace ChessEngine
 
 		const static unsigned short MoveMask = 0b00111111;	// The mask for extracting a move square
 		const static unsigned short TypeMask = 0b00001111;	// The mask for extracting a move type
+		const static unsigned short PromotionTypeMask = 0b1011; // The mask for extracting the piece type of a promotion move
 
 		const static unsigned short Capture = 0b0100;		// The bitmap for whether a move is a capture
 		

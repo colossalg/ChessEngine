@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "Helper.h"
+
 namespace ChessEngine
 {
 	Move::Move(Square init, Square dest, bool isCapture, bool isPromotion, Piece::Type promotionType)
@@ -41,12 +43,32 @@ namespace ChessEngine
 		}
 	}
 
+	Move::Move(const std::string& init, const std::string& dest, bool isCapture, bool isPromotion, Piece::Type promotionType) :
+		Move(
+			Helper::SquareFromString(init),
+			Helper::SquareFromString(dest),
+			isCapture,
+			isPromotion,
+			promotionType
+		)
+	{
+	}
+
 	Move::Move(Square init, Square dest, Special specialType)
 	{
 		m_move = 0;
 		m_move |= (init << InitOffset);
 		m_move |= (dest << DestOffset);
 		m_move |= static_cast<unsigned short>(specialType);
+	}
+
+	Move::Move(const std::string& init, const std::string& dest, Special specialType) :
+		Move(
+			Helper::SquareFromString(init), 
+			Helper::SquareFromString(dest),
+			specialType
+		)
+	{
 	}
 
 	Piece::Type Move::GetPromotionType() const
@@ -57,7 +79,7 @@ namespace ChessEngine
 			throw std::runtime_error(error);
 		}
 
-		const unsigned short promotionType = (m_move & TypeMask);
+		const unsigned short promotionType = (m_move & PromotionTypeMask);
 		switch (promotionType)
 		{
 		case KnightPromotion:
