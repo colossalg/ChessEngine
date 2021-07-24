@@ -13,7 +13,6 @@ namespace ChessEngine
 	using Square = unsigned char;
 
 	using PieceArray = std::array<Piece, 64>;
-	using PieceList = std::list<std::pair<Piece, Square>>;
 
 	using EnPassant = std::optional<Square>;
 }

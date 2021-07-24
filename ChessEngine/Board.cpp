@@ -10,7 +10,6 @@ namespace ChessEngine
 	Board::Board():
 		m_pieces(StartingPieces)
 	{
-		ResetPieceLists();
 	}
 
 	Board::Board(const std::string& FEN)
@@ -59,8 +58,6 @@ namespace ChessEngine
 			std::string error = "Invalid pieces in FEN string (" + pieces + "), not 64 squares.";
 			throw std::invalid_argument(error);
 		}
-
-		ResetPieceLists();
 
 		// Parse whose turn it is to play
 		if (toPlay == "w")
@@ -242,7 +239,7 @@ namespace ChessEngine
 		}
 		else if (move.IsCapture())
 		{
-			TakePiece(init, dest);
+			MovePiece(init, dest);
 		}
 
 		// Update castling rights
@@ -315,23 +312,6 @@ namespace ChessEngine
 		m_whiteToPlay = !m_whiteToPlay;
 	}
 
-	void Board::ResetPieceLists()
-	{
-		m_whitePieceList.clear();
-		m_blackPieceList.clear();
-
-		for (Square square = 0; Helper::IsValidSquare(square); square++)
-		{
-			const Piece& piece = m_pieces[square];
-
-			if (!piece.IsEmpty())
-			{
-				auto& pieceList = (piece.IsWhite() ? m_whitePieceList : m_blackPieceList);
-				pieceList.push_back(std::make_pair(piece, square));
-			}
-		}
-	}
-
 	void Board::MovePiece(Square init, Square dest)
 	{
 		Piece piece = m_pieces[init];
@@ -339,30 +319,6 @@ namespace ChessEngine
 		// Update piece array
 		m_pieces[init] = Piece::ee;
 		m_pieces[dest] = piece;
-
-		// Update piece lists
-		auto& pieceList = (m_whiteToPlay ? m_whitePieceList : m_blackPieceList);
-		for (auto& [_, squ] : pieceList)
-		{
-			if (squ == init)
-			{
-				squ = dest;
-				break;
-			}
-		}
-	}
-
-	void Board::TakePiece(Square init, Square dest)
-	{
-		// Remove captured piece from piece lists
-		auto& pieceList = (m_whiteToPlay ? m_blackPieceList : m_whitePieceList);
-		std::remove_if(
-			pieceList.begin(),
-			pieceList.end(),
-			[dest](auto& elem) { return (elem.second == dest); }
-		);
-
-		MovePiece(init, dest);
 	}
 
 	void Board::KCastles(Move move)
@@ -396,20 +352,13 @@ namespace ChessEngine
 	void Board::EPCapture(Move move)
 	{
 		const Square init = move.GetInitSquare();
-		const Square dest = m_enPassant.value();
+		const Square dest = move.GetDestSquare();
 
 		MovePiece(init, dest);
 
 		const Square captured = dest + (m_whiteToPlay ? -8 : +8);
 
 		m_pieces[captured] = Piece::ee;
-
-		auto & pieceList = (m_whiteToPlay ? m_blackPieceList : m_whitePieceList);
-		std::remove_if(
-			pieceList.begin(),
-			pieceList.end(),
-			[captured](auto& elem) { return (elem.second == captured); }
-		);
 	}
 
 	void Board::Promotion(Move move)
@@ -417,25 +366,10 @@ namespace ChessEngine
 		const Square init = move.GetInitSquare();
 		const Square dest = move.GetDestSquare();
 
-		if (move.IsCapture())
-		{
-			TakePiece(init, dest);
-		}
-		else
-		{
-			MovePiece(init, dest);
-		}
+		MovePiece(init, dest);
 
 		Piece promotionPiece = Piece(move.GetPromotionType(), m_whiteToPlay);
 
 		m_pieces[dest] = promotionPiece;
-
-		auto& pieceList = (m_whiteToPlay ? m_whitePieceList : m_blackPieceList);
-		std::replace_if(
-			pieceList.begin(),
-			pieceList.end(),
-			[dest](auto& entry) { return (entry.second == dest); },
-			std::make_pair(promotionPiece, dest)
-		);
 	}
 }

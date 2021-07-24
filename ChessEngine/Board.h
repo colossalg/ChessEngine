@@ -78,30 +78,23 @@ namespace ChessEngine
 		bool GetWhiteToPlay() const { return m_whiteToPlay; }
 
 	private:
-		// Helper function which resets the piece lists based upon the piece array
-		void ResetPieceLists();
 
-		// Helper function which updates the piece array and lists by moving a piece from 'init' to 'dest'
-		void MovePiece(Square init, Square dest);
-
-		// Helper function which updates the piece array and lists by capturing the piece at 'dest' with the piece at 'init'
-		void TakePiece(Square init, Square dest);
+		// Helper function which updates the piece array by moving a piece from 'init' to 'dest'
+		inline void MovePiece(Square init, Square dest);
 
 		// Helper function for handling kingside castles
-		void KCastles(Move move);
+		inline void KCastles(Move move);
 
 		// Helper function for handling queenside castles
-		void QCastles(Move move);
+		inline void QCastles(Move move);
 
 		// Helper function for handling en passant capture
-		void EPCapture(Move move);
+		inline void EPCapture(Move move);
 
 		// Helper function for handling promotion
 		void Promotion(Move move);
 
 		PieceArray m_pieces;		// The pieces locations on the board
-		PieceList m_whitePieceList; // A list of each of the white pieces as well as their square on the board
-		PieceList m_blackPieceList; // A list of each of the black pieces as well as their square on the board
 
 		EnPassant m_enPassant;		// The en passant square (if en passant is possible)
 
