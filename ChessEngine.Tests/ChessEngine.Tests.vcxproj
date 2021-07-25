@@ -137,7 +137,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>C:\Users\angus\OneDrive\Desktop\Code\ChessEngine\ChessEngine\x64\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Board.obj;Helper.obj;Move.obj;Piece.obj;Static.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Board.obj;Helper.obj;Move.obj;MoveInverse.obj;Piece.obj;Static.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

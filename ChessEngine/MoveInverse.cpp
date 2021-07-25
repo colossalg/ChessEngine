@@ -1,5 +1,7 @@
 #include "MoveInverse.h"
 
+#include "Board.h"
+
 namespace ChessEngine
 {
 	MoveInverse::MoveInverse(const Board& board, Move move) :

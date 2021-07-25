@@ -12,9 +12,9 @@ namespace ChessEngine
 
 		enum class Special
 		{
-			DoublePawnPush = 0b0001, 
-			KingsideCastles = 0b0010, 
-			QueensideCastles = 0b0011, 
+			DoublePawnPush = 0b0001,
+			KingsideCastles = 0b0010,
+			QueensideCastles = 0b0011,
 			EnPassantCapture = 0b0101
 		};
 

@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "Piece.h"
 #include "Board.h"
+#include "Move.h"
+#include "MoveInverse.h"
+#include "Piece.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -37,8 +39,8 @@ namespace ChessEngineTests
 			}
 		}
 
-		// Test a given move using starting FEN, white's move, black's move, FEN after white's move, FEN after black's move
-		void TestMove(
+		// Test making and unmaking a move for white and a move for black
+		void TestMoveUnMove(
 			const std::string& startingFEN,
 			const std::string& whiteMoveFEN,
 			const std::string& blackMoveFEN,
@@ -48,15 +50,25 @@ namespace ChessEngineTests
 		{
 			Board board(startingFEN);
 
+			MoveInverse whiteMoveInverse(board, whiteMove);
+
 			board.MakeMove(whiteMove);
 			Assert::AreEqual(whiteMoveFEN, board.GetFEN());
 
+			MoveInverse blackMoveInverse(board, blackMove);
+
 			board.MakeMove(blackMove);
 			Assert::AreEqual(blackMoveFEN, board.GetFEN());
+
+			board.UndoMove(blackMoveInverse);
+			Assert::AreEqual(whiteMoveFEN, board.GetFEN());
+
+			board.UndoMove(whiteMoveInverse);
+			Assert::AreEqual(startingFEN, board.GetFEN());
 		}
 
-		// Test a given move using starting FEN, ending FEN and a move
-		void TestMove(
+		// Test making and unmaking a move
+		void TestMoveUnMove(
 			const std::string& startingFEN,
 			const std::string& endingFEN,
 			Move move
@@ -64,12 +76,17 @@ namespace ChessEngineTests
 		{
 			Board board(startingFEN);
 
+			MoveInverse moveInverse(board, move);
+
 			board.MakeMove(move);
 			Assert::AreEqual(endingFEN, board.GetFEN());
+
+			board.UndoMove(moveInverse);
+			Assert::AreEqual(startingFEN, board.GetFEN());
 		}
 
 		// Test that quiet moves update the state of the board correctly
-		TEST_METHOD(TestMoveQuiet)
+		TEST_METHOD(TestMoveUnMoveQuiet)
 		{
 			// Queen's Gambit
 			const std::string startingFEN = "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4";
@@ -78,12 +95,12 @@ namespace ChessEngineTests
 
 			Move whiteMove("c1", "g5");	// 4. bg5
 			Move blackMove("f8", "e7"); // 4. --- be7
-			
-			TestMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+
+			TestMoveUnMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 		}
 
 		// Test that capture moves update the state of the board correctly
-		TEST_METHOD(TestMoveCapture)
+		TEST_METHOD(TestMoveUnMoveCapture)
 		{
 			// Queen's Gambit
 			const std::string startingFEN = "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4";
@@ -93,11 +110,11 @@ namespace ChessEngineTests
 			Move whiteMove("c4", "d5", true); // 4. csd5
 			Move blackMove("e6", "d5", true); // 4. --- exd5
 
-			TestMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+			TestMoveUnMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 		}
 
 		// Test that promotion moves update the state of the board correctly
-		TEST_METHOD(TestMovePromotion)
+		TEST_METHOD(TestMoveUnMovePromotion)
 		{
 			// Some artificial position
 			const std::string startingQuietFEN = "8/P7/4k3/8/8/4K3/p7/8 w - - 0 1";
@@ -125,21 +142,21 @@ namespace ChessEngineTests
 				Move whiteMove("a7", "a8", false, true, promotionType);
 				Move blackMove("a2", "a1", false, true, promotionType);
 
-				TestMove(startingQuietFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+				TestMoveUnMove(startingQuietFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 			}
 
 			// Test promotions for each piece type (with capture)
 			for (auto& [whiteMoveFEN, blackMoveFEN, promotionType] : capturePromotionList)
 			{
-				Move whiteMove("b7", "a8", false, true, promotionType);
-				Move blackMove("b2", "a1", false, true, promotionType);
+				Move whiteMove("b7", "a8", true, true, promotionType);
+				Move blackMove("b2", "a1", true, true, promotionType);
 
-				TestMove(startingCaptureFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+				TestMoveUnMove(startingCaptureFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 			}
 		}
 
 		// Test that kingside castling moves update the state of the board correctly
-		TEST_METHOD(TestMoveKingsideCastling)
+		TEST_METHOD(TestMoveUnMoveKingsideCastling)
 		{
 			// French exchange
 			const std::string startingFEN = "rnbqk2r/ppp2ppp/3b1n2/3p4/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6";
@@ -149,11 +166,11 @@ namespace ChessEngineTests
 			Move whiteMove("e1", "g1", Move::Special::KingsideCastles); // 6. O-O
 			Move blackMove("e8", "g8", Move::Special::KingsideCastles); // 6. --- O-O
 
-			TestMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+			TestMoveUnMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 		}
 
 		// Test that queenside castling moves update the state of the board correctly
-		TEST_METHOD(TestMoveQueensideCastling)
+		TEST_METHOD(TestMoveunMoveQueensideCastling)
 		{
 			// Some random opening
 			const std::string startingFEN = "r3k2r/ppp1qppp/2np1n2/1B2p1B1/1b2P1b1/2NP1N2/PPP1QPPP/R3K2R w KQkq - 4 8";
@@ -163,11 +180,11 @@ namespace ChessEngineTests
 			Move whiteMove("e1", "c1", Move::Special::QueensideCastles);
 			Move blackMove("e8", "c8", Move::Special::QueensideCastles);
 
-			TestMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+			TestMoveUnMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 		}
 
 		// Test that double pawn push moves update the state of the board correctly
-		TEST_METHOD(TestMoveDoublePawnPush)
+		TEST_METHOD(TestMoveUnMoveDoublePawnPush)
 		{
 			// e4/e5 opening
 			const std::string startingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -177,11 +194,11 @@ namespace ChessEngineTests
 			Move whiteMove("e2", "e4", Move::Special::DoublePawnPush);
 			Move blackMove("e7", "e5", Move::Special::DoublePawnPush);
 
-			TestMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
+			TestMoveUnMove(startingFEN, whiteMoveFEN, blackMoveFEN, whiteMove, blackMove);
 		}
 
 		// Test that en passant moves update the state of the board correctly
-		TEST_METHOD(TestMoveEnPassantCapture)
+		TEST_METHOD(TestMoveUnMoveEnPassantCapture)
 		{
 			// White en passant capture
 			{
@@ -190,7 +207,7 @@ namespace ChessEngineTests
 
 				Move move("d5", "e6", Move::Special::EnPassantCapture);
 
-				TestMove(startingFEN, endingFEN, move);
+				TestMoveUnMove(startingFEN, endingFEN, move);
 			}
 
 			// Black en passant capture
@@ -200,7 +217,7 @@ namespace ChessEngineTests
 
 				Move move("d4", "e3", Move::Special::EnPassantCapture);
 
-				TestMove(startingFEN, endingFEN, move);
+				TestMoveUnMove(startingFEN, endingFEN, move);
 			}
 		}
 	};

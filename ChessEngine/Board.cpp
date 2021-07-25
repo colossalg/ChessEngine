@@ -4,6 +4,9 @@
 #include <sstream>
 
 #include "Helper.h"
+#include "Move.h"
+#include "MoveInverse.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
@@ -212,18 +215,18 @@ namespace ChessEngine
 
 		const Piece piece = m_pieces[move.GetInitSquare()];
 
-		// Update the piece array and lists
+		// Update the piece array
 		if (move.IsQuiet())
 		{
 			MovePiece(init, dest);
 		}
 		else if (move.IsKingsideCastles())
 		{
-			KCastles(move);
+			KCastles();
 		}
 		else if (move.IsQueensideCastles())
 		{
-			QCastles(move);
+			QCastles();
 		}
 		else if (move.IsDoublePawnPush())
 		{
@@ -231,11 +234,11 @@ namespace ChessEngine
 		}
 		else if (move.IsEnPassantCapture())
 		{
-			EPCapture(move);
+			EPCapture(init, dest);
 		}
 		else if (move.IsPromotion())
 		{
-			Promotion(move);
+			Promotion(init, dest, move.GetPromotionType());
 		}
 		else if (move.IsCapture())
 		{
@@ -312,6 +315,67 @@ namespace ChessEngine
 		m_whiteToPlay = !m_whiteToPlay;
 	}
 
+	void Board::UndoMove(MoveInverse moveInverse)
+	{
+		const Move move = moveInverse.GetMove();
+		
+		const Square init = move.GetInitSquare();
+		const Square dest = move.GetDestSquare();
+
+		const Piece capturedPiece = moveInverse.GetCapturedPiece();
+
+		// Update the piece array
+		if (move.IsQuiet())
+		{
+			MovePieceInverse(init, dest);
+		}
+		else if (move.IsKingsideCastles())
+		{
+			KCastlesInverse();
+		}
+		else if (move.IsQueensideCastles())
+		{
+			QCastlesInverse();
+		}
+		else if (move.IsDoublePawnPush())
+		{
+			MovePieceInverse(init, dest);
+		}
+		else if (move.IsEnPassantCapture())
+		{
+			EPCaptureInverse(init, dest);
+		}
+		else if (move.IsPromotion())
+		{
+			PromotionInverse(init, dest, capturedPiece);
+		}
+		else if (move.IsCapture())
+		{
+			MovePieceInverse(init, dest, capturedPiece);
+		}
+		
+		// Update castling rights
+		m_whiteKingside = moveInverse.GetWhiteKingside();
+		m_whiteQueenside = moveInverse.GetWhiteQueenside();
+		m_blackKingside = moveInverse.GetBlackKingside();
+		m_blackQueenside = moveInverse.GetBlackQueenside();
+
+		// Update en passant square
+		m_enPassant = moveInverse.GetEnPassant();
+
+		// Update half move counter
+		m_halfMoves = moveInverse.GetHalfMoves();
+
+		// Update full move counter
+		if (m_whiteToPlay)
+		{
+			m_fullMoves--;
+		}
+
+		// Update whose turn it is to play
+		m_whiteToPlay = !m_whiteToPlay;
+	}
+
 	void Board::MovePiece(Square init, Square dest)
 	{
 		Piece piece = m_pieces[init];
@@ -321,7 +385,16 @@ namespace ChessEngine
 		m_pieces[dest] = piece;
 	}
 
-	void Board::KCastles(Move move)
+	void Board::MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece)
+	{
+		Piece piece = m_pieces[dest];
+
+		// Update piece array
+		m_pieces[init] = piece;
+		m_pieces[dest] = capturedPiece;
+	}
+
+	void Board::KCastles()
 	{
 		if (m_whiteToPlay)
 		{
@@ -335,7 +408,21 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::QCastles(Move move)
+	void Board::KCastlesInverse()
+	{
+		if (!m_whiteToPlay)
+		{
+			MovePieceInverse(WhiteKingStartingSquare, WhiteKingStartingSquare + 2);
+			MovePieceInverse(WhiteKingsideRookStartingSquare, WhiteKingStartingSquare + 1);
+		}
+		else
+		{
+			MovePieceInverse(BlackKingStartingSquare, BlackKingStartingSquare + 2);
+			MovePieceInverse(BlackKingsideRookStartingSquare, BlackKingStartingSquare + 1);
+		}
+	}
+
+	void Board::QCastles()
 	{
 		if (m_whiteToPlay)
 		{
@@ -349,27 +436,45 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::EPCapture(Move move)
+	void Board::QCastlesInverse()
 	{
-		const Square init = move.GetInitSquare();
-		const Square dest = move.GetDestSquare();
+		if (!m_whiteToPlay)
+		{
+			MovePieceInverse(WhiteKingStartingSquare, WhiteKingStartingSquare - 2);
+			MovePieceInverse(WhiteQueensideRookStartingSquare, WhiteKingStartingSquare - 1);
+		}
+		else
+		{
+			MovePieceInverse(BlackKingStartingSquare, BlackKingStartingSquare - 2);
+			MovePieceInverse(BlackQueensideRookStartingSquare, BlackKingStartingSquare - 1);
+		}
+	}
 
+	void Board::EPCapture(const Square init, const Square dest)
+	{
 		MovePiece(init, dest);
 
 		const Square captured = dest + (m_whiteToPlay ? -8 : +8);
-
 		m_pieces[captured] = Piece::ee;
 	}
 
-	void Board::Promotion(Move move)
+	void Board::EPCaptureInverse(const Square init, const Square dest)
 	{
-		const Square init = move.GetInitSquare();
-		const Square dest = move.GetDestSquare();
+		MovePieceInverse(init, dest);
 
-		MovePiece(init, dest);
+		const Square captured = dest + (!m_whiteToPlay ? -8 : +8);
+		m_pieces[captured] = (m_whiteToPlay ? Piece::wp : Piece::bp);
+	}
 
-		Piece promotionPiece = Piece(move.GetPromotionType(), m_whiteToPlay);
+	void Board::Promotion(const Square init, const Square dest, const Piece::Type type)
+	{
+		m_pieces[init] = Piece::ee;
+		m_pieces[dest] = Piece(type, m_whiteToPlay);
+	}
 
-		m_pieces[dest] = promotionPiece;
+	void Board::PromotionInverse(const Square init, const Square dest, const Piece capturedPiece)
+	{
+		m_pieces[init] = (!m_whiteToPlay ? Piece::wp : Piece::bp);
+		m_pieces[dest] = capturedPiece;
 	}
 }

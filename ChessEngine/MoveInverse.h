@@ -1,15 +1,14 @@
 #pragma once
 
 #include "Definitions.h"
-#include "Board.h"
 #include "Move.h"
 
 namespace ChessEngine
 {
+	class Board;
+
 	class MoveInverse
 	{
-		friend class Board;
-
 	public:
 
 		// Create a new move inverse for a given board and move

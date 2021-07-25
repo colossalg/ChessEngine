@@ -4,11 +4,13 @@
 
 #include "Definitions.h"
 #include "Helper.h"
-#include "Move.h"
-#include "Piece.h"
 
 namespace ChessEngine
 {
+	class Move;
+	class MoveInverse;
+	class Piece;
+
 	class Board
 	{
 	public:
@@ -26,6 +28,9 @@ namespace ChessEngine
 
 		// Update the board as per the given move
 		void MakeMove(Move move);
+
+		// Update the board as per the given move inverse
+		void UndoMove(MoveInverse moveInverse);
 
 		// Get the array representing the piece's locations on the board
 		const PieceArray& GetPieces() const { return m_pieces; }
@@ -57,19 +62,34 @@ namespace ChessEngine
 	private:
 
 		// Helper function which updates the piece array by moving a piece from 'init' to 'dest'
-		inline void MovePiece(Square init, Square dest);
+		inline void MovePiece(const Square init, const Square dest);
+
+		// Helper function which updates the piece array bu 'undoing' MovePiece
+		inline void MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
 
 		// Helper function for handling kingside castles
-		inline void KCastles(Move move);
+		inline void KCastles();
+
+		// Helper function for 'undoing' kingside castles
+		inline void KCastlesInverse();
 
 		// Helper function for handling queenside castles
-		inline void QCastles(Move move);
+		inline void QCastles();
+
+		// Helper function for 'undoing' queenside castles
+		inline void QCastlesInverse();
 
 		// Helper function for handling en passant capture
-		inline void EPCapture(Move move);
+		inline void EPCapture(const Square init, const Square dest);
+
+		// Helper function for 'undoing' an en passant capture
+		inline void EPCaptureInverse(const Square init, const Square dest);
 
 		// Helper function for handling promotion
-		void Promotion(Move move);
+		void Promotion(const Square init, const Square dest, const Piece::Type type);
+
+		// Helper function for 'undoing' a promotion
+		void PromotionInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
 
 		const static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
 		const static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)

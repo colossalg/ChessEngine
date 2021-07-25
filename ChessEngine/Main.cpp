@@ -1,11 +1,12 @@
 #include <array>
 #include <iostream>
 
+#include "AsciiUI.h"
+#include "Board.h"
 #include "Definitions.h"
 #include "Helper.h"
+#include "Move.h"
 #include "Piece.h"
-#include "Board.h"
-#include "AsciiUI.h"
 
 using namespace ChessEngine;
 
