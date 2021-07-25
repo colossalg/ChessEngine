@@ -9,8 +9,6 @@
 
 namespace ChessEngine
 {
-	class MoveGenerator; // Forward declaration
-
 	class Board
 	{
 	public:
@@ -35,44 +33,23 @@ namespace ChessEngine
 		// Update the board as per the given move
 		void MakeMove(Move move);
 
-		// Set the array representing the piece's locations on the board
-		void SetPieces(const PieceArray& pieces) { m_pieces = pieces; }
-
 		// Get the array representing the piece's locations on the board
 		const PieceArray& GetPieces() const { return m_pieces; }
-
-		// Set the en passant square (if en passant is possible)
-		void SetEnPassant(EnPassant enPassant) { m_enPassant = enPassant; }
 
 		// Get the en passant square (if en passant is possible)
 		EnPassant GetEnPassant() const { return m_enPassant; }
 
-		// Set whether white can castle kingside
-		void SetWhiteCanCastleKingside(bool canCastle) { m_whiteKingside = canCastle; }
-
 		// Get whether white can castle kingside
 		bool GetWhiteCanCastleKingside() { return m_whiteKingside; }
-
-		// Set whether white can castle kingside
-		void SetWhiteCanCastleQueenside(bool canCastle) { m_whiteQueenside = canCastle; }
 
 		// Get whether white can castle queenside
 		bool GetWhiteCanCastleQueenside() { return m_whiteQueenside; }
 
-		// Set whether black can castle kingside
-		void SetBlackCanCastleKingside(bool canCastle) { m_blackKingside = canCastle; }
-
 		// Get whether black can castle kingside
 		bool GetBlackCanCastlekingside() { return m_blackKingside; }
 
-		// Set whether black can castle queenside
-		void SetBlackCanCastleQueenside(bool canCastle) { m_blackQueenside = canCastle; }
-
 		// Get whether black can castle queenside
 		bool GetBlackCanCastleQueenside() { return m_blackQueenside; }
-
-		// Set whether it is white's turn to play
-		void SetWhiteToPlay(bool whiteToPlay) { m_whiteToPlay = whiteToPlay; }
 
 		// Get whether it is white's turn to play
 		bool GetWhiteToPlay() const { return m_whiteToPlay; }
@@ -105,8 +82,8 @@ namespace ChessEngine
 
 		bool m_whiteToPlay = true;	// Whether it is white's turn to play
 
-		unsigned char m_halfMoves = 0;	// Not really used
-		unsigned char m_fullMoves = 0;	// Not really used
+		unsigned char m_halfMoves = 0;	// The number of half moves played since last irreversible move
+		unsigned char m_fullMoves = 0;	// The number of full moves played
 	};
 }
 
