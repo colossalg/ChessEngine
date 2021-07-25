@@ -145,6 +145,7 @@
     <ClInclude Include="AsciiUI.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MoveInverse.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Definitions.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="AsciiUI.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MoveInverse.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Main.cpp" />

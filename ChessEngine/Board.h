@@ -12,12 +12,6 @@ namespace ChessEngine
 	class Board
 	{
 	public:
-		const static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
-		const static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
-		const static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
-		const static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
-		const static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
-		const static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
 
 		const static PieceArray StartingPieces; // The starting pieces for a board
 
@@ -40,19 +34,25 @@ namespace ChessEngine
 		EnPassant GetEnPassant() const { return m_enPassant; }
 
 		// Get whether white can castle kingside
-		bool GetWhiteCanCastleKingside() { return m_whiteKingside; }
+		bool GetWhiteCanCastleKingside() const { return m_whiteKingside; }
 
 		// Get whether white can castle queenside
-		bool GetWhiteCanCastleQueenside() { return m_whiteQueenside; }
+		bool GetWhiteCanCastleQueenside() const { return m_whiteQueenside; }
 
 		// Get whether black can castle kingside
-		bool GetBlackCanCastlekingside() { return m_blackKingside; }
+		bool GetBlackCanCastleKingside() const { return m_blackKingside; }
 
 		// Get whether black can castle queenside
-		bool GetBlackCanCastleQueenside() { return m_blackQueenside; }
+		bool GetBlackCanCastleQueenside() const { return m_blackQueenside; }
 
 		// Get whether it is white's turn to play
 		bool GetWhiteToPlay() const { return m_whiteToPlay; }
+
+		// Get the number of half moves played since the lase irreversible move
+		unsigned char GetHalfMoves() const { return m_halfMoves; }
+
+		// Get the number of full moves played
+		unsigned char GetFullMoves() const { return m_fullMoves; }
 
 	private:
 
@@ -70,6 +70,13 @@ namespace ChessEngine
 
 		// Helper function for handling promotion
 		void Promotion(Move move);
+
+		const static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
+		const static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
+		const static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
+		const static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
+		const static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
+		const static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
 
 		PieceArray m_pieces;		// The pieces locations on the board
 
