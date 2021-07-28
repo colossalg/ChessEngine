@@ -6,23 +6,21 @@ namespace ChessEngine
 {
 	MoveInverse::MoveInverse(const Board& board, Move move) :
 		m_move(move),
-		m_enPassant(board.GetEnPassant()),
-		m_whiteKingside(board.GetWhiteCanCastleKingside()),
-		m_whiteQueenside(board.GetWhiteCanCastleQueenside()),
-		m_blackKingside(board.GetBlackCanCastleKingside()),
-		m_blackQueenside(board.GetBlackCanCastleQueenside()),
-		m_halfMoves(board.GetHalfMoves()),
+		m_enPassant(board.m_enPassant),
+		m_whiteKingside(board.m_whiteKingside),
+		m_whiteQueenside(board.m_whiteQueenside),
+		m_blackKingside(board.m_blackKingside),
+		m_blackQueenside(board.m_blackQueenside),
+		m_halfMoves(board.m_halfMoves),
 		m_capturedPiece(Piece::ee)
 	{
 		if (move.IsEnPassantCapture())
 		{
-			m_capturedPiece = (board.GetWhiteToPlay() ? Piece::bp : Piece::wp);
+			m_capturedPiece = (board.m_whiteToPlay ? Piece::bp : Piece::wp);
 		}
 		else if (move.IsCapture())
 		{
-			const PieceArray& pieces = board.GetPieces();
-
-			m_capturedPiece = pieces[move.GetDestSquare()];
+			m_capturedPiece = board.m_pieces[move.GetDestSquare()];
 		}
 	}
 }

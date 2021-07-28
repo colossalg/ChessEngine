@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Definitions.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
@@ -78,12 +79,8 @@ namespace ChessEngine
 		const static unsigned short PromotionTypeMask = 0b1011; // The mask for extracting the piece type of a promotion move
 
 		const static unsigned short Capture = 0b0100;		// The bitmap for whether a move is a capture
-		
-		const static unsigned short Promotion = 0b1000;			// The bitmap for whether a move is a promotion
-		const static unsigned short KnightPromotion = 0b1000;	// The bitmap for knight promotions
-		const static unsigned short BishopPromotion = 0b1001;	// The bitmap for bishop promotions
-		const static unsigned short RookPromotion = 0b1010;		// The bitmap for rook promotions
-		const static unsigned short QueenPromotion = 0b1011;	// The bitmap for queen promotions
+
+		const unsigned short Promotion = 0b1000;			// The bitmap for whether a move is a promotion
 
 		unsigned short m_move;	// The underlying bitmap for the move
 	};

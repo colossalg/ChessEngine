@@ -4,15 +4,22 @@
 #include <list>
 #include <optional>
 
-#include "Piece.h"
-
 namespace ChessEngine
 {
+	class AsciiUI;
+	class Board;
+	class Move;
+	class MoveGnerator;
+	class MoveInverse;
+	class Piece;
+
 	using Row = unsigned char;
 	using Col = unsigned char;
 	using Square = unsigned char;
 
 	using PieceArray = std::array<Piece, 64>;
+
+	using MoveList = std::list<Move>;
 
 	using EnPassant = std::optional<Square>;
 }

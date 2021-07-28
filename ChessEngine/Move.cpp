@@ -4,9 +4,18 @@
 #include <string>
 
 #include "Helper.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
+	namespace
+	{
+		const unsigned short KnightPromotion = 0b1000;	// The bitmap for knight promotions
+		const unsigned short BishopPromotion = 0b1001;	// The bitmap for bishop promotions
+		const unsigned short RookPromotion = 0b1010;	// The bitmap for rook promotions
+		const unsigned short QueenPromotion = 0b1011;	// The bitmap for queen promotions
+	}
+
 	Move::Move(Square init, Square dest, bool isCapture, bool isPromotion, Piece::Type promotionType)
 	{
 		m_move = 0;

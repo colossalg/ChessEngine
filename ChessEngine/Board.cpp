@@ -6,7 +6,6 @@
 #include "Helper.h"
 #include "Move.h"
 #include "MoveInverse.h"
-#include "Piece.h"
 
 namespace ChessEngine
 {
@@ -204,7 +203,7 @@ namespace ChessEngine
 		return FENStream.str();
 	}
 
-	void Board::MakeMove(Move move)
+	void Board::MakeMove(const Move move)
 	{
 		// It is assumed that the move provided is a valid move. Checking of whether a
 		// move is valid will be done at the point where the user move is parsed. All
@@ -315,7 +314,7 @@ namespace ChessEngine
 		m_whiteToPlay = !m_whiteToPlay;
 	}
 
-	void Board::UndoMove(MoveInverse moveInverse)
+	void Board::UndoMove(const MoveInverse moveInverse)
 	{
 		const Move move = moveInverse.GetMove();
 		
@@ -376,7 +375,7 @@ namespace ChessEngine
 		m_whiteToPlay = !m_whiteToPlay;
 	}
 
-	void Board::MovePiece(Square init, Square dest)
+	inline void Board::MovePiece(const Square init, const Square dest)
 	{
 		Piece piece = m_pieces[init];
 
@@ -385,7 +384,7 @@ namespace ChessEngine
 		m_pieces[dest] = piece;
 	}
 
-	void Board::MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece)
+	inline void Board::MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
 		Piece piece = m_pieces[dest];
 
@@ -394,7 +393,7 @@ namespace ChessEngine
 		m_pieces[dest] = capturedPiece;
 	}
 
-	void Board::KCastles()
+	inline void Board::KCastles()
 	{
 		if (m_whiteToPlay)
 		{
@@ -408,7 +407,7 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::KCastlesInverse()
+	inline void Board::KCastlesInverse()
 	{
 		if (!m_whiteToPlay)
 		{
@@ -422,7 +421,7 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::QCastles()
+	inline void Board::QCastles()
 	{
 		if (m_whiteToPlay)
 		{
@@ -436,7 +435,7 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::QCastlesInverse()
+	inline void Board::QCastlesInverse()
 	{
 		if (!m_whiteToPlay)
 		{
@@ -450,7 +449,7 @@ namespace ChessEngine
 		}
 	}
 
-	void Board::EPCapture(const Square init, const Square dest)
+	inline void Board::EPCapture(const Square init, const Square dest)
 	{
 		MovePiece(init, dest);
 
@@ -458,7 +457,7 @@ namespace ChessEngine
 		m_pieces[captured] = Piece::ee;
 	}
 
-	void Board::EPCaptureInverse(const Square init, const Square dest)
+	inline void Board::EPCaptureInverse(const Square init, const Square dest)
 	{
 		MovePieceInverse(init, dest);
 
@@ -466,13 +465,13 @@ namespace ChessEngine
 		m_pieces[captured] = (m_whiteToPlay ? Piece::wp : Piece::bp);
 	}
 
-	void Board::Promotion(const Square init, const Square dest, const Piece::Type type)
+	inline void Board::Promotion(const Square init, const Square dest, const Piece::Type type)
 	{
 		m_pieces[init] = Piece::ee;
 		m_pieces[dest] = Piece(type, m_whiteToPlay);
 	}
 
-	void Board::PromotionInverse(const Square init, const Square dest, const Piece capturedPiece)
+	inline void Board::PromotionInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
 		m_pieces[init] = (!m_whiteToPlay ? Piece::wp : Piece::bp);
 		m_pieces[dest] = capturedPiece;

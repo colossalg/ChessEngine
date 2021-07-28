@@ -5,8 +5,6 @@
 
 namespace ChessEngine
 {
-	class Board;
-
 	class MoveInverse
 	{
 	public:

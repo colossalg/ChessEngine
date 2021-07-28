@@ -3,16 +3,16 @@
 #include <string>
 
 #include "Definitions.h"
-#include "Helper.h"
+#include "Piece.h"
 
 namespace ChessEngine
 {
-	class Move;
-	class MoveInverse;
-	class Piece;
-
 	class Board
 	{
+		friend class AsciiUI;
+		friend class MoveGenerator;
+		friend class MoveInverse;
+
 	public:
 
 		const static PieceArray StartingPieces; // The starting pieces for a board
@@ -27,63 +27,36 @@ namespace ChessEngine
 		std::string GetFEN() const;
 
 		// Update the board as per the given move
-		void MakeMove(Move move);
+		void MakeMove(const Move move);
 
 		// Update the board as per the given move inverse
-		void UndoMove(MoveInverse moveInverse);
-
-		// Get the array representing the piece's locations on the board
-		const PieceArray& GetPieces() const { return m_pieces; }
-
-		// Get the en passant square (if en passant is possible)
-		EnPassant GetEnPassant() const { return m_enPassant; }
-
-		// Get whether white can castle kingside
-		bool GetWhiteCanCastleKingside() const { return m_whiteKingside; }
-
-		// Get whether white can castle queenside
-		bool GetWhiteCanCastleQueenside() const { return m_whiteQueenside; }
-
-		// Get whether black can castle kingside
-		bool GetBlackCanCastleKingside() const { return m_blackKingside; }
-
-		// Get whether black can castle queenside
-		bool GetBlackCanCastleQueenside() const { return m_blackQueenside; }
-
-		// Get whether it is white's turn to play
-		bool GetWhiteToPlay() const { return m_whiteToPlay; }
-
-		// Get the number of half moves played since the lase irreversible move
-		unsigned char GetHalfMoves() const { return m_halfMoves; }
-
-		// Get the number of full moves played
-		unsigned char GetFullMoves() const { return m_fullMoves; }
+		void UndoMove(const MoveInverse moveInverse);
 
 	private:
 
 		// Helper function which updates the piece array by moving a piece from 'init' to 'dest'
-		inline void MovePiece(const Square init, const Square dest);
+		void MovePiece(const Square init, const Square dest);
 
 		// Helper function which updates the piece array bu 'undoing' MovePiece
-		inline void MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
+		void MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
 
 		// Helper function for handling kingside castles
-		inline void KCastles();
+		void KCastles();
 
 		// Helper function for 'undoing' kingside castles
-		inline void KCastlesInverse();
+		void KCastlesInverse();
 
 		// Helper function for handling queenside castles
-		inline void QCastles();
+		void QCastles();
 
 		// Helper function for 'undoing' queenside castles
-		inline void QCastlesInverse();
+		void QCastlesInverse();
 
 		// Helper function for handling en passant capture
-		inline void EPCapture(const Square init, const Square dest);
+		void EPCapture(const Square init, const Square dest);
 
 		// Helper function for 'undoing' an en passant capture
-		inline void EPCaptureInverse(const Square init, const Square dest);
+		void EPCaptureInverse(const Square init, const Square dest);
 
 		// Helper function for handling promotion
 		void Promotion(const Square init, const Square dest, const Piece::Type type);
