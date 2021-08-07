@@ -10,7 +10,7 @@ namespace ChessEngine
 	public:
 
 		// Create a new move inverse for a given board and move
-		MoveInverse(const Board& board, Move move);
+		MoveInverse(const Board& board, const Move move);
 
 		// Get the move which this is the inverse move for
 		Move GetMove() const { return m_move; }

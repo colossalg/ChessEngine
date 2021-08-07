@@ -20,16 +20,26 @@ namespace ChessEngine
 		};
 
 		// Create a new move with the given properties (init/dest squares, is a capture, is a promotion and to what piece)
-		Move(Square init, Square dest, bool isCapture = false, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
+		Move(
+			const Square init, 
+			const Square dest, 
+			const bool isCapture = false, 
+			const bool isPromotion = false, 
+			const Piece::Type promotionType = Piece::Type::Queen);
 
 		// Create a new move with the given properties (init/dest squares as strings, is a capture, is a promotion and to what piece)
-		Move(const std::string& init, const std::string& dest, bool isCapture = false, bool isPromotion = false, Piece::Type promotionType = Piece::Type::Queen);
+		Move(
+			const std::string& init, 
+			const std::string& dest, 
+			const bool isCapture = false, 
+			const bool isPromotion = false, 
+			const Piece::Type promotionType = Piece::Type::Queen);
 
 		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
-		Move(Square init, Square dest, Special specialType);
+		Move(const Square init, const Square dest, const Special specialType);
 
 		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
-		Move(const std::string& init, const std::string& dest, Special specialType);
+		Move(const std::string& init, const std::string& dest, const Special specialType);
 
 		// Create a new move from another move
 		Move(const Move& other) = default;

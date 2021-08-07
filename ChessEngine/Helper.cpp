@@ -29,7 +29,7 @@ namespace ChessEngine
 			}
 		}
 
-		std::string StringFromSquare(Square s)
+		std::string StringFromSquare(const Square s)
 		{
 			char row = static_cast<char>(RowFromSquare(s) + '1');
 			char col = static_cast<char>(ColFromSquare(s) + 'a');

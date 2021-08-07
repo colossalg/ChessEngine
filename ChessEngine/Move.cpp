@@ -16,7 +16,7 @@ namespace ChessEngine
 		const unsigned short QueenPromotion = 0b1011;	// The bitmap for queen promotions
 	}
 
-	Move::Move(Square init, Square dest, bool isCapture, bool isPromotion, Piece::Type promotionType)
+	Move::Move(const Square init, const Square dest, const bool isCapture, const bool isPromotion, const Piece::Type promotionType)
 	{
 		m_move = 0;
 		m_move |= (init << InitOffset);
@@ -52,7 +52,7 @@ namespace ChessEngine
 		}
 	}
 
-	Move::Move(const std::string& init, const std::string& dest, bool isCapture, bool isPromotion, Piece::Type promotionType) :
+	Move::Move(const std::string& init, const std::string& dest, const bool isCapture, const bool isPromotion, const Piece::Type promotionType) :
 		Move(
 			Helper::SquareFromString(init),
 			Helper::SquareFromString(dest),
@@ -63,7 +63,7 @@ namespace ChessEngine
 	{
 	}
 
-	Move::Move(Square init, Square dest, Special specialType)
+	Move::Move(const Square init, const Square dest, const Special specialType)
 	{
 		m_move = 0;
 		m_move |= (init << InitOffset);
@@ -71,7 +71,7 @@ namespace ChessEngine
 		m_move |= static_cast<unsigned short>(specialType);
 	}
 
-	Move::Move(const std::string& init, const std::string& dest, Special specialType) :
+	Move::Move(const std::string& init, const std::string& dest, const Special specialType) :
 		Move(
 			Helper::SquareFromString(init), 
 			Helper::SquareFromString(dest),

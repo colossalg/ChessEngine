@@ -4,7 +4,7 @@
 
 namespace ChessEngine
 {
-	MoveInverse::MoveInverse(const Board& board, Move move) :
+	MoveInverse::MoveInverse(const Board& board, const Move move) :
 		m_move(move),
 		m_enPassant(board.m_enPassant),
 		m_whiteKingside(board.m_whiteKingside),

@@ -24,10 +24,10 @@ namespace ChessEngine
 		Piece() = default;
 
 		// Create a new piece with the given properties (type, whether it is white)
-		Piece(Type type, bool isWhite);
+		Piece(const Type type, const bool isWhite);
 
 		// Create a new piece from the piece's ascii
-		Piece(char ascii);
+		Piece(const char ascii);
 
 		// Create a new piece from another piece
 		Piece(const Piece& other) = default;
@@ -37,6 +37,7 @@ namespace ChessEngine
 
 		// Compare one piece to another
 		bool operator==(const Piece& other) const { return (m_piece == other.GetValue()); }
+		bool operator!=(const Piece& other) const { return (m_piece != other.GetValue()); }
 
 		// Get whether the piece is an empty square
 		inline bool IsEmpty() const { return ((m_piece & IsEmptyBitMap) == 0); }

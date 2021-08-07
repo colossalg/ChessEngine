@@ -5,7 +5,7 @@
 
 namespace ChessEngine
 {
-	Piece::Piece(Type type, bool isWhite)
+	Piece::Piece(const Type type, const bool isWhite)
 	{
 		m_piece = static_cast<int>(type);
 
@@ -15,7 +15,7 @@ namespace ChessEngine
 		}
 	}
 
-	Piece::Piece(char ascii)
+	Piece::Piece(const char ascii)
 	{
 		switch (ascii)
 		{
