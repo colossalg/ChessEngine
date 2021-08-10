@@ -104,4 +104,9 @@ namespace ChessEngine
 			throw std::runtime_error(error);
 		}
 	}
+
+	std::string Move::GetString() const
+	{
+		return ("(" + Helper::StringFromSquare(GetInitSquare()) + "," + Helper::StringFromSquare(GetDestSquare()) + ")");
+	}
 }

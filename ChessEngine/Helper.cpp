@@ -39,5 +39,10 @@ namespace ChessEngine
 
 			return ss.str();
 		}
+
+		std::wstring StringToWString(const std::string& s)
+		{
+			return std::wstring(s.begin(), s.end());
+		}
 	}
 }

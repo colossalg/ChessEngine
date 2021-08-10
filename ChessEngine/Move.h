@@ -47,6 +47,10 @@ namespace ChessEngine
 		// Copy one move to another
 		Move& operator=(const Move& other) = default;
 
+		// Compare one move to another
+		bool operator==(const Move& other) const { return (m_move == other.GetValue()); }
+		bool operator!=(const Move& other) const { return (m_move != other.GetValue()); }
+
 		// Get the initial square of the move
 		inline Square GetInitSquare() const { return static_cast<Square>((m_move >> InitOffset) & MoveMask); }
 
@@ -76,6 +80,12 @@ namespace ChessEngine
 
 		// Get the type of the piece that the pawn is promoted to
 		Piece::Type GetPromotionType() const;
+
+		// Get the value of the move
+		inline unsigned short GetValue() const { return m_move; }
+
+		// Get the move represented as a string (start square, end square)
+		std::string GetString() const;
 
 	private:
 		// Helper function for querying whether a move is XXX (capture, promotion, etc.)

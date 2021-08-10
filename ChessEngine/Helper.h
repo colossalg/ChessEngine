@@ -37,5 +37,8 @@ namespace ChessEngine
 
 		// Get the string from a square (ex. 63 -> h8)
 		std::string StringFromSquare(const Square s);
+
+		// Convert a std::string to a std::wstring
+		std::wstring StringToWString(const std::string& s);
 	}
 }

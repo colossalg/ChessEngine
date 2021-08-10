@@ -159,6 +159,10 @@ namespace ChessEngine
 				{
 					return true;
 				}
+				else if (piece != Piece::ee)
+				{
+					break;
+				}
 			}
 
 			if (CheckMoveLandsOnBoard(init, offset, dest) &&
@@ -194,12 +198,16 @@ namespace ChessEngine
 			{
 				const Piece piece = board.m_pieces[dest];
 
-				if ((board.m_whiteToPlay && piece == Piece::bb) ||
+				if ((board.m_whiteToPlay && piece == Piece::br) ||
 					(board.m_whiteToPlay && piece == Piece::bq) ||
-					(!board.m_whiteToPlay && piece == Piece::wb) ||
+					(!board.m_whiteToPlay && piece == Piece::wr) ||
 					(!board.m_whiteToPlay && piece == Piece::wq))
 				{
 					return true;
+				}
+				else if (piece != Piece::ee)
+				{
+					break;
 				}
 			}
 
@@ -392,13 +400,18 @@ namespace ChessEngine
 
 		const Square kingPosition = (board.m_whiteToPlay ? Helper::SquareFromRowAndCol(0, 4) : Helper::SquareFromRowAndCol(7, 4));
 
+		if (IsSquareAttacked(board, kingPosition))
+		{
+			return;
+		}
+
 		if (canCastleKingside)
 		{
 			const Square oneKingside = OffsetSquare(kingPosition, 1);
 			const Square twoKingside = OffsetSquare(kingPosition, 2);
 
-			if (((board.m_pieces[oneKingside] == Piece::ee) || !IsSquareAttacked(board, oneKingside)) &&
-				((board.m_pieces[twoKingside] == Piece::ee) || !IsSquareAttacked(board, twoKingside)))
+			if (((board.m_pieces[oneKingside] == Piece::ee) && !IsSquareAttacked(board, oneKingside)) &&
+				((board.m_pieces[twoKingside] == Piece::ee) && !IsSquareAttacked(board, twoKingside)))
 			{
 				moveList.push_back(Move(kingPosition, twoKingside, Move::Special::KingsideCastles));
 			}
@@ -410,8 +423,8 @@ namespace ChessEngine
 			const Square twoQueenside = OffsetSquare(kingPosition, -2);
 			const Square threeQueenside = OffsetSquare(kingPosition, -3);
 
-			if (((board.m_pieces[oneQueenside] == Piece::ee) || !IsSquareAttacked(board, oneQueenside)) &&
-				((board.m_pieces[twoQueenside] == Piece::ee) || !IsSquareAttacked(board, twoQueenside)) &&
+			if (((board.m_pieces[oneQueenside] == Piece::ee) && !IsSquareAttacked(board, oneQueenside)) &&
+				((board.m_pieces[twoQueenside] == Piece::ee) && !IsSquareAttacked(board, twoQueenside)) &&
 				((board.m_pieces[threeQueenside] == Piece::ee)))
 			{
 				moveList.push_back(Move(kingPosition, twoQueenside, Move::Special::QueensideCastles));
