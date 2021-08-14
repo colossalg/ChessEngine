@@ -309,7 +309,7 @@ namespace ChessEngine
 			}
 
 			// Take right
-			if (CheckMoveLandsOnBoard(init, captureLftOffset, dest))
+			if (CheckMoveLandsOnBoard(init, captureRgtOffset, dest))
 			{
 				const Piece piece = board.m_pieces[dest];
 

@@ -109,4 +109,9 @@ namespace ChessEngine
 	{
 		return ("(" + Helper::StringFromSquare(GetInitSquare()) + "," + Helper::StringFromSquare(GetDestSquare()) + ")");
 	}
+
+	std::string Move::GetStringExtended() const
+	{
+		return ("(" + std::to_string(m_move) + "," + Helper::StringFromSquare(GetInitSquare()) + "," + Helper::StringFromSquare(GetDestSquare()) + ")");
+	}
 }

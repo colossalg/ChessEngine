@@ -87,6 +87,9 @@ namespace ChessEngine
 		// Get the move represented as a string (start square, end square)
 		std::string GetString() const;
 
+		// Get the move represented as a string (raw value, start square, end square)
+		std::string GetStringExtended() const;
+
 	private:
 		// Helper function for querying whether a move is XXX (capture, promotion, etc.)
 		inline bool IsSpecial(Special specialType) const { return (Special(m_move & TypeMask) == specialType); }
