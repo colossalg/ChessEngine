@@ -2,6 +2,8 @@
 // in this file as I found out the HARD way that the order of static initialization is undefined
 // accross compilation units.
 
+#include "pch.h"
+
 #include "Piece.h"
 #include "Board.h"
 

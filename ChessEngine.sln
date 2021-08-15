@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessEngine.Tests", "ChessE
 		{C18ED818-379F-4F80-8CAB-37264447F066} = {C18ED818-379F-4F80-8CAB-37264447F066}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessEngine.Internal", "ChessEngine.Internal\ChessEngine.Internal.vcxproj", "{59B0790A-2699-4C0E-AEB9-3B89A03BED10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{8F77A03C-DE95-4ABD-9F6C-0208EF6AA3D6}.Release|x64.Build.0 = Release|x64
 		{8F77A03C-DE95-4ABD-9F6C-0208EF6AA3D6}.Release|x86.ActiveCfg = Release|Win32
 		{8F77A03C-DE95-4ABD-9F6C-0208EF6AA3D6}.Release|x86.Build.0 = Release|Win32
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Debug|x64.ActiveCfg = Debug|x64
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Debug|x64.Build.0 = Debug|x64
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Debug|x86.ActiveCfg = Debug|Win32
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Debug|x86.Build.0 = Debug|Win32
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Release|x64.ActiveCfg = Release|x64
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Release|x64.Build.0 = Release|x64
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Release|x86.ActiveCfg = Release|Win32
+		{59B0790A-2699-4C0E-AEB9-3B89A03BED10}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

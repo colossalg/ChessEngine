@@ -1,7 +1,6 @@
-#include "Board.h"
+#include "pch.h"
 
-#include <algorithm>
-#include <sstream>
+#include "Board.h"
 
 #include "Helper.h"
 #include "Move.h"

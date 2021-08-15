@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "MoveGenerator.h"
 
 #include "Board.h"

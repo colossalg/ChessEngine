@@ -1,7 +1,6 @@
-#include "Move.h"
+#include "pch.h"
 
-#include <stdexcept>
-#include <string>
+#include "Move.h"
 
 #include "Helper.h"
 #include "Piece.h"

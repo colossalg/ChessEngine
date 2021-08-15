@@ -1,7 +1,6 @@
-#include "Piece.h"
+#include "pch.h"
 
-#include <stdexcept>
-#include <string>
+#include "Piece.h"
 
 namespace ChessEngine
 {

@@ -6,7 +6,6 @@
 
 namespace ChessEngine
 {
-	class AsciiUI;
 	class Board;
 	class Move;
 	class MoveGnerator;
