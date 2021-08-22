@@ -6,6 +6,8 @@ namespace ChessEngine
 {
 	class MoveGenerator
 	{
+		friend class MoveGeneratorTests;
+
 	public:
 
 		// Generate and return a list of all the pseudo-legal moves for the position
@@ -15,8 +17,6 @@ namespace ChessEngine
 		static bool IsSquareAttacked(const Board& board, const Square init);
 
 	private:
-
-		friend class MoveGeneratorTests;
 
 		// Generate and return a list of all the pseudo-legal moves for the pawn at the given square on the board
 		static void GeneratePawnMoves(MoveList& moveList, const Board& board, const Square init);

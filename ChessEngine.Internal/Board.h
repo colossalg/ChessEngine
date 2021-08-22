@@ -10,6 +10,7 @@ namespace ChessEngine
 	class Board
 	{
 		friend class AsciiUI;
+		friend class BoardEvaluator;
 		friend class MoveGenerator;
 		friend class MoveInverse;
 
@@ -64,12 +65,12 @@ namespace ChessEngine
 		// Helper function for 'undoing' a promotion
 		void PromotionInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
 
-		const static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
-		const static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
-		const static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
-		const static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
-		const static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
-		const static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
+		constexpr static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
+		constexpr static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
+		constexpr static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
+		constexpr static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
+		constexpr static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
+		constexpr static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
 
 		PieceArray m_pieces;		// The pieces locations on the board
 

@@ -13,21 +13,21 @@ namespace ChessEngine
 	namespace
 	{
 		// The offsets from a square to all those whigh can be reached via a knight jump
-		const char KnightJumps[8] = { +8, -8, +12, -12, +19, -19, +21, -21 };
+		constexpr char KnightJumps[8] = { +8, -8, +12, -12, +19, -19, +21, -21 };
 
 		// The offsets from a square to those adjacent diagonally
-		const char Diagonals[4] = { +9, -9, +11, -11 };
+		constexpr char Diagonals[4] = { +9, -9, +11, -11 };
 
 		// The offsets from a square to those adjacent along the rank or file
-		const char RanksAndFiles[4] = { +1, -1, +10, -10 };
+		constexpr char RanksAndFiles[4] = { +1, -1, +10, -10 };
 
 		// The offsets from a square to those adjacent diagonally or along the rank or file
-		const char DiagonalsRanksAndFiles[8] = { +9, -9, +11, -11, +1, -1, +10, -10 };
+		constexpr char DiagonalsRanksAndFiles[8] = { +9, -9, +11, -11, +1, -1, +10, -10 };
 
 		// The 120 character mailbox for detecting whether a move will land on
 		// the board or not. Each entry is either -1 denoting that the move is
 		// not on the board, or, the valid square that the move will land on.
-		const char Mailbox120[120] = {
+		constexpr char Mailbox120[120] = {
 			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 			-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 			-1,  0,  1,  2,  3,  4,  5,  6,  7, -1,
@@ -44,7 +44,7 @@ namespace ChessEngine
 
 		// The 64 character mailbox which maps squares to the index of the
 		// corresponding entry in Mailbox120.
-		const char Mailbox64[64] = {
+		constexpr char Mailbox64[64] = {
 			21, 22, 23, 24, 25, 26, 27, 28,
 			31, 32, 33, 34, 35, 36, 37, 38,
 			41, 42, 43, 44, 45, 46, 47, 48,
