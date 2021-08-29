@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.Tests.cpp" />
+    <ClCompile Include="BoardEvaluator.Tests.cpp" />
     <ClCompile Include="Move.Tests.cpp" />
     <ClCompile Include="MoveGenerator.Tests.cpp" />
     <ClCompile Include="Template.Tests.cpp" />

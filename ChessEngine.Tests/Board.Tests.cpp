@@ -17,7 +17,7 @@ namespace ChessEngineTests
 
 	namespace
 	{
-		std::vector <std::string> FENVector{
+		const std::vector <std::string> FENVector{
 			"rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e3 0 2",		// 1. e4 e5
 			"r1bq1rk1/4bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 b - - 0 11",	// Ruy Lopez
 			"rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",		// Sicilian Dragon

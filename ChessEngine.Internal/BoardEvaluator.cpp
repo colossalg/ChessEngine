@@ -239,6 +239,8 @@ namespace ChessEngine
 
 		int evaluation = 0;
 
+		evaluation += PawnPositionModifiers[square];
+
 		if (row < m_whiteForemostPawns[index])
 		{
 			evaluation -= DoubledPawnPenalty;
@@ -277,12 +279,14 @@ namespace ChessEngine
 
 		int evaluation = 0;
 
+		evaluation += PawnPositionModifiers[Mirror[square]];
+
 		if (row > m_blackForemostPawns[index])
 		{
 			evaluation -= DoubledPawnPenalty;
 		}
 
-		if ((m_blackForemostPawns[index - 1] == 0) && (m_blackForemostPawns[index + 1] == 0))
+		if ((m_blackForemostPawns[index - 1] == 7) && (m_blackForemostPawns[index + 1] == 7))
 		{
 			evaluation -= IsolatedPawnPenalty;
 		}
