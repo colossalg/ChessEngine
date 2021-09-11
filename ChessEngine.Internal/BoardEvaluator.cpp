@@ -15,14 +15,7 @@ namespace ChessEngine
 		constexpr int BishopValue = 325;	// The base value of a bishop
 		constexpr int RookValue	  = 500;	// The base value of a rook
 		constexpr int QueenValue  = 900;	// The base value of a queen
-		constexpr int KingValue   = 10000;	// The base value of a king 
-
-		constexpr int MaxMaterialValue =
-			8 * PawnValue +
-			2 * KnightValue +
-			2 * BishopValue +
-			2 * RookValue +
-			1 * QueenValue;
+		constexpr int KingValue   = 99999;	// The base value of a king 
 
 		// An array of modifiers for pawn values based upon the pawn's position
 		constexpr int PawnPositionModifiers[64] = {
