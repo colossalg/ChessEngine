@@ -10,11 +10,12 @@ namespace ChessEngine
 {
 	namespace
 	{
-		constexpr int PawnValue	= 100;		// The base value of a pawn
+		constexpr int PawnValue	  = 100;	// The base value of a pawn
 		constexpr int KnightValue = 300;	// The base value of a knight
 		constexpr int BishopValue = 325;	// The base value of a bishop
-		constexpr int RookValue	= 500;		// The base value of a rook
-		constexpr int QueenValue = 900;		// The base value of a queen
+		constexpr int RookValue	  = 500;	// The base value of a rook
+		constexpr int QueenValue  = 900;	// The base value of a queen
+		constexpr int KingValue   = 10000;	// The base value of a king 
 
 		constexpr int MaxMaterialValue =
 			8 * PawnValue +
@@ -152,6 +153,7 @@ namespace ChessEngine
 				else if (piece == Piece::wb || piece == Piece::bb) pieceValue = BishopValue;
 				else if (piece == Piece::wr || piece == Piece::br) pieceValue = RookValue;
 				else if (piece == Piece::wq || piece == Piece::bq) pieceValue = QueenValue;
+				else if (piece == Piece::wk || piece == Piece::bk) pieceValue = KingValue;
 
 				if (piece.IsWhite())
 				{
