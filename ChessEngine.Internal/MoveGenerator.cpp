@@ -86,9 +86,9 @@ namespace ChessEngine
 
 		for (Square init = 0; Helper::IsValidSquare(init); init++)
 		{
-			Piece piece = board.m_pieces[init];
+			Piece piece = board.GetPieces()[init];
 
-			if (piece.IsEmpty() || piece.IsWhite() != board.m_whiteToPlay)
+			if (piece.IsEmpty() || piece.IsWhite() != board.GetWhiteToPlay())
 			{
 				continue;
 			}
@@ -137,10 +137,10 @@ namespace ChessEngine
 		{
 			if (CheckMoveLandsOnBoard(init, offset, dest))
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((board.m_whiteToPlay && piece == Piece::bn) || 
-					(!board.m_whiteToPlay && piece == Piece::wn))
+				if ((board.GetWhiteToPlay() && piece == Piece::bn) || 
+					(!board.GetWhiteToPlay() && piece == Piece::wn))
 				{
 					return true;
 				}
@@ -152,12 +152,12 @@ namespace ChessEngine
 		{
 			for (char lineOffset = offset; CheckMoveLandsOnBoard(init, lineOffset, dest); lineOffset += offset)
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((board.m_whiteToPlay && piece == Piece::bb) ||
-					(board.m_whiteToPlay && piece == Piece::bq) ||
-					(!board.m_whiteToPlay && piece == Piece::wb) ||
-					(!board.m_whiteToPlay && piece == Piece::wq))
+				if ((board.GetWhiteToPlay() && piece == Piece::bb) ||
+					(board.GetWhiteToPlay() && piece == Piece::bq) ||
+					(!board.GetWhiteToPlay() && piece == Piece::wb) ||
+					(!board.GetWhiteToPlay() && piece == Piece::wq))
 				{
 					return true;
 				}
@@ -168,26 +168,26 @@ namespace ChessEngine
 			}
 
 			if (CheckMoveLandsOnBoard(init, offset, dest) &&
-				((board.m_whiteToPlay && board.m_pieces[dest] == Piece::bk) || 
-				(!board.m_whiteToPlay && board.m_pieces[dest] == Piece::wk)))
+				((board.GetWhiteToPlay() && board.GetPieces()[dest] == Piece::bk) || 
+				(!board.GetWhiteToPlay() && board.GetPieces()[dest] == Piece::wk)))
 			{
 				return true;
 			}
 		}
 
 		// Check diagonals for pawns
-		if (board.m_whiteToPlay)
+		if (board.GetWhiteToPlay())
 		{
-			if ((CheckMoveLandsOnBoard(init, 9, dest) && (board.m_pieces[dest] == Piece::bp)) ||
-				(CheckMoveLandsOnBoard(init, 11, dest) && (board.m_pieces[dest] == Piece::bp)))
+			if ((CheckMoveLandsOnBoard(init, 9, dest) && (board.GetPieces()[dest] == Piece::bp)) ||
+				(CheckMoveLandsOnBoard(init, 11, dest) && (board.GetPieces()[dest] == Piece::bp)))
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if ((CheckMoveLandsOnBoard(init, -9, dest) && (board.m_pieces[dest] == Piece::wp)) ||
-				(CheckMoveLandsOnBoard(init, -11, dest) && (board.m_pieces[dest] == Piece::wp)))
+			if ((CheckMoveLandsOnBoard(init, -9, dest) && (board.GetPieces()[dest] == Piece::wp)) ||
+				(CheckMoveLandsOnBoard(init, -11, dest) && (board.GetPieces()[dest] == Piece::wp)))
 			{
 				return true;
 			}
@@ -198,12 +198,12 @@ namespace ChessEngine
 		{
 			for (char lineOffset = offset; CheckMoveLandsOnBoard(init, lineOffset, dest); lineOffset += offset)
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((board.m_whiteToPlay && piece == Piece::br) ||
-					(board.m_whiteToPlay && piece == Piece::bq) ||
-					(!board.m_whiteToPlay && piece == Piece::wr) ||
-					(!board.m_whiteToPlay && piece == Piece::wq))
+				if ((board.GetWhiteToPlay() && piece == Piece::br) ||
+					(board.GetWhiteToPlay() && piece == Piece::bq) ||
+					(!board.GetWhiteToPlay() && piece == Piece::wr) ||
+					(!board.GetWhiteToPlay() && piece == Piece::wq))
 				{
 					return true;
 				}
@@ -214,8 +214,8 @@ namespace ChessEngine
 			}
 
 			if (CheckMoveLandsOnBoard(init, offset, dest) &&
-				((board.m_whiteToPlay && board.m_pieces[dest] == Piece::bk) ||
-				(!board.m_whiteToPlay && board.m_pieces[dest] == Piece::wk)))
+				((board.GetWhiteToPlay() && board.GetPieces()[dest] == Piece::bk) ||
+				(!board.GetWhiteToPlay() && board.GetPieces()[dest] == Piece::wk)))
 			{
 				return true;
 			}
@@ -227,16 +227,16 @@ namespace ChessEngine
 	inline void MoveGenerator::GeneratePawnMoves(MoveList& moveList, const Board& board, const Square init)
 	{
 		const Row row = Helper::RowFromSquare(init);
-		const bool onPlayersRank2 = ((board.m_whiteToPlay && row == 1) || (!board.m_whiteToPlay && row == 6));
-		const bool onPlayersRank7 = ((board.m_whiteToPlay && row == 6) || (!board.m_whiteToPlay && row == 1));
+		const bool onPlayersRank2 = ((board.GetWhiteToPlay() && row == 1) || (!board.GetWhiteToPlay() && row == 6));
+		const bool onPlayersRank7 = ((board.GetWhiteToPlay() && row == 6) || (!board.GetWhiteToPlay() && row == 1));
 
 		// Pushing one or two squares forwards, we don't need to check that these are on the board
-		const Square oneForward = OffsetSquare(init, (board.m_whiteToPlay ? +8 : -8));
-		const Square twoForward = OffsetSquare(init, (board.m_whiteToPlay ? +16 : -16));
+		const Square oneForward = OffsetSquare(init, (board.GetWhiteToPlay() ? +8 : -8));
+		const Square twoForward = OffsetSquare(init, (board.GetWhiteToPlay() ? +16 : -16));
 
 		// Capturing left and right offsets, used to check whether these captures are on the board
-		const char captureLftOffset = (board.m_whiteToPlay ? +9 : -9);
-		const char captureRgtOffset = (board.m_whiteToPlay ? +11 : -11);
+		const char captureLftOffset = (board.GetWhiteToPlay() ? +9 : -9);
+		const char captureRgtOffset = (board.GetWhiteToPlay() ? +11 : -11);
 
 		// Handle promotions
 		if (onPlayersRank7)
@@ -250,7 +250,7 @@ namespace ChessEngine
 			};
 
 			// Push one square
-			if (board.m_pieces[oneForward] == Piece::ee)
+			if (board.GetPieces()[oneForward] == Piece::ee)
 			{
 				addPromotionsToList(oneForward, false);
 			}
@@ -260,9 +260,9 @@ namespace ChessEngine
 			// Take left
 			if (CheckMoveLandsOnBoard(init, captureLftOffset, dest))
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((piece != Piece::ee) && (piece.IsWhite() != board.m_whiteToPlay))
+				if ((piece != Piece::ee) && (piece.IsWhite() != board.GetWhiteToPlay()))
 				{
 					addPromotionsToList(dest, true);
 				}
@@ -271,9 +271,9 @@ namespace ChessEngine
 			// Take right
 			if (CheckMoveLandsOnBoard(init, captureRgtOffset, dest))
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((piece != Piece::ee) && (piece.IsWhite() != board.m_whiteToPlay))
+				if ((piece != Piece::ee) && (piece.IsWhite() != board.GetWhiteToPlay()))
 				{
 					addPromotionsToList(dest, true);
 				}
@@ -282,12 +282,12 @@ namespace ChessEngine
 		else
 		{
 			// Push one square
-			if (board.m_pieces[oneForward] == Piece::ee)
+			if (board.GetPieces()[oneForward] == Piece::ee)
 			{
 				moveList.push_back(Move(init, oneForward));
 
 				// Push two squares
-				if (onPlayersRank2 && board.m_pieces[twoForward] == Piece::ee)
+				if (onPlayersRank2 && board.GetPieces()[twoForward] == Piece::ee)
 				{
 					moveList.push_back(Move(init, twoForward, Move::Special::DoublePawnPush));
 				}
@@ -298,13 +298,13 @@ namespace ChessEngine
 			// Take left
 			if (CheckMoveLandsOnBoard(init, captureLftOffset, dest))
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((piece != Piece::ee) && (piece.IsWhite() != board.m_whiteToPlay))
+				if ((piece != Piece::ee) && (piece.IsWhite() != board.GetWhiteToPlay()))
 				{
 					moveList.push_back(Move(init, dest, true));
 				}
-				else if (dest == board.m_enPassant)
+				else if (dest == board.GetEnPassant())
 				{
 					moveList.push_back(Move(init, dest, Move::Special::EnPassantCapture));
 				}
@@ -313,13 +313,13 @@ namespace ChessEngine
 			// Take right
 			if (CheckMoveLandsOnBoard(init, captureRgtOffset, dest))
 			{
-				const Piece piece = board.m_pieces[dest];
+				const Piece piece = board.GetPieces()[dest];
 
-				if ((piece != Piece::ee) && (piece.IsWhite() != board.m_whiteToPlay))
+				if ((piece != Piece::ee) && (piece.IsWhite() != board.GetWhiteToPlay()))
 				{
 					moveList.push_back(Move(init, dest, true));
 				}
-				else if (dest == board.m_enPassant)
+				else if (dest == board.GetEnPassant())
 				{
 					moveList.push_back(Move(init, dest, Move::Special::EnPassantCapture));
 				}
@@ -335,12 +335,12 @@ namespace ChessEngine
 
 			if (CheckMoveLandsOnBoard(init, offset, dest))
 			{
-				if (board.m_pieces[dest] == Piece::ee)
+				if (board.GetPieces()[dest] == Piece::ee)
 				{
 					// Move is not a capture
 					moveList.push_back(Move(init, dest));
 				}
-				else if (board.m_pieces[dest].IsWhite() != board.m_whiteToPlay)
+				else if (board.GetPieces()[dest].IsWhite() != board.GetWhiteToPlay())
 				{
 					// Move is a capture
 					moveList.push_back(Move(init, dest, true));
@@ -382,12 +382,12 @@ namespace ChessEngine
 		{
 			if (CheckMoveLandsOnBoard(init, offset, dest))
 			{
-				if (board.m_pieces[dest] == Piece::ee)
+				if (board.GetPieces()[dest] == Piece::ee)
 				{
 					// Move is not a capture
 					moveList.push_back(Move(init, dest));
 				}
-				else if (board.m_pieces[dest].IsWhite() != board.m_whiteToPlay)
+				else if (board.GetPieces()[dest].IsWhite() != board.GetWhiteToPlay())
 				{
 					// Move is a capture
 					moveList.push_back(Move(init, dest, true));
@@ -397,10 +397,10 @@ namespace ChessEngine
 
 		// Check for castling moves
 
-		const bool canCastleKingside = (board.m_whiteToPlay ? board.m_whiteKingside : board.m_blackKingside);
-		const bool canCastleQueenside = (board.m_whiteToPlay ? board.m_whiteQueenside : board.m_blackQueenside);
+		const bool canCastleKingside = (board.GetWhiteToPlay() ? board.CanWhiteCastleKingside() : board.CanBlackCastleKingside());
+		const bool canCastleQueenside = (board.GetWhiteToPlay() ? board.CanWhiteCastleQueenside() : board.CanBlackCastleQueenside());
 
-		const Square kingPosition = (board.m_whiteToPlay ? Helper::SquareFromRowAndCol(0, 4) : Helper::SquareFromRowAndCol(7, 4));
+		const Square kingPosition = (board.GetWhiteToPlay() ? Helper::SquareFromRowAndCol(0, 4) : Helper::SquareFromRowAndCol(7, 4));
 
 		if (IsSquareAttacked(board, kingPosition))
 		{
@@ -412,8 +412,8 @@ namespace ChessEngine
 			const Square oneKingside = OffsetSquare(kingPosition, 1);
 			const Square twoKingside = OffsetSquare(kingPosition, 2);
 
-			if (((board.m_pieces[oneKingside] == Piece::ee) && !IsSquareAttacked(board, oneKingside)) &&
-				((board.m_pieces[twoKingside] == Piece::ee) && !IsSquareAttacked(board, twoKingside)))
+			if (((board.GetPieces()[oneKingside] == Piece::ee) && !IsSquareAttacked(board, oneKingside)) &&
+				((board.GetPieces()[twoKingside] == Piece::ee) && !IsSquareAttacked(board, twoKingside)))
 			{
 				moveList.push_back(Move(kingPosition, twoKingside, Move::Special::KingsideCastles));
 			}
@@ -425,9 +425,9 @@ namespace ChessEngine
 			const Square twoQueenside = OffsetSquare(kingPosition, -2);
 			const Square threeQueenside = OffsetSquare(kingPosition, -3);
 
-			if (((board.m_pieces[oneQueenside] == Piece::ee) && !IsSquareAttacked(board, oneQueenside)) &&
-				((board.m_pieces[twoQueenside] == Piece::ee) && !IsSquareAttacked(board, twoQueenside)) &&
-				((board.m_pieces[threeQueenside] == Piece::ee)))
+			if (((board.GetPieces()[oneQueenside] == Piece::ee) && !IsSquareAttacked(board, oneQueenside)) &&
+				((board.GetPieces()[twoQueenside] == Piece::ee) && !IsSquareAttacked(board, twoQueenside)) &&
+				((board.GetPieces()[threeQueenside] == Piece::ee)))
 			{
 				moveList.push_back(Move(kingPosition, twoQueenside, Move::Special::QueensideCastles));
 			}
@@ -443,14 +443,14 @@ namespace ChessEngine
 
 		for (char offset = lineOffset; CheckMoveLandsOnBoard(init, offset, dest); offset += lineOffset)
 		{
-			if (board.m_pieces[dest] == Piece::ee)
+			if (board.GetPieces()[dest] == Piece::ee)
 			{
 				// Move is not a capture
 				moveList.push_back(Move(init, dest));
 			}
 			else
 			{
-				if (board.m_pieces[dest].IsWhite() != board.m_whiteToPlay)
+				if (board.GetPieces()[dest].IsWhite() != board.GetWhiteToPlay())
 				{
 					// Move is a capture
 					moveList.push_back(Move(init, dest, true));

@@ -9,11 +9,6 @@ namespace ChessEngine
 {
 	class Board
 	{
-		friend class AsciiUI;
-		friend class BoardEvaluator;
-		friend class MoveGenerator;
-		friend class MoveInverse;
-
 	public:
 
 		const static PieceArray StartingPieces; // The starting pieces for a board
@@ -32,6 +27,26 @@ namespace ChessEngine
 
 		// Update the board as per the given move inverse
 		void UndoMove(const MoveInverse moveInverse);
+
+		// Get the pieces locations on the board
+		const PieceArray& GetPieces() const { return m_pieces; }
+
+		// Get the en passant square (if en passant is possible)
+		const EnPassant& GetEnPassant() const { return m_enPassant; }
+
+		bool CanWhiteCastleKingside() const { return m_whiteKingside; }		// Get whether white can castle kingside
+		bool CanWhiteCastleQueenside() const { return m_whiteQueenside; }	// Get whether white can castle queenside
+		bool CanBlackCastleKingside() const { return m_blackKingside; }		// Get whether black can castle kingside
+		bool CanBlackCastleQueenside() const { return m_blackQueenside; }	// Get whether black can castle queenside
+
+		// Get whether it is white's turn to play
+		bool GetWhiteToPlay() const { return m_whiteToPlay; }
+
+		// Get the number of half moves played since the last irreversible move
+		unsigned char GetHalfMoves() const { return m_halfMoves; }
+
+		// Get the number of full moves played
+		unsigned char GetFullMoves() const { return m_fullMoves; }
 
 	private:
 

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "AsciiUI.h"
 
 #include <iostream>
@@ -16,14 +18,14 @@ namespace ChessEngine
 
 		// The metadata for the game (whose turn, castling rights, en passant, etc.)
 		ss << "    ";
-		ss << (board.m_whiteToPlay ? 'W' : 'B');
+		ss << (board.GetWhiteToPlay() ? 'W' : 'B');
 		ss << "    ";
-		ss << (board.m_whiteKingside ? 'K' : ' ');
-		ss << (board.m_whiteQueenside ? 'Q' : ' ');
-		ss << (board.m_blackKingside ? 'k' : ' ');
-		ss << (board.m_blackQueenside ? 'q' : ' ');
+		ss << (board.CanWhiteCastleKingside() ? 'K' : ' ');
+		ss << (board.CanWhiteCastleQueenside() ? 'Q' : ' ');
+		ss << (board.CanBlackCastleKingside() ? 'k' : ' ');
+		ss << (board.CanBlackCastleQueenside() ? 'q' : ' ');
 		ss << "    ";
-		ss << (board.m_enPassant ? std::to_string(*(board.m_enPassant)) : "-");
+		ss << (board.GetEnPassant() ? std::to_string(*(board.GetEnPassant())) : "-");
 		ss << std::endl;
 		
 		// The actual board (squares, pieces, rows/columns labels, etc.)
@@ -34,7 +36,7 @@ namespace ChessEngine
 			for (unsigned int col = 0; Helper::IsValidCol(col); col++)
 			{
 				Square square = Helper::SquareFromRowAndCol(row, col);
-				Piece piece = board.m_pieces[square];
+				Piece piece = board.GetPieces()[square];
 
 				char squChar = (Helper::IsSquareWhite(square) ? ' ' : ':');
 				char pceChar = piece.GetAscii();

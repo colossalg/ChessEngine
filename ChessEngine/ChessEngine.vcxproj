@@ -149,10 +149,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AsciiUI.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AsciiUI.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>

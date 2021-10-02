@@ -52,37 +52,37 @@ namespace ChessEngine
 		bool operator!=(const Move& other) const { return (m_move != other.GetValue()); }
 
 		// Get the initial square of the move
-		inline Square GetInitSquare() const { return static_cast<Square>((m_move >> InitOffset) & MoveMask); }
+		Square GetInitSquare() const { return static_cast<Square>((m_move >> InitOffset) & MoveMask); }
 
 		// Get the destination square of the move
-		inline Square GetDestSquare() const { return static_cast<Square>((m_move >> DestOffset) & MoveMask); }
+		Square GetDestSquare() const { return static_cast<Square>((m_move >> DestOffset) & MoveMask); }
 
 		// Get whether the move is a quiet move
-		inline bool IsQuiet() const { return ((m_move & TypeMask) == 0); }
+		bool IsQuiet() const { return ((m_move & TypeMask) == 0); }
 
 		// Get whether the move is a capture
-		inline bool IsCapture() const { return ((m_move & Capture) == Capture); }
+		bool IsCapture() const { return ((m_move & Capture) == Capture); }
 
 		// Get whether the move is a promotion
-		inline bool IsPromotion() const { return ((m_move & Promotion) == Promotion); }
+		bool IsPromotion() const { return ((m_move & Promotion) == Promotion); }
 
 		// Get whether the move is pushing a pawn two squares
-		inline bool IsDoublePawnPush() const { return IsSpecial(Special::DoublePawnPush); }
+		bool IsDoublePawnPush() const { return IsSpecial(Special::DoublePawnPush); }
 
 		// Get whether the move is an en passant capture
-		inline bool IsEnPassantCapture() const { return IsSpecial(Special::EnPassantCapture); }
+		bool IsEnPassantCapture() const { return IsSpecial(Special::EnPassantCapture); }
 
 		// Get whether the move is kingside castling
-		inline bool IsKingsideCastles() const { return IsSpecial(Special::KingsideCastles); }
+		bool IsKingsideCastles() const { return IsSpecial(Special::KingsideCastles); }
 
 		// Get whether the move is queenside castling
-		inline bool IsQueensideCastles() const { return IsSpecial(Special::QueensideCastles); }
+		bool IsQueensideCastles() const { return IsSpecial(Special::QueensideCastles); }
 
 		// Get the type of the piece that the pawn is promoted to
 		Piece::Type GetPromotionType() const;
 
 		// Get the value of the move
-		inline unsigned short GetValue() const { return m_move; }
+		unsigned short GetValue() const { return m_move; }
 
 		// Get the move represented as a string (start square, end square)
 		std::string GetString() const;
@@ -92,7 +92,7 @@ namespace ChessEngine
 
 	private:
 		// Helper function for querying whether a move is XXX (capture, promotion, etc.)
-		inline bool IsSpecial(Special specialType) const { return (Special(m_move & TypeMask) == specialType); }
+		bool IsSpecial(Special specialType) const { return (Special(m_move & TypeMask) == specialType); }
 
 		const static unsigned char InitOffset = 10;			// The offset of the 6 bits for the initial move
 		const static unsigned char DestOffset = 4;			// The offset of the 6 bits for the destination move

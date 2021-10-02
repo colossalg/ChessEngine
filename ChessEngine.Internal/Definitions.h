@@ -8,7 +8,7 @@ namespace ChessEngine
 {
 	class Board;
 	class Move;
-	class MoveGnerator;
+	class MoveGenerator;
 	class MoveInverse;
 	class Piece;
 
