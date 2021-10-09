@@ -41,11 +41,14 @@ namespace ChessEngine
 		// Create a new move from one of the special move types (double pawn push, castling, en passant capture)
 		Move(const std::string& init, const std::string& dest, const Special specialType);
 
+		// Default constructor
+		Move() = default;
+
 		// Create a new move from another move
 		Move(const Move& other) = default;
 
 		// Copy one move to another
-		Move& operator=(const Move& other) = default;
+		Move& operator=(const Move& other) { m_move = other.m_move; return *this; }
 
 		// Compare one move to another
 		bool operator==(const Move& other) const { return (m_move == other.GetValue()); }
@@ -105,6 +108,6 @@ namespace ChessEngine
 
 		const unsigned short Promotion = 0b1000;			// The bitmap for whether a move is a promotion
 
-		unsigned short m_move;	// The underlying bitmap for the move
+		unsigned short m_move = 0;	// The underlying bitmap for the move
 	};
 }

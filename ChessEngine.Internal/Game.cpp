@@ -1,15 +1,18 @@
 #include "pch.h"
 
+#include "Game.h"
+
 #include <exception>
 #include <iostream>
 #include <optional>
 #include <regex>
 #include <string>
+#include <tuple>
 
-#include "Game.h"
 #include "Helper.h"
 #include "Move.h"
 #include "MoveGenerator.h"
+#include "Search.h"
 
 namespace ChessEngine
 {
@@ -55,9 +58,13 @@ namespace ChessEngine
 
 	std::optional<Move> Game::GetComputerMove()
 	{
-		const MoveList moveList = MoveGenerator::GenerateMoves(m_board);
+		Search search;
 
-		return *moveList.begin();
+		std::pair<Move, int> searchResult = search.SearchPosition(m_board, 5);
+		Move bestMove = searchResult.first;
+		int  bestEval = searchResult.second;
+
+		return bestMove;
 	}
 
 	std::optional<Move> Game::GetPlayerMove()
@@ -71,6 +78,7 @@ namespace ChessEngine
 			std::cin  >> moveStr;
 		}
 
+		std::optional<Move> playerMove;
 		if (std::regex_match(moveStr, moveRegex))
 		{
 			std::smatch moveMatch;
@@ -85,7 +93,7 @@ namespace ChessEngine
 				matchIt++;
 				const Square dest = Helper::SquareFromString(*matchIt);
 
-				return Move(init, dest);
+				playerMove = Move(init, dest);
 			}
 			else
 			{
@@ -94,20 +102,20 @@ namespace ChessEngine
 				matchIt++;
 				const Square dest = Helper::SquareFromString(*matchIt);
 
-				return Move(init, dest, true);
+				playerMove = Move(init, dest, true);
 			}
 		}
 		else if (moveStr == "o-o")
 		{
 			const Square init = Helper::SquareFromString(m_board.GetWhiteToPlay() ? "e1" : "e8");
 			const Square dest = Helper::SquareFromString(m_board.GetWhiteToPlay() ? "g1" : "g8");
-			return Move(init, dest, Move::Special::KingsideCastles);
+			playerMove = Move(init, dest, Move::Special::KingsideCastles);
 		}
 		else if (moveStr == "o-o-o")
 		{
 			const Square init = Helper::SquareFromString(m_board.GetWhiteToPlay() ? "e1" : "e8");
 			const Square dest = Helper::SquareFromString(m_board.GetWhiteToPlay() ? "c1" : "c8");
-			return Move(init, dest, Move::Special::QueensideCastles);
+			playerMove = Move(init, dest, Move::Special::QueensideCastles);
 		}
 		else if (moveStr == "quit")
 		{
@@ -117,5 +125,7 @@ namespace ChessEngine
 		{
 			throw std::runtime_error("Move provided was of illegal format: moveStr = " + moveStr);
 		}
+
+		return playerMove;
 	}
 }
