@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BoardEvaluator.h"
+
 namespace ChessEngine
 {
 	class Board;
@@ -12,7 +14,15 @@ namespace ChessEngine
 		// Search a position to a given depth for the 'best move' in the position
 		std::pair<Move, int> SearchPosition(Board& board, const unsigned char maxDepth);
 
-		// Search a position for a given time for the 'best move' in the position
-		// void SearchPosition(Board& board, std::chrono::duration<std::chrono::seconds> maxTime);
+	private:
+
+		// Search a position to a given depth using an 'alpha-beta' style pruning search algorithm
+		std::pair<Move, int> SearchPositionPruned(
+			Board& board,
+			const unsigned char maxDepth,
+			int alpha,
+			int beta);
+
+		BoardEvaluator m_evaluator; // The board evaluator used to evaluate positions during search
 	};
 }
