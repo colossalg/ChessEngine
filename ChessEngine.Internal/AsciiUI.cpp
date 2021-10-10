@@ -26,10 +26,10 @@ namespace ChessEngine
 		ss << (board.CanBlackCastleQueenside() ? 'q' : ' ');
 		ss << "    ";
 		ss << (board.GetEnPassant() ? std::to_string(*(board.GetEnPassant())) : "-");
-		ss << std::endl;
+		ss << "\n";
 		
 		// The actual board (squares, pieces, rows/columns labels, etc.)
-		ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
+		ss << "   +---+---+---+---+---+---+---+---+  " << "\n";
 		for (unsigned int row = 7; Helper::IsValidRow(row); row--)
 		{
 			ss << " " << row + 1 << " |";
@@ -53,10 +53,10 @@ namespace ChessEngine
 				}
 				ss <<  "|";
 			}
-			ss << std::endl;
-			ss << "   +---+---+---+---+---+---+---+---+  " << std::endl;
+			ss << "\n";
+			ss << "   +---+---+---+---+---+---+---+---+  " << "\n";
 		}
-		ss << "     a   b   c   d   e   f   g   h    " << std::endl;
+		ss << "     a   b   c   d   e   f   g   h    " << "\n";
 
 		return ss.str();
 	}

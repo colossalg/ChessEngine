@@ -25,7 +25,7 @@ namespace ChessEngine
 		std::string playerColourStr;
 		while (playerColourStr != "w" && playerColourStr != "b")
 		{
-			std::cout << "Would you like to play white or black? [w/b]: " << std::endl;
+			std::cout << "Would you like to play white or black? [w/b]: ";
 			std::cin  >> playerColourStr;
 		}
 		m_isComputerWhite = (playerColourStr == "b");
@@ -43,6 +43,7 @@ namespace ChessEngine
 			else
 			{
 				std::cout << m_tui.GetAscii(m_board);
+				std::cout.flush();
 
 				const Move move = *GetPlayerMove();
 
@@ -60,7 +61,7 @@ namespace ChessEngine
 	{
 		Search search;
 
-		std::pair<Move, int> searchResult = search.SearchPosition(m_board, 6);
+		std::pair<Move, int> searchResult = search.SearchPosition(m_board, 4);
 		Move bestMove = searchResult.first;
 		int  bestEval = searchResult.second;
 
@@ -77,6 +78,7 @@ namespace ChessEngine
 			std::cout << "Please enter your move: ";
 			std::cin  >> moveStr;
 		}
+		std::cout << std::endl;
 
 		std::optional<Move> playerMove;
 		if (std::regex_match(moveStr, moveRegex))

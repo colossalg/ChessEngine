@@ -54,6 +54,12 @@
     <ClInclude Include="Search.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SearchMetrics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -90,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchMetrics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

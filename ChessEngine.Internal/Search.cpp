@@ -12,15 +12,29 @@
 #include "MoveGenerator.h"
 #include "MoveInverse.h"
 
+namespace
+{
+	constexpr bool CollectMetrics = true;
+}
+
 namespace ChessEngine
 {
 	std::pair<Move, int> Search::SearchPosition(Board& board, const unsigned char maxDepth)
 	{
-		return SearchPositionPruned(
+		METRICS_SET_MAX_DEPTH(CollectMetrics, m_metrics, maxDepth);
+		METRICS_SEARCH_START(CollectMetrics, m_metrics);
+
+		std::pair<Move, int> searchResult = SearchPositionPruned(
 			board,
 			maxDepth,
 			std::numeric_limits<int>::min(),
 			std::numeric_limits<int>::max());
+
+		METRICS_SEARCH_STOP(CollectMetrics, m_metrics);
+		METRICS_PRINT(CollectMetrics, m_metrics);
+		METRICS_WRITE(CollectMetrics, m_metrics);
+
+		return searchResult;
 	}
 
 	// Implemented as per wikipedia description of alpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
@@ -30,21 +44,35 @@ namespace ChessEngine
 		int alpha,
 		int beta)
 	{
-		Move bestMove;
-		int  bestEval;
+		METRICS_SEARCH_INCREMENT(CollectMetrics, m_metrics, 1);
 
 		if (maxDepth == 0)
 		{
+			METRICS_EVALUATION_START(CollectMetrics, m_metrics);
+
 			// Convert from symmetric scoring to +ve for white, -ve for black
-			bestEval = m_evaluator.Evaluate(board) * (board.GetWhiteToPlay() ? +1 : -1);
-			return std::pair<Move, int>(bestMove, bestEval);
+			int eval = m_evaluator.Evaluate(board) * (board.GetWhiteToPlay() ? +1 : -1);
+
+			METRICS_EVALUATION_STOP(CollectMetrics, m_metrics);
+			METRICS_EVALUATION_INCREMENT(CollectMetrics, m_metrics, 1);
+
+			return std::pair<Move, int>(Move(), eval);
 		}
+
+		Move bestMove;
+		int  bestEval;
+
+		METRICS_GENERATION_START(CollectMetrics, m_metrics);
+
+		const MoveList moveList = MoveGenerator::GenerateMoves(board);
+
+		METRICS_GENERATION_STOP(CollectMetrics, m_metrics);
+		METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, moveList.size());
 
 		if (board.GetWhiteToPlay())
 		{
 			bestEval = std::numeric_limits<int>::min();
 
-			const MoveList moveList = MoveGenerator::GenerateMoves(board);
 			for (const Move& move : moveList)
 			{
 				MoveInverse moveInverse(board, move);
@@ -70,7 +98,6 @@ namespace ChessEngine
 		{
 			bestEval = std::numeric_limits<int>::max();
 
-			const MoveList moveList = MoveGenerator::GenerateMoves(board);
 			for (const Move& move : moveList)
 			{
 				MoveInverse moveInverse(board, move);

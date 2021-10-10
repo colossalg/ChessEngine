@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoardEvaluator.h"
+#include "SearchMetrics.h"
 
 namespace ChessEngine
 {
@@ -24,5 +25,7 @@ namespace ChessEngine
 			int beta);
 
 		BoardEvaluator m_evaluator; // The board evaluator used to evaluate positions during search
+
+		SearchMetrics m_metrics;	// The metrics collected during the search
 	};
 }
