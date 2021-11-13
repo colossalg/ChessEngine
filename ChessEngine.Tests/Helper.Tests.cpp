@@ -60,5 +60,31 @@ namespace ChessEngineTests
 			Assert::IsTrue(IsSquareWhite(0, 7));
 			Assert::IsTrue(IsSquareWhite(7, 0));
 		}
+
+		TEST_METHOD(TestSquareFromString)
+		{
+			// Test that the SquareFromString helper function works
+			Assert::AreEqual(Square(0), SquareFromString("a1"));
+			Assert::AreEqual(Square(56), SquareFromString("a8"));
+			Assert::AreEqual(Square(7), SquareFromString("h1"));
+			Assert::AreEqual(Square(63), SquareFromString("h8"));
+			Assert::AreEqual(Square(27), SquareFromString("d4"));
+			Assert::AreEqual(Square(28), SquareFromString("e4"));
+			Assert::AreEqual(Square(35), SquareFromString("d5"));
+			Assert::AreEqual(Square(36), SquareFromString("e5"));
+		}
+
+		TEST_METHOD(TestStringFromSquare)
+		{
+			// Test that the SquareFromString helper function works
+			Assert::AreEqual(std::string("a1"), StringFromSquare(Square(0)));
+			Assert::AreEqual(std::string("a8"), StringFromSquare(Square(56)));
+			Assert::AreEqual(std::string("h1"), StringFromSquare(Square(7)));
+			Assert::AreEqual(std::string("h8"), StringFromSquare(Square(63)));
+			Assert::AreEqual(std::string("d4"), StringFromSquare(Square(27)));
+			Assert::AreEqual(std::string("e4"), StringFromSquare(Square(28)));
+			Assert::AreEqual(std::string("d5"), StringFromSquare(Square(35)));
+			Assert::AreEqual(std::string("e5"), StringFromSquare(Square(36)));
+		}
 	};
 }

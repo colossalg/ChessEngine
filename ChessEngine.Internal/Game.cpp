@@ -61,7 +61,7 @@ namespace ChessEngine
 	{
 		Search search;
 
-		std::pair<Move, int> searchResult = search.SearchPosition(m_board, 4);
+		std::pair<Move, int> searchResult = search.SearchPosition(m_board, 6);
 		Move bestMove = searchResult.first;
 		int  bestEval = searchResult.second;
 
