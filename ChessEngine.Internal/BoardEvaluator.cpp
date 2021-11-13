@@ -110,7 +110,7 @@ namespace ChessEngine
 		{
 			const Piece piece = board.GetPieces()[square];
 
-			if (piece == Piece::ee || piece == Piece::wk || piece == Piece::bk)
+			if (piece == Piece::ee)
 			{
 				continue;
 			}
