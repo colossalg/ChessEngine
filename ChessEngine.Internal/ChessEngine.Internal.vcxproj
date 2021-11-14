@@ -156,6 +156,7 @@
     <ClInclude Include="AsciiUI.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardEvaluator.h" />
+    <ClInclude Include="BoardHasher.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="AsciiUI.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardEvaluator.cpp" />
+    <ClCompile Include="BoardHasher.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Move.cpp" />

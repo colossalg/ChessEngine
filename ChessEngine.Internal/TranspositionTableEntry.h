@@ -11,7 +11,7 @@ namespace ChessEngine
 
 		// Create a new table entry
 		TranspositionTableEntry(
-			unsigned long long hash,
+			unsigned int hash,
 			unsigned char depthFromRoot,
 			unsigned char depthToLeaves,
 			int eval);
@@ -25,8 +25,8 @@ namespace ChessEngine
 		bool operator!=(const TranspositionTableEntry& other) const;
 
 		// Get/Set the Zobrist hash for the position corresponding to this entry
-		unsigned long long GetHash() const { return m_hash; }
-		void SetHash(const unsigned long long hash) { m_hash = hash; }
+		unsigned int GetHash() const { return m_hash; }
+		void SetHash(const unsigned int hash) { m_hash = hash; }
 
 		// Get whether this entry has been initialized yet or is still empty/default constructed
 		bool IsInitialized() const { return m_initialized; }
@@ -45,7 +45,7 @@ namespace ChessEngine
 
 	private:
 
-		unsigned long long m_hash = 0ULL;	// The Zobrist hash for the position corresponding to this entry
+		unsigned int m_hash = 0ULL;	// The Zobrist hash for the position corresponding to this entry
 		bool m_initialized = false;			// Whether this entry has been initialized yet or is still empty/default constructed
 		unsigned char m_depthFromRoot = 0U;	// The depth from the root node the position corresponding to this entry was last searched at
 		unsigned char m_depthToLeaves = 0U;	// The depth to the leaf nodes the position corresponding to this entry was last searched at

@@ -19,7 +19,7 @@ namespace ChessEngine
 		TranspositionTable(size_t maxEntries);
 
 		// Gets the entry with a given hash
-		TranspositionTableEntry& operator[](unsigned long long hash);
+		TranspositionTableEntry& operator[](unsigned int hash);
 
 		// Get the max entries in the underlying table/map
 		size_t GetMaxEntries() const { return m_maxEntries; }
@@ -29,7 +29,7 @@ namespace ChessEngine
 
 	private:
 
-		size_t m_maxEntries;														// The max entries in the underlying table/map
-		std::unordered_map<unsigned long long, TranspositionTableEntry> m_table;	// The underlying table/map
+		size_t m_maxEntries;												// The max entries in the underlying table/map
+		std::unordered_map<unsigned int, TranspositionTableEntry> m_table;	// The underlying table/map
 	};
 }

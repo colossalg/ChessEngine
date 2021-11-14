@@ -18,7 +18,7 @@ namespace ChessEngine
 	{
 	}
 
-	TranspositionTableEntry& TranspositionTable::operator[](unsigned long long hash)
+	TranspositionTableEntry& TranspositionTable::operator[](unsigned int hash)
 	{
 		return m_table[hash % m_maxEntries];
 	}

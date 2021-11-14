@@ -32,7 +32,7 @@ namespace ChessEngineTests
 			TranspositionTable table(10);
 
 			// Keep inserting entries, far above the max number of entries that can be in the table
-			for (unsigned long long i = 0; i < 100; i++)
+			for (unsigned int i = 0; i < 100; i++)
 			{
 				table[i] = TranspositionTableEntry(i, 0, 0, 0);
 			}
@@ -41,7 +41,7 @@ namespace ChessEngineTests
 			Assert::AreEqual(table.GetMaxEntries(), table.GetNumEntries());
 
 			// Assert that the entries wrapped just as expected
-			for (unsigned long long i = 90; i < 100; i++)
+			for (unsigned int i = 90; i < 100; i++)
 			{
 				Assert::AreEqual(TranspositionTableEntry(i, 0, 0, 0), table[i]);
 			}

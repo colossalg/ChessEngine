@@ -6,7 +6,7 @@
 namespace ChessEngine
 {
 	TranspositionTableEntry::TranspositionTableEntry(
-		unsigned long long hash,
+		unsigned int hash,
 		unsigned char depthFromRoot,
 		unsigned char depthToLeaves,
 		int eval

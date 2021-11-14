@@ -20,6 +20,9 @@ namespace ChessEngine
 			King = 0b10000000
 		};
 
+		// The array of all the piece types so we can iterate over them
+		static const std::array<Type, 7> AllTypes;
+
 		// Create a new piece
 		Piece() = default;
 
@@ -40,28 +43,31 @@ namespace ChessEngine
 		bool operator!=(const Piece& other) const { return (m_piece != other.GetValue()); }
 
 		// Get whether the piece is an empty square
-		bool IsEmpty() const { return ((m_piece & IsEmptyBitMap) == 0); }
+		bool IsEmpty() const { return (GetType() == Type::Empty); }
 
 		// Get whether the piece is a pawn
-		bool IsPawn() const { return ((static_cast<int>(Type::Pawn) & m_piece) != 0); }
+		bool IsPawn() const { return (GetType() == Type::Pawn); }
 
 		// Get whether the piece is a knight
-		bool IsKnight() const { return ((static_cast<int>(Type::Knight) & m_piece) != 0); }
+		bool IsKnight() const { return (GetType() == Type::Knight); }
 
 		// Get whether the piece is a bishop
-		bool IsBishop() const { return ((static_cast<int>(Type::Bishop) & m_piece) != 0); }
+		bool IsBishop() const { return (GetType() == Type::Bishop); }
 
 		// Get whether the piece is a rook
-		bool IsRook() const { return ((static_cast<int>(Type::Rook) & m_piece) != 0); }
+		bool IsRook() const { return (GetType()  == Type::Rook); }
 
 		// Get whether the piece is a queen
-		bool IsQueen() const { return ((static_cast<int>(Type::Queen) & m_piece) != 0); }
+		bool IsQueen() const { return (GetType() == Type::Queen); }
 
 		// Get whether the piece is a king
-		bool IsKing() const { return ((static_cast<int>(Type::King) & m_piece) != 0); }
+		bool IsKing() const { return (GetType() == Type::King); }
 
 		// Get whether the piece is white
 		bool IsWhite() const { return ((m_piece & IsWhiteBitMap) != 0); }
+
+		// Get the type of the piece
+		Type GetType() const { return Type(m_piece & TypeBitMap); }
 
 		// Get the value of the piece
 		unsigned int GetValue() const { return m_piece; }
@@ -70,7 +76,7 @@ namespace ChessEngine
 		char GetAscii() const;
 
 	private:
-		const static unsigned char IsEmptyBitMap = 0b11111100;	// Bitmap used to determine whether a piece is empty
+		const static unsigned char TypeBitMap    = 0b11111100;	// Bitmap used to determine whether a piece is empty
 		const static unsigned char IsWhiteBitMap = 0b00000001;	// Bitmap used to determine whether a piece is white
 
 		unsigned int m_piece = 0;	// Underlying bitmap

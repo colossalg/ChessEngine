@@ -67,7 +67,7 @@ namespace ChessEngine
 		const MoveList moveList = MoveGenerator::GenerateMoves(board);
 
 		METRICS_GENERATION_STOP(CollectMetrics, m_metrics);
-		METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, moveList.size());
+		METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, static_cast<int>(moveList.size()));
 
 		if (board.GetWhiteToPlay())
 		{

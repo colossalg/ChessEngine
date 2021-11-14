@@ -35,4 +35,15 @@ namespace ChessEngine
 		Piece::bp, Piece::bp, Piece::bp, Piece::bp, Piece::bp, Piece::bp, Piece::bp, Piece::bp,
 		Piece::br, Piece::bn, Piece::bb, Piece::bq, Piece::bk, Piece::bb, Piece::bn, Piece::br
 	};
+
+	// The array of all the piece types so we can iterate over them
+	const std::array<Piece::Type, 7> AllTypes = {
+		Piece::Type::Empty,
+		Piece::Type::Pawn,
+		Piece::Type::Knight,
+		Piece::Type::Bishop,
+		Piece::Type::Rook,
+		Piece::Type::Queen,
+		Piece::Type::King
+	};
 }
