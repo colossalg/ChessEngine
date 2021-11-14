@@ -4,6 +4,7 @@
 #include "TranspositionTable.h"
 #include "TranspositionTableEntry.h"
 
+using namespace ChessEngine;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessEngineTests

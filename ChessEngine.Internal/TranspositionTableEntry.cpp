@@ -29,4 +29,20 @@ namespace ChessEngine
 			m_eval = other.m_eval;
 		}
 	}
+
+	bool TranspositionTableEntry::operator==(const TranspositionTableEntry& other) const
+	{
+		return (
+			m_hash == other.m_hash &&
+			m_initialized == other.m_initialized &&
+			m_depthFromRoot == other.m_depthFromRoot &&
+			m_depthToLeaves == other.m_depthToLeaves &&
+			m_eval == other.m_eval
+			);
+	}
+
+	bool TranspositionTableEntry::operator!=(const TranspositionTableEntry& other) const
+	{ 
+		return !(*this == other);
+	}
 }

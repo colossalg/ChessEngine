@@ -20,12 +20,16 @@ namespace ChessEngine
 		// those of the other entry and will not do anything if the replacement strategy decides that the other entry should not replace this one
 		void operator=(const TranspositionTableEntry& other);
 
+		// Compare two table entries
+		bool operator==(const TranspositionTableEntry& other) const;
+		bool operator!=(const TranspositionTableEntry& other) const;
+
 		// Get/Set the Zobrist hash for the position corresponding to this entry
 		unsigned long long GetHash() const { return m_hash; }
 		void SetHash(const unsigned long long hash) { m_hash = hash; }
 
 		// Get whether this entry has been initialized yet or is still empty/default constructed
-		bool IsInitialized() { return m_initialized; }
+		bool IsInitialized() const { return m_initialized; }
 
 		// Get/Set the depth from the root node the position corresponding to this entry was last searched at
 		unsigned char GetDepthFromRoot() const { return m_depthFromRoot; }
