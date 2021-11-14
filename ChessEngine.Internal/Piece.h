@@ -40,31 +40,31 @@ namespace ChessEngine
 		bool operator!=(const Piece& other) const { return (m_piece != other.GetValue()); }
 
 		// Get whether the piece is an empty square
-		inline bool IsEmpty() const { return ((m_piece & IsEmptyBitMap) == 0); }
+		bool IsEmpty() const { return ((m_piece & IsEmptyBitMap) == 0); }
 
 		// Get whether the piece is a pawn
-		inline bool IsPawn() const { return ((static_cast<int>(Type::Pawn) & m_piece) != 0); }
+		bool IsPawn() const { return ((static_cast<int>(Type::Pawn) & m_piece) != 0); }
 
 		// Get whether the piece is a knight
-		inline bool IsKnight() const { return ((static_cast<int>(Type::Knight) & m_piece) != 0); }
+		bool IsKnight() const { return ((static_cast<int>(Type::Knight) & m_piece) != 0); }
 
 		// Get whether the piece is a bishop
-		inline bool IsBishop() const { return ((static_cast<int>(Type::Bishop) & m_piece) != 0); }
+		bool IsBishop() const { return ((static_cast<int>(Type::Bishop) & m_piece) != 0); }
 
 		// Get whether the piece is a rook
-		inline bool IsRook() const { return ((static_cast<int>(Type::Rook) & m_piece) != 0); }
+		bool IsRook() const { return ((static_cast<int>(Type::Rook) & m_piece) != 0); }
 
 		// Get whether the piece is a queen
-		inline bool IsQueen() const { return ((static_cast<int>(Type::Queen) & m_piece) != 0); }
+		bool IsQueen() const { return ((static_cast<int>(Type::Queen) & m_piece) != 0); }
 
 		// Get whether the piece is a king
-		inline bool IsKing() const { return ((static_cast<int>(Type::King) & m_piece) != 0); }
+		bool IsKing() const { return ((static_cast<int>(Type::King) & m_piece) != 0); }
 
 		// Get whether the piece is white
-		inline bool IsWhite() const { return ((m_piece & IsWhiteBitMap) != 0); }
+		bool IsWhite() const { return ((m_piece & IsWhiteBitMap) != 0); }
 
 		// Get the value of the piece
-		inline unsigned int GetValue() const { return m_piece; }
+		unsigned int GetValue() const { return m_piece; }
 
 		// Get the ascii representation of the piece
 		char GetAscii() const;

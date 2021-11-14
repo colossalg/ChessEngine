@@ -16,14 +16,20 @@ namespace ChessEngine
 		static std::function<bool(const TranspositionTableEntry&, const TranspositionTableEntry&)> ReplacementStrategy;
 
 		// Create a new transposition table
-		TranspositionTable(unsigned int length);
+		TranspositionTable(size_t maxEntries);
 
 		// Gets the entry with a given hash
-		TranspositionTableEntry& operator[](unsigned int hash);
+		TranspositionTableEntry& operator[](unsigned long long hash);
+
+		// Get the max entries in the underlying table/map
+		size_t GetMaxEntries() const { return m_maxEntries; }
+
+		// Get the num entries in the underlying table/map
+		size_t GetNumEntries() const { return m_table.size(); }
 
 	private:
 
-		unsigned int m_length;												// The lenth of the underlying table/map
-		std::unordered_map<unsigned int, TranspositionTableEntry> m_table;	// The underlying table/map
+		size_t m_maxEntries;														// The max entries in the underlying table/map
+		std::unordered_map<unsigned long long, TranspositionTableEntry> m_table;	// The underlying table/map
 	};
 }

@@ -6,12 +6,13 @@
 namespace ChessEngine
 {
 	TranspositionTableEntry::TranspositionTableEntry(
-		unsigned int hash,
-		unsigned int depthFromRoot,
-		unsigned int depthToLeaves,
+		unsigned long long hash,
+		unsigned char depthFromRoot,
+		unsigned char depthToLeaves,
 		int eval
 	):
 		m_hash(hash),
+		m_initialized(true),
 		m_depthFromRoot(depthFromRoot),
 		m_depthToLeaves(depthToLeaves),
 		m_eval(eval)
@@ -19,9 +20,10 @@ namespace ChessEngine
 
 	void TranspositionTableEntry::operator=(const TranspositionTableEntry& other)
 	{
-		if (TranspositionTable::ReplacementStrategy(*this, other))
+		if (!IsInitialized() || TranspositionTable::ReplacementStrategy(*this, other))
 		{
 			m_hash = other.m_hash;
+			m_initialized = other.m_initialized;
 			m_depthFromRoot = other.m_depthFromRoot;
 			m_depthToLeaves = other.m_depthToLeaves;
 			m_eval = other.m_eval;
