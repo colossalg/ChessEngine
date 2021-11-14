@@ -11,11 +11,13 @@ namespace ChessEngine
 {
 	Board::Board():
 		m_pieces(StartingPieces),
-		m_hash(BoardHasher::Hash(*this))
+		m_boardHasher(*this)
 	{
+		m_boardHasher.ResetHash();
 	}
 
-	Board::Board(const std::string& FEN)
+	Board::Board(const std::string& FEN):
+		m_boardHasher(*this)
 	{
 		std::string pieces;
 		std::string toPlay;
@@ -123,7 +125,7 @@ namespace ChessEngine
 		m_fullMoves = static_cast<unsigned char>(fullMoves);
 
 		// Get the hash for this position
-		m_hash = BoardHasher::Hash(*this);
+		m_boardHasher.ResetHash();
 	}
 
 	std::string Board::GetFEN() const
@@ -381,43 +383,43 @@ namespace ChessEngine
 
 	inline void Board::SetPiece(const Square square, const Piece piece)
 	{
-		m_hash = BoardHasher::UpdatePiece(m_hash, square, m_pieces[square], piece);
+		m_boardHasher.UpdatePiece(square, m_pieces[square], piece);
 		m_pieces[square] = piece;
 	}
 
 	inline void Board::SetEnPassant(const EnPassant& enPassant)
 	{
-		m_hash = BoardHasher::UpdateEnPassant(m_hash, m_enPassant, enPassant);
+		m_boardHasher.UpdateEnPassant(m_enPassant, enPassant);
 		m_enPassant = enPassant;
 	}
 
 	inline void Board::SetCanWhiteCastleKingside(const bool canCastle)
 	{
-		m_hash = BoardHasher::UpdateCanWhiteCastleKingside(m_hash, m_whiteKingside, canCastle);
+		m_boardHasher.UpdateCanWhiteCastleKingside(m_whiteKingside, canCastle);
 		m_whiteKingside = canCastle;
 	}
 
 	inline void Board::SetCanWhiteCastleQueenside(const bool canCastle)
 	{
-		m_hash = BoardHasher::UpdateCanWhiteCastleQueenside(m_hash, m_whiteQueenside, canCastle);
+		m_boardHasher.UpdateCanWhiteCastleQueenside(m_whiteQueenside, canCastle);
 		m_whiteQueenside = canCastle;
 	}
 
 	inline void Board::SetCanBlackCastleKingside(const bool canCastle)
 	{
-		m_hash = BoardHasher::UpdateCanBlackCastleKingside(m_hash, m_blackKingside, canCastle);
+		m_boardHasher.UpdateCanBlackCastleKingside(m_blackKingside, canCastle);
 		m_blackKingside = canCastle;
 	}
 
 	inline void Board::SetCanBlackCastleQueenside(const bool canCastle)
 	{
-		m_hash = BoardHasher::UpdateCanBlackCastleQueenside(m_hash, m_blackQueenside, canCastle);
+		m_boardHasher.UpdateCanBlackCastleQueenside(m_blackQueenside, canCastle);
 		m_blackQueenside = canCastle;
 	}
 
 	inline void Board::SetWhiteToPlay(const bool whiteToPlay)
 	{
-		m_hash = BoardHasher::UpdateWhiteToPlay(m_hash, m_whiteToPlay, whiteToPlay);
+		m_boardHasher.UpdateWhiteToPlay(m_whiteToPlay, whiteToPlay);
 		m_whiteToPlay = whiteToPlay;
 	}
 

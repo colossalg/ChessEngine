@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-
+#include "BoardHasher.h"
 #include "Definitions.h"
 #include "Piece.h"
 
@@ -56,7 +55,7 @@ namespace ChessEngine
 		unsigned char GetFullMoves() const { return m_fullMoves; }
 
 		// Get the Zobrist hash for the position
-		unsigned int GetHash() const { return m_hash; }
+		unsigned int GetHash() const { return m_boardHasher.GetHash(); }
 
 	private:
 
@@ -121,7 +120,7 @@ namespace ChessEngine
 		unsigned char m_halfMoves = 0;	// The number of half moves played since last irreversible move
 		unsigned char m_fullMoves = 0;	// The number of full moves played
 
-		unsigned int m_hash = 0;	// The Zobrist hash
+		BoardHasher m_boardHasher;	// The hasher for this board
 	};
 }
 
