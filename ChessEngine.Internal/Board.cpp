@@ -253,13 +253,13 @@ namespace ChessEngine
 		{
 			if (m_whiteToPlay)
 			{
-				SetWhiteCastleKingside(false);
-				SetWhiteCastleQueenside(false);
+				SetCanWhiteCastleKingside(false);
+				SetCanWhiteCastleQueenside(false);
 			}
 			else
 			{
-				SetBlackCastleKingside(false);
-				SetBlackCastleQueenside(false);
+				SetCanBlackCastleKingside(false);
+				SetCanBlackCastleQueenside(false);
 			}
 		}
 		else if (piece.IsRook())
@@ -268,22 +268,22 @@ namespace ChessEngine
 			{
 				if (init == WhiteKingsideRookStartingSquare)
 				{
-					SetWhiteCastleKingside(false);
+					SetCanWhiteCastleKingside(false);
 				}
 				else if (init == WhiteQueensideRookStartingSquare)
 				{
-					SetWhiteCastleQueenside(false);
+					SetCanWhiteCastleQueenside(false);
 				}
 			}
 			else
 			{
 				if (init == BlackKingsideRookStartingSquare)
 				{
-					SetBlackCastleKingside(false);
+					SetCanBlackCastleKingside(false);
 				}
 				else if (init == BlackQueensideRookStartingSquare)
 				{
-					SetBlackCastleQueenside(false);
+					SetCanBlackCastleQueenside(false);
 				}
 			}
 		}
@@ -315,7 +315,7 @@ namespace ChessEngine
 		}
 
 		// Update whose turn it is to play
-		m_whiteToPlay = !m_whiteToPlay;
+		SetWhiteToPlay(!m_whiteToPlay);
 	}
 
 	void Board::UndoMove(const MoveInverse moveInverse)
@@ -358,10 +358,10 @@ namespace ChessEngine
 		}
 		
 		// Update castling rights
-		SetWhiteCastleKingside(moveInverse.GetWhiteKingside());
-		SetWhiteCastleQueenside(moveInverse.GetWhiteQueenside());
-		SetBlackCastleKingside(moveInverse.GetBlackKingside());
-		SetBlackCastleQueenside(moveInverse.GetBlackQueenside());
+		SetCanWhiteCastleKingside(moveInverse.GetWhiteKingside());
+		SetCanWhiteCastleQueenside(moveInverse.GetWhiteQueenside());
+		SetCanBlackCastleKingside(moveInverse.GetBlackKingside());
+		SetCanBlackCastleQueenside(moveInverse.GetBlackQueenside());
 
 		// Update en passant square
 		SetEnPassant(moveInverse.GetEnPassant());
@@ -376,18 +376,12 @@ namespace ChessEngine
 		}
 
 		// Update whose turn it is to play
-		m_whiteToPlay = !m_whiteToPlay;
+		SetWhiteToPlay(!m_whiteToPlay);
 	}
 
-	inline void Board::RemovePiece(const Square square)
+	inline void Board::SetPiece(const Square square, const Piece piece)
 	{
-		m_hash = BoardHasher::RemovePiece(m_hash, square, m_pieces[square]);
-		m_pieces[square] = Piece::ee;
-	}
-
-	inline void Board::InsertPiece(const Square square, const Piece piece)
-	{
-		m_hash = BoardHasher::InsertPiece(m_hash, square, m_pieces[square]);
+		m_hash = BoardHasher::UpdatePiece(m_hash, square, m_pieces[square], piece);
 		m_pieces[square] = piece;
 	}
 
@@ -397,62 +391,50 @@ namespace ChessEngine
 		m_enPassant = enPassant;
 	}
 
-	inline void Board::SetWhiteCastleKingside(bool canCastle)
+	inline void Board::SetCanWhiteCastleKingside(const bool canCastle)
 	{
-		if (canCastle != m_whiteKingside)
-		{
-			m_whiteKingside = canCastle;
-			m_hash = BoardHasher::UpdateWhiteCastleKingside(m_hash);
-		}
+		m_hash = BoardHasher::UpdateCanWhiteCastleKingside(m_hash, m_whiteKingside, canCastle);
+		m_whiteKingside = canCastle;
 	}
 
-	inline void Board::SetWhiteCastleQueenside(bool canCastle)
+	inline void Board::SetCanWhiteCastleQueenside(const bool canCastle)
 	{
-		if (canCastle != m_whiteQueenside)
-		{
-			m_whiteQueenside = canCastle;
-			m_hash = BoardHasher::UpdateWhiteCastleQueenside(m_hash);
-		}
+		m_hash = BoardHasher::UpdateCanWhiteCastleQueenside(m_hash, m_whiteQueenside, canCastle);
+		m_whiteQueenside = canCastle;
 	}
 
-	inline void Board::SetBlackCastleKingside(bool canCastle)
+	inline void Board::SetCanBlackCastleKingside(const bool canCastle)
 	{
-		if (canCastle != m_blackKingside)
-		{
-			m_blackKingside = canCastle;
-			m_hash = BoardHasher::UpdateBlackCastleKingside(m_hash);
-		}
+		m_hash = BoardHasher::UpdateCanBlackCastleKingside(m_hash, m_blackKingside, canCastle);
+		m_blackKingside = canCastle;
 	}
 
-	inline void Board::SetBlackCastleQueenside(bool canCastle)
+	inline void Board::SetCanBlackCastleQueenside(const bool canCastle)
 	{
-		if (canCastle != m_blackQueenside)
-		{
-			m_blackQueenside = canCastle;
-			m_hash = BoardHasher::UpdateBlackCastleQueenside(m_hash);
-		}
+		m_hash = BoardHasher::UpdateCanBlackCastleQueenside(m_hash, m_blackQueenside, canCastle);
+		m_blackQueenside = canCastle;
+	}
+
+	inline void Board::SetWhiteToPlay(const bool whiteToPlay)
+	{
+		m_hash = BoardHasher::UpdateWhiteToPlay(m_hash, m_whiteToPlay, whiteToPlay);
+		m_whiteToPlay = whiteToPlay;
 	}
 
 	inline void Board::MovePiece(const Square init, const Square dest)
 	{
 		Piece pieceAtInit = m_pieces[init];
-		Piece pieceAtDest = m_pieces[dest];
 
-		RemovePiece(init);
-		RemovePiece(dest);
-		InsertPiece(init, Piece::ee);
-		InsertPiece(dest, pieceAtInit);
+		SetPiece(init, Piece::ee);
+		SetPiece(dest, pieceAtInit);
 	}
 
 	inline void Board::MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
-		Piece pieceAtInit = m_pieces[init];
 		Piece pieceAtDest = m_pieces[dest];
 
-		RemovePiece(init);
-		RemovePiece(dest);
-		InsertPiece(init, pieceAtDest);
-		InsertPiece(dest, capturedPiece);
+		SetPiece(init, pieceAtDest);
+		SetPiece(dest, capturedPiece);
 	}
 
 	inline void Board::KCastles()
@@ -516,9 +498,7 @@ namespace ChessEngine
 		MovePiece(init, dest);
 
 		const Square captureSquare = dest + (m_whiteToPlay ? -8 : +8);
-
-		RemovePiece(captureSquare);
-		InsertPiece(captureSquare, Piece::ee);
+		SetPiece(captureSquare, Piece::ee);
 	}
 
 	inline void Board::EPCaptureInverse(const Square init, const Square dest)
@@ -526,24 +506,18 @@ namespace ChessEngine
 		MovePieceInverse(init, dest);
 
 		const Square captureSquare = dest + (m_whiteToPlay ? +8 : -8);
-
-		RemovePiece(captureSquare);
-		InsertPiece(captureSquare, (m_whiteToPlay ? Piece::wp : Piece::bp));
+		SetPiece(captureSquare, (m_whiteToPlay ? Piece::wp : Piece::bp));
 	}
 
 	inline void Board::Promotion(const Square init, const Square dest, const Piece::Type type)
 	{
-		RemovePiece(init);
-		RemovePiece(dest);
-		InsertPiece(init, Piece::ee);
-		InsertPiece(dest, Piece(type, m_whiteToPlay));
+		SetPiece(init, Piece::ee);
+		SetPiece(dest, Piece(type, m_whiteToPlay));
 	}
 
 	inline void Board::PromotionInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
-		RemovePiece(init);
-		RemovePiece(dest);
-		InsertPiece(init, (!m_whiteToPlay ? Piece::wp : Piece::bp));
-		InsertPiece(dest, capturedPiece);
+		SetPiece(init, (!m_whiteToPlay ? Piece::wp : Piece::bp));
+		SetPiece(dest, capturedPiece);
 	}
 }

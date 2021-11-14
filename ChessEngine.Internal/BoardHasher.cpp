@@ -30,6 +30,19 @@ namespace
 namespace ChessEngine
 {
 	template<unsigned int N>
+	std::array<unsigned int, N> CreateZeroArray()
+	{
+		std::array<unsigned int, N> zeroArray;
+
+		for (auto& number : zeroArray)
+		{
+			number = 0U;
+		}
+
+		return zeroArray;
+	}
+
+	template<unsigned int N>
 	std::array<unsigned int, N> CreateRandomNumberArray()
 	{
 		std::array<unsigned int, N> randomNumberArray;
@@ -44,13 +57,20 @@ namespace ChessEngine
 
 	void BoardHasher::InitializeRandomNumbers(unsigned int seed)
 	{
+		// Prevent initializing the random numbers more than once
+		if (AreRandomNumbersInitialized)
+		{
+			return;
+		}
+
 		srand(seed);
 
 		for (const auto& type : Piece::AllTypes)
 		{
 			if (type == Piece::Type::Empty)
 			{
-				WhitePieceRandNums[type] = std::move(std::array<unsigned int, 64>());
+				WhitePieceRandNums[type] = CreateZeroArray<64>();
+				BlackPieceRandNums[type] = CreateZeroArray<64>();
 			}
 
 			WhitePieceRandNums[type] = CreateRandomNumberArray<64>();
@@ -64,14 +84,14 @@ namespace ChessEngine
 		unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
 
 		std::array<unsigned int, 8> EnPassantRandNums = CreateRandomNumberArray<8>();
+
+		// Prevent initializing the random numbers more than once
+		AreRandomNumbersInitialized = true;
 	}
 
 	unsigned int BoardHasher::Hash(const Board& board)
 	{
-		if (!AreRandomNumbersInitialized)
-		{
-			InitializeRandomNumbers();
-		}
+		InitializeRandomNumbers();
 
 		unsigned int hash = 0;
 
@@ -104,19 +124,12 @@ namespace ChessEngine
 		return hash;
 	}
 
-	unsigned int BoardHasher::InsertPiece(unsigned int hash, const Square square, const Piece piece)
+	unsigned int BoardHasher::UpdatePiece(unsigned int hash, const Square square, const Piece oldPiece, const Piece newPiece)
 	{
-		auto& pieceRandNums = (piece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[piece.GetType()];
-		hash ^= pieceRandNums[square];
+		hash ^= (oldPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[oldPiece.GetType()][square];
+		hash ^= (newPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[newPiece.GetType()][square];
 
 		return hash;
-	}
-
-	unsigned int BoardHasher::RemovePiece(unsigned int hash, const Square square, const Piece piece)
-	{
-		// As XOR is its own inverse, by inserting the piece at the same
-		// position again it will have the same effect as removing it
-		return InsertPiece(hash, square, piece);
 	}
 
 	unsigned int BoardHasher::UpdateEnPassant(unsigned int hash, const EnPassant& oldEnPassant, const EnPassant& newEnPassant)
@@ -134,23 +147,53 @@ namespace ChessEngine
 		return hash;
 	}
 
-	unsigned int BoardHasher::UpdateWhiteCastleKingside(unsigned int hash)
+	unsigned int BoardHasher::UpdateCanWhiteCastleKingside(unsigned int hash, const bool oldCastlingRights, const bool newCastlingRights)
 	{
-		return (hash ^ WhiteKingsideCastlingRandNum);
+		if (oldCastlingRights != newCastlingRights)
+		{
+			hash ^= WhiteKingsideCastlingRandNum;
+		}
+
+		return hash;
 	}
 
-	unsigned int BoardHasher::UpdateWhiteCastleQueenside(unsigned int hash)
+	unsigned int BoardHasher::UpdateCanWhiteCastleQueenside(unsigned int hash, const bool oldCastlingRights, const bool newCastlingRights)
 	{
-		return (hash ^ WhiteQueensideCastlingRandNum);
+		if (oldCastlingRights != newCastlingRights)
+		{
+			hash ^= WhiteQueensideCastlingRandNum;
+		}
+
+		return hash;
 	}
 
-	unsigned int BoardHasher::UpdateBlackCastleKingside(unsigned int hash)
+	unsigned int BoardHasher::UpdateCanBlackCastleKingside(unsigned int hash, const bool oldCastlingRights, const bool newCastlingRights)
 	{
-		return (hash ^ BlackKingsideCastlingRandNum);
+		if (oldCastlingRights != newCastlingRights)
+		{
+			hash ^= BlackKingsideCastlingRandNum;
+		}
+
+		return hash;
 	}
 
-	unsigned int BoardHasher::UpdateBlackCastleQueenside(unsigned int hash)
+	unsigned int BoardHasher::UpdateCanBlackCastleQueenside(unsigned int hash, const bool oldCastlingRights, const bool newCastlingRights)
 	{
-		return (hash ^ BlackQueensideCastlingRandNum);
+		if (oldCastlingRights != newCastlingRights)
+		{
+			hash ^= BlackQueensideCastlingRandNum;
+		}
+
+		return hash;
+	}
+
+	unsigned int BoardHasher::UpdateWhiteToPlay(unsigned int hash, const bool oldWhiteToPlay, const bool newWhiteToPlay)
+	{
+		if (oldWhiteToPlay != newWhiteToPlay)
+		{
+			hash ^= WhiteToPlayRandNum;
+		}
+
+		return hash;
 	}
 }

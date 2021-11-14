@@ -50,6 +50,8 @@ namespace ChessEngineTests
 		{
 			Board board(startingFEN);
 
+			unsigned int initialHash = board.GetHash();
+
 			MoveInverse whiteMoveInverse(board, whiteMove);
 
 			board.MakeMove(whiteMove);
@@ -65,6 +67,9 @@ namespace ChessEngineTests
 
 			board.UndoMove(whiteMoveInverse);
 			Assert::AreEqual(startingFEN, board.GetFEN());
+
+			unsigned int finalHash = board.GetHash();
+			Assert::AreEqual(initialHash, finalHash);
 		}
 
 		// Test making and unmaking a move
@@ -76,6 +81,8 @@ namespace ChessEngineTests
 		{
 			Board board(startingFEN);
 
+			unsigned int initialHash = board.GetHash();
+
 			MoveInverse moveInverse(board, move);
 
 			board.MakeMove(move);
@@ -83,6 +90,9 @@ namespace ChessEngineTests
 
 			board.UndoMove(moveInverse);
 			Assert::AreEqual(startingFEN, board.GetFEN());
+
+			unsigned int finalHash = board.GetHash();
+			Assert::AreEqual(initialHash, finalHash);
 		}
 
 		// Test that quiet moves update the state of the board correctly

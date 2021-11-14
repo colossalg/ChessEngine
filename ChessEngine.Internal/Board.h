@@ -60,20 +60,22 @@ namespace ChessEngine
 
 	private:
 
-		// Helper function which updates the piece array by removing the piece at 'square' (also updates the hash)
-		void RemovePiece(const Square square);
+		// NOTE: Some of the helper functions below should be used for setting the 
 
-		// Helper function which updates the piece array by inserting the piece at 'square' (also updates the hash)
-		void InsertPiece(const Square square, const Piece piece);
+		// Helper function for setting the piece on a given square (also updates the hash)
+		void SetPiece(const Square square, const Piece piece);
 
-		// Helper function which updates the en passant square (also updates the hash)
+		// Helper function for setting the en passant square (also updates the hash)
 		void SetEnPassant(const EnPassant& enPassant);
 
 		// Helper functions for setting the castling rights (also updates the hash)
-		void SetWhiteCastleKingside(bool canCastle);
-		void SetWhiteCastleQueenside(bool canCastle);
-		void SetBlackCastleKingside(bool canCastle);
-		void SetBlackCastleQueenside(bool canCastle);
+		void SetCanWhiteCastleKingside(const bool canCastle);
+		void SetCanWhiteCastleQueenside(const bool canCastle);
+		void SetCanBlackCastleKingside(const bool canCastle);
+		void SetCanBlackCastleQueenside(const bool canCastle);
+
+		// Helper function for setting whether it is white's turn to play (also updates the hash)
+		void SetWhiteToPlay(bool whiteToPlay);
 
 		// Helper function which updates the piece array by moving a piece from 'init' to 'dest'
 		void MovePiece(const Square init, const Square dest);
