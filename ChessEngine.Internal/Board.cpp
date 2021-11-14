@@ -2,6 +2,7 @@
 
 #include "Board.h"
 
+#include "BoardHasher.h"
 #include "Helper.h"
 #include "Move.h"
 #include "MoveInverse.h"
@@ -9,7 +10,8 @@
 namespace ChessEngine
 {
 	Board::Board():
-		m_pieces(StartingPieces)
+		m_pieces(StartingPieces),
+		m_hash(BoardHasher::Hash(*this))
 	{
 	}
 
@@ -119,6 +121,9 @@ namespace ChessEngine
 		FENStream >> fullMoves;
 		m_halfMoves = static_cast<unsigned char>(halfMoves);
 		m_fullMoves = static_cast<unsigned char>(fullMoves);
+
+		// Get the hash for this position
+		m_hash = BoardHasher::Hash(*this);
 	}
 
 	std::string Board::GetFEN() const
@@ -248,13 +253,13 @@ namespace ChessEngine
 		{
 			if (m_whiteToPlay)
 			{
-				m_whiteKingside = false;
-				m_whiteQueenside = false;
+				SetWhiteCastleKingside(false);
+				SetWhiteCastleQueenside(false);
 			}
 			else
 			{
-				m_blackKingside = false;
-				m_blackQueenside = false;
+				SetBlackCastleKingside(false);
+				SetBlackCastleQueenside(false);
 			}
 		}
 		else if (piece.IsRook())
@@ -263,22 +268,22 @@ namespace ChessEngine
 			{
 				if (init == WhiteKingsideRookStartingSquare)
 				{
-					m_whiteKingside = false;
+					SetWhiteCastleKingside(false);
 				}
 				else if (init == WhiteQueensideRookStartingSquare)
 				{
-					m_whiteQueenside = false;
+					SetWhiteCastleQueenside(false);
 				}
 			}
 			else
 			{
 				if (init == BlackKingsideRookStartingSquare)
 				{
-					m_blackKingside = false;
+					SetBlackCastleKingside(false);
 				}
 				else if (init == BlackQueensideRookStartingSquare)
 				{
-					m_blackQueenside = false;
+					SetBlackCastleQueenside(false);
 				}
 			}
 		}
@@ -286,11 +291,11 @@ namespace ChessEngine
 		// Update en passan square
 		if (move.IsDoublePawnPush())
 		{
-			m_enPassant = init + (m_whiteToPlay ? +8 : -8);
+			SetEnPassant(init + (m_whiteToPlay ? +8 : -8));
 		}
 		else
 		{
-			m_enPassant.reset();
+			SetEnPassant(std::nullopt);
 		}
 
 		// Update half move counter
@@ -353,13 +358,13 @@ namespace ChessEngine
 		}
 		
 		// Update castling rights
-		m_whiteKingside = moveInverse.GetWhiteKingside();
-		m_whiteQueenside = moveInverse.GetWhiteQueenside();
-		m_blackKingside = moveInverse.GetBlackKingside();
-		m_blackQueenside = moveInverse.GetBlackQueenside();
+		SetWhiteCastleKingside(moveInverse.GetWhiteKingside());
+		SetWhiteCastleQueenside(moveInverse.GetWhiteQueenside());
+		SetBlackCastleKingside(moveInverse.GetBlackKingside());
+		SetBlackCastleQueenside(moveInverse.GetBlackQueenside());
 
 		// Update en passant square
-		m_enPassant = moveInverse.GetEnPassant();
+		SetEnPassant(moveInverse.GetEnPassant());
 
 		// Update half move counter
 		m_halfMoves = moveInverse.GetHalfMoves();
@@ -374,22 +379,80 @@ namespace ChessEngine
 		m_whiteToPlay = !m_whiteToPlay;
 	}
 
+	inline void Board::RemovePiece(const Square square)
+	{
+		m_hash = BoardHasher::RemovePiece(m_hash, square, m_pieces[square]);
+		m_pieces[square] = Piece::ee;
+	}
+
+	inline void Board::InsertPiece(const Square square, const Piece piece)
+	{
+		m_hash = BoardHasher::InsertPiece(m_hash, square, m_pieces[square]);
+		m_pieces[square] = piece;
+	}
+
+	inline void Board::SetEnPassant(const EnPassant& enPassant)
+	{
+		m_hash = BoardHasher::UpdateEnPassant(m_hash, m_enPassant, enPassant);
+		m_enPassant = enPassant;
+	}
+
+	inline void Board::SetWhiteCastleKingside(bool canCastle)
+	{
+		if (canCastle != m_whiteKingside)
+		{
+			m_whiteKingside = canCastle;
+			m_hash = BoardHasher::UpdateWhiteCastleKingside(m_hash);
+		}
+	}
+
+	inline void Board::SetWhiteCastleQueenside(bool canCastle)
+	{
+		if (canCastle != m_whiteQueenside)
+		{
+			m_whiteQueenside = canCastle;
+			m_hash = BoardHasher::UpdateWhiteCastleQueenside(m_hash);
+		}
+	}
+
+	inline void Board::SetBlackCastleKingside(bool canCastle)
+	{
+		if (canCastle != m_blackKingside)
+		{
+			m_blackKingside = canCastle;
+			m_hash = BoardHasher::UpdateBlackCastleKingside(m_hash);
+		}
+	}
+
+	inline void Board::SetBlackCastleQueenside(bool canCastle)
+	{
+		if (canCastle != m_blackQueenside)
+		{
+			m_blackQueenside = canCastle;
+			m_hash = BoardHasher::UpdateBlackCastleQueenside(m_hash);
+		}
+	}
+
 	inline void Board::MovePiece(const Square init, const Square dest)
 	{
-		Piece piece = m_pieces[init];
+		Piece pieceAtInit = m_pieces[init];
+		Piece pieceAtDest = m_pieces[dest];
 
-		// Update piece array
-		m_pieces[init] = Piece::ee;
-		m_pieces[dest] = piece;
+		RemovePiece(init);
+		RemovePiece(dest);
+		InsertPiece(init, Piece::ee);
+		InsertPiece(dest, pieceAtInit);
 	}
 
 	inline void Board::MovePieceInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
-		Piece piece = m_pieces[dest];
+		Piece pieceAtInit = m_pieces[init];
+		Piece pieceAtDest = m_pieces[dest];
 
-		// Update piece array
-		m_pieces[init] = piece;
-		m_pieces[dest] = capturedPiece;
+		RemovePiece(init);
+		RemovePiece(dest);
+		InsertPiece(init, pieceAtDest);
+		InsertPiece(dest, capturedPiece);
 	}
 
 	inline void Board::KCastles()
@@ -452,27 +515,35 @@ namespace ChessEngine
 	{
 		MovePiece(init, dest);
 
-		const Square captured = dest + (m_whiteToPlay ? -8 : +8);
-		m_pieces[captured] = Piece::ee;
+		const Square captureSquare = dest + (m_whiteToPlay ? -8 : +8);
+
+		RemovePiece(captureSquare);
+		InsertPiece(captureSquare, Piece::ee);
 	}
 
 	inline void Board::EPCaptureInverse(const Square init, const Square dest)
 	{
 		MovePieceInverse(init, dest);
 
-		const Square captured = dest + (!m_whiteToPlay ? -8 : +8);
-		m_pieces[captured] = (m_whiteToPlay ? Piece::wp : Piece::bp);
+		const Square captureSquare = dest + (m_whiteToPlay ? +8 : -8);
+
+		RemovePiece(captureSquare);
+		InsertPiece(captureSquare, (m_whiteToPlay ? Piece::wp : Piece::bp));
 	}
 
 	inline void Board::Promotion(const Square init, const Square dest, const Piece::Type type)
 	{
-		m_pieces[init] = Piece::ee;
-		m_pieces[dest] = Piece(type, m_whiteToPlay);
+		RemovePiece(init);
+		RemovePiece(dest);
+		InsertPiece(init, Piece::ee);
+		InsertPiece(dest, Piece(type, m_whiteToPlay));
 	}
 
 	inline void Board::PromotionInverse(const Square init, const Square dest, const Piece capturedPiece)
 	{
-		m_pieces[init] = (!m_whiteToPlay ? Piece::wp : Piece::bp);
-		m_pieces[dest] = capturedPiece;
+		RemovePiece(init);
+		RemovePiece(dest);
+		InsertPiece(init, (!m_whiteToPlay ? Piece::wp : Piece::bp));
+		InsertPiece(dest, capturedPiece);
 	}
 }

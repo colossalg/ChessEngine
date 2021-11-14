@@ -37,7 +37,7 @@ namespace ChessEngine
 	};
 
 	// The array of all the piece types so we can iterate over them
-	const std::array<Piece::Type, 7> AllTypes = {
+	const std::array<Piece::Type, 7> Piece::AllTypes = {
 		Piece::Type::Empty,
 		Piece::Type::Pawn,
 		Piece::Type::Knight,

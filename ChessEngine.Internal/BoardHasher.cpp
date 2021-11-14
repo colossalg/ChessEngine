@@ -2,32 +2,35 @@
 
 #include "BoardHasher.h"
 
-#include <array>
 #include <cstdlib>
 #include <map>
 
 #include "Board.h"
-#include "Definitions.h"
 #include "Helper.h"
+#include "Move.h"
 #include "Piece.h"
 
 namespace
 {
 	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> WhitePieceRandNums;
 	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> BlackPieceRandNums;
+
 	unsigned int WhiteToPlayRandNum;
+
 	unsigned int WhiteKingsideCastlingRandNum;
 	unsigned int WhiteQueensideCastlingRandNum;
 	unsigned int BlackKingsideCastlingRandNum;
 	unsigned int BlackQueensideCastlingRandNum;
-	std::array<unsigned int, 8> EnPassanRandNums;
+
+	std::array<unsigned int, 8> EnPassantRandNums;
+
 	bool AreRandomNumbersInitialized = false;
 }
 
 namespace ChessEngine
 {
 	template<unsigned int N>
-	std::array<unsigned int, N>&& CreateRandomNumberArray()
+	std::array<unsigned int, N> CreateRandomNumberArray()
 	{
 		std::array<unsigned int, N> randomNumberArray;
 
@@ -36,7 +39,7 @@ namespace ChessEngine
 			number = static_cast<unsigned int>(rand());
 		}
 
-		return std::move(randomNumberArray);
+		return randomNumberArray;
 	}
 
 	void BoardHasher::InitializeRandomNumbers(unsigned int seed)
@@ -47,7 +50,7 @@ namespace ChessEngine
 		{
 			if (type == Piece::Type::Empty)
 			{
-				continue;
+				WhitePieceRandNums[type] = std::move(std::array<unsigned int, 64>());
 			}
 
 			WhitePieceRandNums[type] = CreateRandomNumberArray<64>();
@@ -60,7 +63,7 @@ namespace ChessEngine
 		unsigned int BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
 		unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
 
-		std::array<unsigned int, 8> EnPassanRandNums = CreateRandomNumberArray<8>();
+		std::array<unsigned int, 8> EnPassantRandNums = CreateRandomNumberArray<8>();
 	}
 
 	unsigned int BoardHasher::Hash(const Board& board)
@@ -94,10 +97,60 @@ namespace ChessEngine
 
 		if (board.GetEnPassant().has_value())
 		{
-			Row enPassanRow = Helper::RowFromSquare(board.GetEnPassant().value());
-			hash ^= EnPassanRandNums[enPassanRow];
+			Row enPassantRow = Helper::RowFromSquare(board.GetEnPassant().value());
+			hash ^= EnPassantRandNums[enPassantRow];
 		}
 
 		return hash;
+	}
+
+	unsigned int BoardHasher::InsertPiece(unsigned int hash, const Square square, const Piece piece)
+	{
+		auto& pieceRandNums = (piece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[piece.GetType()];
+		hash ^= pieceRandNums[square];
+
+		return hash;
+	}
+
+	unsigned int BoardHasher::RemovePiece(unsigned int hash, const Square square, const Piece piece)
+	{
+		// As XOR is its own inverse, by inserting the piece at the same
+		// position again it will have the same effect as removing it
+		return InsertPiece(hash, square, piece);
+	}
+
+	unsigned int BoardHasher::UpdateEnPassant(unsigned int hash, const EnPassant& oldEnPassant, const EnPassant& newEnPassant)
+	{
+		if (oldEnPassant.has_value())
+		{
+			hash ^= EnPassantRandNums[Helper::ColFromSquare(oldEnPassant.value())];
+		}
+
+		if (newEnPassant.has_value())
+		{
+			hash ^= EnPassantRandNums[Helper::ColFromSquare(newEnPassant.value())];
+		}
+
+		return hash;
+	}
+
+	unsigned int BoardHasher::UpdateWhiteCastleKingside(unsigned int hash)
+	{
+		return (hash ^ WhiteKingsideCastlingRandNum);
+	}
+
+	unsigned int BoardHasher::UpdateWhiteCastleQueenside(unsigned int hash)
+	{
+		return (hash ^ WhiteQueensideCastlingRandNum);
+	}
+
+	unsigned int BoardHasher::UpdateBlackCastleKingside(unsigned int hash)
+	{
+		return (hash ^ BlackKingsideCastlingRandNum);
+	}
+
+	unsigned int BoardHasher::UpdateBlackCastleQueenside(unsigned int hash)
+	{
+		return (hash ^ BlackQueensideCastlingRandNum);
 	}
 }

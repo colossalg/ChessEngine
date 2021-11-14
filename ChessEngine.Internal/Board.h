@@ -11,6 +11,13 @@ namespace ChessEngine
 	{
 	public:
 
+		constexpr static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
+		constexpr static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
+		constexpr static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
+		constexpr static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
+		constexpr static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
+		constexpr static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
+
 		const static PieceArray StartingPieces; // The starting pieces for a board
 
 		// Create a new board
@@ -48,7 +55,25 @@ namespace ChessEngine
 		// Get the number of full moves played
 		unsigned char GetFullMoves() const { return m_fullMoves; }
 
+		// Get the Zobrist hash for the position
+		unsigned int GetHash() const { return m_hash; }
+
 	private:
+
+		// Helper function which updates the piece array by removing the piece at 'square' (also updates the hash)
+		void RemovePiece(const Square square);
+
+		// Helper function which updates the piece array by inserting the piece at 'square' (also updates the hash)
+		void InsertPiece(const Square square, const Piece piece);
+
+		// Helper function which updates the en passant square (also updates the hash)
+		void SetEnPassant(const EnPassant& enPassant);
+
+		// Helper functions for setting the castling rights (also updates the hash)
+		void SetWhiteCastleKingside(bool canCastle);
+		void SetWhiteCastleQueenside(bool canCastle);
+		void SetBlackCastleKingside(bool canCastle);
+		void SetBlackCastleQueenside(bool canCastle);
 
 		// Helper function which updates the piece array by moving a piece from 'init' to 'dest'
 		void MovePiece(const Square init, const Square dest);
@@ -80,13 +105,6 @@ namespace ChessEngine
 		// Helper function for 'undoing' a promotion
 		void PromotionInverse(const Square init, const Square dest, const Piece capturedPiece = Piece::ee);
 
-		constexpr static Square WhiteKingStartingSquare = 4;			// The starting square of the white king (e1)
-		constexpr static Square BlackKingStartingSquare = 60;			// The starting square of the black king (e8)
-		constexpr static Square WhiteKingsideRookStartingSquare = 7;	// The starting square of the white kingside rook (h1)
-		constexpr static Square BlackKingsideRookStartingSquare = 63;	// The starting square of the black kingside rook (h8)
-		constexpr static Square WhiteQueensideRookStartingSquare = 0;	// The starting square of the white queenside rook (a1)
-		constexpr static Square BlackQueensideRookStartingSquare = 56;	// The starting square fo the black queenside rook (a8)
-
 		PieceArray m_pieces;		// The pieces locations on the board
 
 		EnPassant m_enPassant;		// The en passant square (if en passant is possible)
@@ -100,6 +118,8 @@ namespace ChessEngine
 
 		unsigned char m_halfMoves = 0;	// The number of half moves played since last irreversible move
 		unsigned char m_fullMoves = 0;	// The number of full moves played
+
+		unsigned int m_hash = 0;	// The Zobrist hash
 	};
 }
 
