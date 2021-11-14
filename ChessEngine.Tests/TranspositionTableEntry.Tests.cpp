@@ -4,25 +4,10 @@
 #include "TranspositionTable.h"
 #include "TranspositionTableEntry.h"
 
+#include "TestHelpers.h"
+
 using namespace ChessEngine;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
-namespace Microsoft::VisualStudio::CppUnitTestFramework
-{
-	template<> static std::wstring ToString<TranspositionTableEntry>(const class TranspositionTableEntry& entry)
-	{
-		std::wostringstream wss;
-		wss << "TranspositionTableEntry { "
-			<< entry.GetHash() << ", "
-			<< (entry.IsInitialized() ? "true, " : "false, ")
-			<< entry.GetDepthFromRoot() << ", "
-			<< entry.GetDepthToLeaves() << ", "
-			<< entry.GetEval()
-			<< " }";
-
-		return wss.str();
-	}
-}
 
 namespace ChessEngineTests
 {
