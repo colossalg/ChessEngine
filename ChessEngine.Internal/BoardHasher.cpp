@@ -12,32 +12,6 @@
 
 namespace
 {
-	template<unsigned int N>
-	std::array<unsigned int, N> CreateZeroArray()
-	{
-		std::array<unsigned int, N> zeroArray;
-
-		for (auto& number : zeroArray)
-		{
-			number = 0U;
-		}
-
-		return zeroArray;
-	}
-
-	template<unsigned int N>
-	std::array<unsigned int, N> CreateRandomNumberArray()
-	{
-		std::array<unsigned int, N> randomNumberArray;
-
-		for (auto& number : randomNumberArray)
-		{
-			number = static_cast<unsigned int>(rand());
-		}
-
-		return randomNumberArray;
-	}
-
 	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> WhitePieceRandNums;
 	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> BlackPieceRandNums;
 
@@ -55,17 +29,13 @@ namespace
 
 namespace ChessEngine
 {
-	BoardHasher::BoardHasher(const Board& board):
-		m_board(board)
-	{}
-
-	void BoardHasher::ResetHash()
+	void BoardHasher::SetHash(const Board& board)
 	{
 		InitializeRandomNumbers();
 
 		m_hash = 0;
 
-		const PieceArray& pieces = m_board.GetPieces();
+		const PieceArray& pieces = board.GetPieces();
 		for (Square square = 0; Helper::IsValidSquare(square); square++)
 		{
 			Piece piece = pieces[square];
@@ -80,15 +50,32 @@ namespace ChessEngine
 			}
 		}
 
-		if (m_board.GetWhiteToPlay())
+		if (board.GetEnPassant().has_value())
 		{
-			m_hash ^= WhiteToPlayRandNum;
+			Row enPassantRow = Helper::RowFromSquare(board.GetEnPassant().value());
+			m_hash ^= EnPassantRandNums[enPassantRow];
 		}
 
-		if (m_board.GetEnPassant().has_value())
+		if (board.CanWhiteCastleKingside())
 		{
-			Row enPassantRow = Helper::RowFromSquare(m_board.GetEnPassant().value());
-			m_hash ^= EnPassantRandNums[enPassantRow];
+			m_hash ^= WhiteKingsideCastlingRandNum;
+		}
+		if (board.CanWhiteCastleQueenside())
+		{
+			m_hash ^= WhiteQueensideCastlingRandNum;
+		}
+		if (board.CanBlackCastleKingside())
+		{
+			m_hash ^= BlackKingsideCastlingRandNum;
+		}
+		if (board.CanBlackCastleQueenside())
+		{
+			m_hash ^= BlackQueensideCastlingRandNum;
+		}
+
+		if (board.GetWhiteToPlay())
+		{
+			m_hash ^= WhiteToPlayRandNum;
 		}
 	}
 
@@ -165,12 +152,12 @@ namespace ChessEngine
 		{
 			if (type == Piece::Type::Empty)
 			{
-				WhitePieceRandNums[type] = CreateZeroArray<64>();
-				BlackPieceRandNums[type] = CreateZeroArray<64>();
+				WhitePieceRandNums[type] = Helper::CreateZeroArray<64>();
+				BlackPieceRandNums[type] = Helper::CreateZeroArray<64>();
 			}
 
-			WhitePieceRandNums[type] = CreateRandomNumberArray<64>();
-			BlackPieceRandNums[type] = CreateRandomNumberArray<64>();
+			WhitePieceRandNums[type] = Helper::CreateRandomArray<64>();
+			BlackPieceRandNums[type] = Helper::CreateRandomArray<64>();
 		}
 
 		unsigned int WhiteToMoveRandNum = static_cast<unsigned int>(rand());
@@ -179,7 +166,7 @@ namespace ChessEngine
 		unsigned int BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
 		unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
 
-		std::array<unsigned int, 8> EnPassantRandNums = CreateRandomNumberArray<8>();
+		std::array<unsigned int, 8> EnPassantRandNums = Helper::CreateRandomArray<8>();
 
 		// Prevent initializing the random numbers more than once
 		AreRandomNumbersInitialized = true;

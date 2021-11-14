@@ -8,11 +8,8 @@ namespace ChessEngine
 	{
 	public:
 
-		// Create a new board hasher
-		BoardHasher(const Board& board);
-
-		// Reset the hash of the board this board hasher belongs to
-		void ResetHash();
+		// Set the hash of the board this board hasher belongs to
+		void SetHash(const Board& board);
 
 		// Get the hash of the board this board hasher belongs to
 		unsigned int GetHash() const { return m_hash; }
@@ -42,8 +39,6 @@ namespace ChessEngine
 
 		// Initialize the random numbers used for zobrist hashing
 		static void InitializeRandomNumbers(unsigned int seed = 0);
-
-		const Board& m_board;		// The board that this board hasher belongs to
 
 		unsigned int m_hash = 0;	// The hash of the board that this board hasher belongs to
 	};

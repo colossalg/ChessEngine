@@ -40,5 +40,27 @@ namespace ChessEngine
 
 		// Convert a std::string to a std::wstring
 		std::wstring StringToWString(const std::string& s);
+
+		// Create an array with all zero entries
+		template<unsigned int N> std::array<unsigned int, N> CreateZeroArray()
+		{
+			std::array<unsigned int, N> arr;
+
+			for (auto& number : arr)
+				number = 0U;
+
+			return arr;
+		}
+
+		// Create an array with random entries
+		template<unsigned int N> std::array<unsigned int, N> CreateRandomArray()
+		{
+			std::array<unsigned int, N> arr;
+
+			for (auto& number : arr)
+				number = static_cast<unsigned int>(rand());
+
+			return arr;
+		}
 	}
 }

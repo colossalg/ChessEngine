@@ -10,14 +10,12 @@
 namespace ChessEngine
 {
 	Board::Board():
-		m_pieces(StartingPieces),
-		m_boardHasher(*this)
+		m_pieces(StartingPieces)
 	{
-		m_boardHasher.ResetHash();
+		m_boardHasher.SetHash(*this);
 	}
 
-	Board::Board(const std::string& FEN):
-		m_boardHasher(*this)
+	Board::Board(const std::string& FEN)
 	{
 		std::string pieces;
 		std::string toPlay;
@@ -125,7 +123,7 @@ namespace ChessEngine
 		m_fullMoves = static_cast<unsigned char>(fullMoves);
 
 		// Get the hash for this position
-		m_boardHasher.ResetHash();
+		m_boardHasher.SetHash(*this);
 	}
 
 	std::string Board::GetFEN() const
