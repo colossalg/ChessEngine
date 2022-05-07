@@ -12,163 +12,163 @@
 
 namespace
 {
-	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> WhitePieceRandNums;
-	std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> BlackPieceRandNums;
+    std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> WhitePieceRandNums;
+    std::map<ChessEngine::Piece::Type, std::array<unsigned int, 64>> BlackPieceRandNums;
 
-	unsigned int WhiteToPlayRandNum;
+    unsigned int WhiteToPlayRandNum;
 
-	unsigned int WhiteKingsideCastlingRandNum;
-	unsigned int WhiteQueensideCastlingRandNum;
-	unsigned int BlackKingsideCastlingRandNum;
-	unsigned int BlackQueensideCastlingRandNum;
+    unsigned int WhiteKingsideCastlingRandNum;
+    unsigned int WhiteQueensideCastlingRandNum;
+    unsigned int BlackKingsideCastlingRandNum;
+    unsigned int BlackQueensideCastlingRandNum;
 
-	std::array<unsigned int, 8> EnPassantRandNums;
+    std::array<unsigned int, 8> EnPassantRandNums;
 
-	bool AreRandomNumbersInitialized = false;
+    bool AreRandomNumbersInitialized = false;
 }
 
 namespace ChessEngine
 {
-	void BoardHasher::SetHash(const Board& board)
-	{
-		InitializeRandomNumbers();
+    void BoardHasher::SetHash(const Board& board)
+    {
+        InitializeRandomNumbers();
 
-		m_hash = 0;
+        m_hash = 0;
 
-		const PieceArray& pieces = board.GetPieces();
-		for (Square square = 0; Helper::IsValidSquare(square); square++)
-		{
-			Piece piece = pieces[square];
+        const PieceArray& pieces = board.GetPieces();
+        for (Square square = 0; Helper::IsValidSquare(square); square++)
+        {
+            Piece piece = pieces[square];
 
-			if (piece.IsWhite())
-			{
-				m_hash ^= WhitePieceRandNums[piece.GetType()][square];
-			}
-			else
-			{
-				m_hash ^= BlackPieceRandNums[piece.GetType()][square];
-			}
-		}
+            if (piece.IsWhite())
+            {
+                m_hash ^= WhitePieceRandNums[piece.GetType()][square];
+            }
+            else
+            {
+                m_hash ^= BlackPieceRandNums[piece.GetType()][square];
+            }
+        }
 
-		if (board.GetEnPassant().has_value())
-		{
-			Row enPassantRow = Helper::RowFromSquare(board.GetEnPassant().value());
-			m_hash ^= EnPassantRandNums[enPassantRow];
-		}
+        if (board.GetEnPassant().has_value())
+        {
+            Row enPassantRow = Helper::RowFromSquare(board.GetEnPassant().value());
+            m_hash ^= EnPassantRandNums[enPassantRow];
+        }
 
-		if (board.CanWhiteCastleKingside())
-		{
-			m_hash ^= WhiteKingsideCastlingRandNum;
-		}
-		if (board.CanWhiteCastleQueenside())
-		{
-			m_hash ^= WhiteQueensideCastlingRandNum;
-		}
-		if (board.CanBlackCastleKingside())
-		{
-			m_hash ^= BlackKingsideCastlingRandNum;
-		}
-		if (board.CanBlackCastleQueenside())
-		{
-			m_hash ^= BlackQueensideCastlingRandNum;
-		}
+        if (board.CanWhiteCastleKingside())
+        {
+            m_hash ^= WhiteKingsideCastlingRandNum;
+        }
+        if (board.CanWhiteCastleQueenside())
+        {
+            m_hash ^= WhiteQueensideCastlingRandNum;
+        }
+        if (board.CanBlackCastleKingside())
+        {
+            m_hash ^= BlackKingsideCastlingRandNum;
+        }
+        if (board.CanBlackCastleQueenside())
+        {
+            m_hash ^= BlackQueensideCastlingRandNum;
+        }
 
-		if (board.GetWhiteToPlay())
-		{
-			m_hash ^= WhiteToPlayRandNum;
-		}
-	}
+        if (board.GetWhiteToPlay())
+        {
+            m_hash ^= WhiteToPlayRandNum;
+        }
+    }
 
-	void BoardHasher::UpdatePiece(const Square square, const Piece oldPiece, const Piece newPiece)
-	{
-		m_hash ^= (oldPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[oldPiece.GetType()][square];
-		m_hash ^= (newPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[newPiece.GetType()][square];
-	}
+    void BoardHasher::UpdatePiece(const Square square, const Piece oldPiece, const Piece newPiece)
+    {
+        m_hash ^= (oldPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[oldPiece.GetType()][square];
+        m_hash ^= (newPiece.IsWhite() ? WhitePieceRandNums : BlackPieceRandNums)[newPiece.GetType()][square];
+    }
 
-	void BoardHasher::UpdateEnPassant(const EnPassant& oldEnPassant, const EnPassant& newEnPassant)
-	{
-		if (oldEnPassant.has_value())
-		{
-			m_hash ^= EnPassantRandNums[Helper::ColFromSquare(oldEnPassant.value())];
-		}
+    void BoardHasher::UpdateEnPassant(const EnPassant& oldEnPassant, const EnPassant& newEnPassant)
+    {
+        if (oldEnPassant.has_value())
+        {
+            m_hash ^= EnPassantRandNums[Helper::ColFromSquare(oldEnPassant.value())];
+        }
 
-		if (newEnPassant.has_value())
-		{
-			m_hash ^= EnPassantRandNums[Helper::ColFromSquare(newEnPassant.value())];
-		}
-	}
+        if (newEnPassant.has_value())
+        {
+            m_hash ^= EnPassantRandNums[Helper::ColFromSquare(newEnPassant.value())];
+        }
+    }
 
-	void BoardHasher::UpdateCanWhiteCastleKingside(const bool oldCastlingRights, const bool newCastlingRights)
-	{
-		if (oldCastlingRights != newCastlingRights)
-		{
-			m_hash ^= WhiteKingsideCastlingRandNum;
-		}
-	}
+    void BoardHasher::UpdateCanWhiteCastleKingside(const bool oldCastlingRights, const bool newCastlingRights)
+    {
+        if (oldCastlingRights != newCastlingRights)
+        {
+            m_hash ^= WhiteKingsideCastlingRandNum;
+        }
+    }
 
-	void BoardHasher::UpdateCanWhiteCastleQueenside(const bool oldCastlingRights, const bool newCastlingRights)
-	{
-		if (oldCastlingRights != newCastlingRights)
-		{
-			m_hash ^= WhiteQueensideCastlingRandNum;
-		}
-	}
+    void BoardHasher::UpdateCanWhiteCastleQueenside(const bool oldCastlingRights, const bool newCastlingRights)
+    {
+        if (oldCastlingRights != newCastlingRights)
+        {
+            m_hash ^= WhiteQueensideCastlingRandNum;
+        }
+    }
 
-	void BoardHasher::UpdateCanBlackCastleKingside(const bool oldCastlingRights, const bool newCastlingRights)
-	{
-		if (oldCastlingRights != newCastlingRights)
-		{
-			m_hash ^= BlackKingsideCastlingRandNum;
-		}
-	}
+    void BoardHasher::UpdateCanBlackCastleKingside(const bool oldCastlingRights, const bool newCastlingRights)
+    {
+        if (oldCastlingRights != newCastlingRights)
+        {
+            m_hash ^= BlackKingsideCastlingRandNum;
+        }
+    }
 
-	void BoardHasher::UpdateCanBlackCastleQueenside(const bool oldCastlingRights, const bool newCastlingRights)
-	{
-		if (oldCastlingRights != newCastlingRights)
-		{
-			m_hash ^= BlackQueensideCastlingRandNum;
-		}
-	}
+    void BoardHasher::UpdateCanBlackCastleQueenside(const bool oldCastlingRights, const bool newCastlingRights)
+    {
+        if (oldCastlingRights != newCastlingRights)
+        {
+            m_hash ^= BlackQueensideCastlingRandNum;
+        }
+    }
 
-	void BoardHasher::UpdateWhiteToPlay(const bool oldWhiteToPlay, const bool newWhiteToPlay)
-	{
-		if (oldWhiteToPlay != newWhiteToPlay)
-		{
-			m_hash ^= WhiteToPlayRandNum;
-		}
-	}
+    void BoardHasher::UpdateWhiteToPlay(const bool oldWhiteToPlay, const bool newWhiteToPlay)
+    {
+        if (oldWhiteToPlay != newWhiteToPlay)
+        {
+            m_hash ^= WhiteToPlayRandNum;
+        }
+    }
 
-	void BoardHasher::InitializeRandomNumbers(unsigned int seed)
-	{
-		// Prevent initializing the random numbers more than once
-		if (AreRandomNumbersInitialized)
-		{
-			return;
-		}
+    void BoardHasher::InitializeRandomNumbers(unsigned int seed)
+    {
+        // Prevent initializing the random numbers more than once
+        if (AreRandomNumbersInitialized)
+        {
+            return;
+        }
 
-		srand(seed);
+        srand(seed);
 
-		for (const auto& type : Piece::AllTypes)
-		{
-			if (type == Piece::Type::Empty)
-			{
-				WhitePieceRandNums[type] = Helper::CreateZeroArray<64>();
-				BlackPieceRandNums[type] = Helper::CreateZeroArray<64>();
-			}
+        for (const auto& type : Piece::AllTypes)
+        {
+            if (type == Piece::Type::Empty)
+            {
+                WhitePieceRandNums[type] = Helper::CreateZeroArray<64>();
+                BlackPieceRandNums[type] = Helper::CreateZeroArray<64>();
+            }
 
-			WhitePieceRandNums[type] = Helper::CreateRandomArray<64>();
-			BlackPieceRandNums[type] = Helper::CreateRandomArray<64>();
-		}
+            WhitePieceRandNums[type] = Helper::CreateRandomArray<64>();
+            BlackPieceRandNums[type] = Helper::CreateRandomArray<64>();
+        }
 
-		unsigned int WhiteToMoveRandNum = static_cast<unsigned int>(rand());
-		unsigned int WhiteKingsideCastlingRandNum = static_cast<unsigned int>(rand());
-		unsigned int WhiteQueensideCastlingRandNum = static_cast<unsigned int>(rand());
-		unsigned int BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
-		unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
+        unsigned int WhiteToMoveRandNum = static_cast<unsigned int>(rand());
+        unsigned int WhiteKingsideCastlingRandNum = static_cast<unsigned int>(rand());
+        unsigned int WhiteQueensideCastlingRandNum = static_cast<unsigned int>(rand());
+        unsigned int BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
+        unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
 
-		std::array<unsigned int, 8> EnPassantRandNums = Helper::CreateRandomArray<8>();
+        std::array<unsigned int, 8> EnPassantRandNums = Helper::CreateRandomArray<8>();
 
-		// Prevent initializing the random numbers more than once
-		AreRandomNumbersInitialized = true;
-	}
+        // Prevent initializing the random numbers more than once
+        AreRandomNumbersInitialized = true;
+    }
 }

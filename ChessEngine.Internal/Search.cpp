@@ -14,112 +14,112 @@
 
 namespace
 {
-	constexpr bool CollectMetrics = true;
+    constexpr bool CollectMetrics = true;
 }
 
 namespace ChessEngine
 {
-	std::pair<Move, int> Search::SearchPosition(Board& board, const unsigned char maxDepth)
-	{
-		METRICS_SET_MAX_DEPTH(CollectMetrics, m_metrics, maxDepth);
-		METRICS_SEARCH_START(CollectMetrics, m_metrics);
+    std::pair<Move, int> Search::SearchPosition(Board& board, const unsigned char maxDepth)
+    {
+        METRICS_SET_MAX_DEPTH(CollectMetrics, m_metrics, maxDepth);
+        METRICS_SEARCH_START(CollectMetrics, m_metrics);
 
-		std::pair<Move, int> searchResult = SearchPositionPruned(
-			board,
-			maxDepth,
-			std::numeric_limits<int>::min(),
-			std::numeric_limits<int>::max());
+        std::pair<Move, int> searchResult = SearchPositionPruned(
+            board,
+            maxDepth,
+            std::numeric_limits<int>::min(),
+            std::numeric_limits<int>::max());
 
-		METRICS_SEARCH_STOP(CollectMetrics, m_metrics);
-		METRICS_PRINT(CollectMetrics, m_metrics);
-		METRICS_WRITE(CollectMetrics, m_metrics);
+        METRICS_SEARCH_STOP(CollectMetrics, m_metrics);
+        METRICS_PRINT(CollectMetrics, m_metrics);
+        METRICS_WRITE(CollectMetrics, m_metrics);
 
-		return searchResult;
-	}
+        return searchResult;
+    }
 
-	// Implemented as per wikipedia description of alpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
-	std::pair<Move, int> Search::SearchPositionPruned(
-		Board& board, 
-		const unsigned char maxDepth, 
-		int alpha,
-		int beta)
-	{
-		METRICS_SEARCH_INCREMENT(CollectMetrics, m_metrics, 1);
+    // Implemented as per wikipedia description of alpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+    std::pair<Move, int> Search::SearchPositionPruned(
+        Board& board, 
+        const unsigned char maxDepth, 
+        int alpha,
+        int beta)
+    {
+        METRICS_SEARCH_INCREMENT(CollectMetrics, m_metrics, 1);
 
-		if (maxDepth == 0)
-		{
-			METRICS_EVALUATION_START(CollectMetrics, m_metrics);
+        if (maxDepth == 0)
+        {
+            METRICS_EVALUATION_START(CollectMetrics, m_metrics);
 
-			// Convert from symmetric scoring to +ve for white, -ve for black
-			int eval = m_evaluator.Evaluate(board) * (board.GetWhiteToPlay() ? +1 : -1);
+            // Convert from symmetric scoring to +ve for white, -ve for black
+            int eval = m_evaluator.Evaluate(board) * (board.GetWhiteToPlay() ? +1 : -1);
 
-			METRICS_EVALUATION_STOP(CollectMetrics, m_metrics);
-			METRICS_EVALUATION_INCREMENT(CollectMetrics, m_metrics, 1);
+            METRICS_EVALUATION_STOP(CollectMetrics, m_metrics);
+            METRICS_EVALUATION_INCREMENT(CollectMetrics, m_metrics, 1);
 
-			return std::pair<Move, int>(Move(), eval);
-		}
+            return std::pair<Move, int>(Move(), eval);
+        }
 
-		Move bestMove;
-		int  bestEval;
+        Move bestMove;
+        int  bestEval;
 
-		METRICS_GENERATION_START(CollectMetrics, m_metrics);
+        METRICS_GENERATION_START(CollectMetrics, m_metrics);
 
-		const MoveList moveList = MoveGenerator::GenerateMoves(board);
+        const MoveList moveList = MoveGenerator::GenerateMoves(board);
 
-		METRICS_GENERATION_STOP(CollectMetrics, m_metrics);
-		METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, static_cast<int>(moveList.size()));
+        METRICS_GENERATION_STOP(CollectMetrics, m_metrics);
+        METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, static_cast<int>(moveList.size()));
 
-		if (board.GetWhiteToPlay())
-		{
-			bestEval = std::numeric_limits<int>::min();
+        if (board.GetWhiteToPlay())
+        {
+            bestEval = std::numeric_limits<int>::min();
 
-			for (const Move& move : moveList)
-			{
-				MoveInverse moveInverse(board, move);
-				board.MakeMove(move);
+            for (const Move& move : moveList)
+            {
+                MoveInverse moveInverse(board, move);
+                board.MakeMove(move);
 
-				std::pair<Move, int> moveResult = SearchPositionPruned(board, maxDepth - 1, alpha, beta);
+                std::pair<Move, int> moveResult = SearchPositionPruned(board, maxDepth - 1, alpha, beta);
 
-				if (moveResult.second > bestEval)
-				{
-					bestMove = move;
-					bestEval = moveResult.second;
-				}
+                if (moveResult.second > bestEval)
+                {
+                    bestMove = move;
+                    bestEval = moveResult.second;
+                }
 
-				board.UndoMove(moveInverse);
+                board.UndoMove(moveInverse);
 
-				if (bestEval >= beta)
-					break;
+                if (bestEval >= beta)
+                    break;
 
-				alpha = std::max(alpha, bestEval);
-			}
-		}
-		else
-		{
-			bestEval = std::numeric_limits<int>::max();
+                alpha = std::max(alpha, bestEval);
+            }
+        }
+        else
+        {
+            bestEval = std::numeric_limits<int>::max();
 
-			for (const Move& move : moveList)
-			{
-				MoveInverse moveInverse(board, move);
-				board.MakeMove(move);
+            for (const Move& move : moveList)
+            {
+                MoveInverse moveInverse(board, move);
+                board.MakeMove(move);
 
-				std::pair<Move, int> moveResult = SearchPositionPruned(board, maxDepth - 1, alpha, beta);
+                std::pair<Move, int> moveResult = SearchPositionPruned(board, maxDepth - 1, alpha, beta);
 
-				if (moveResult.second < bestEval)
-				{
-					bestMove = move;
-					bestEval = moveResult.second;
-				}
+                if (moveResult.second < bestEval)
+                {
+                    bestMove = move;
+                    bestEval = moveResult.second;
+                }
 
-				board.UndoMove(moveInverse);
+                board.UndoMove(moveInverse);
 
-				if (bestEval <= alpha)
-					break;
+                if (bestEval <= alpha)
+                    break;
 
-				beta = std::min(beta, bestEval);
-			}
-		}
+                beta = std::min(beta, bestEval);
+            }
+        }
 
-		return std::pair<Move, int>(bestMove, bestEval);
-	}
+        return std::pair<Move, int>(bestMove, bestEval);
+    }
 }

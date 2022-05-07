@@ -12,8 +12,8 @@ using namespace ChessEngine;
 
 int main()
 {
-	Game game;
-	game.StartGame();
+    Game game;
+    game.StartGame();
 
-	return 0;
+    return 0;
 }

@@ -7,11 +7,11 @@
 
 namespace ChessEngine
 {
-	class AsciiUI
-	{
-	public:
+    class AsciiUI
+    {
+    public:
 
-		// Get an ascii representation of the board
-		static std::string GetAscii(const Board& board);
-	};
+        // Get an ascii representation of the board
+        static std::string GetAscii(const Board& board);
+    };
 }
