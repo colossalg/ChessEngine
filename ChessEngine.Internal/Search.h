@@ -28,7 +28,5 @@ namespace ChessEngine
         BoardEvaluator m_evaluator; // The board evaluator used to evaluate positions during search
 
         SearchMetrics m_metrics;    // The metrics collected during the search
-
-        TranspositionTable m_transpositionTable{ 10000 };   // The transposition table
     };
 }

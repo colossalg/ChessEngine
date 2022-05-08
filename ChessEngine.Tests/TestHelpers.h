@@ -10,8 +10,7 @@ namespace Microsoft::VisualStudio::CppUnitTestFramework
         wss << "TranspositionTableEntry { "
             << entry.GetHash() << ", "
             << (entry.IsInitialized() ? "true, " : "false, ")
-            << entry.GetDepthFromRoot() << ", "
-            << entry.GetDepthToLeaves() << ", "
+            << entry.GetDepth() << ", "
             << entry.GetEval()
             << " }";
 

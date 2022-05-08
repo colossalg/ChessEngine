@@ -39,7 +39,7 @@ namespace ChessEngine
 
     // Implemented as per wikipedia description of alpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
     std::pair<Move, int> Search::SearchPositionPruned(
-        Board& board, 
+        Board& board,
         const unsigned char maxDepth, 
         int alpha,
         int beta)

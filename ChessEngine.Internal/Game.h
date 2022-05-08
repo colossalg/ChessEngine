@@ -2,6 +2,7 @@
 
 #include "AsciiUI.h"
 #include "Board.h"
+#include "Search.h"
 
 namespace ChessEngine
 {
@@ -24,8 +25,9 @@ namespace ChessEngine
 
         bool m_isComputerWhite; // Whether the computer is playing white or not
 
-        Board m_board;  // The current board for this game
+        Board  m_board;     // The current board for this game
+        Search m_search;    // The current search for this game
 
-        AsciiUI m_tui;  // The tui for this game
+        AsciiUI m_tui;      // The tui for this game
     };
 }
