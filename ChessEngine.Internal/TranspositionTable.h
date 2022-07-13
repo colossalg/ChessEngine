@@ -18,10 +18,10 @@ namespace ChessEngine
         // Create a new transposition table
         TranspositionTable(size_t maxEntries);
 
-        // Get a pointer to the entry with a given hash (returns nullptr if no such entry exists)
-        TranspositionTableEntry* GetEntry(unsigned int hash);
+        // Get the entry with a given hash
+        TranspositionTableEntry& GetEntry(unsigned int hash);
 
-        // Insert an entry in to the transposition table. In the case of a collision, then
+        // Insert an entry in to the transposition table. In the case of a collision,
         // the replacement strategy is used to determine which entry should be kept
         void InsertEntry(const TranspositionTableEntry& entry);
 

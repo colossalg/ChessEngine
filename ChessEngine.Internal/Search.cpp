@@ -19,6 +19,46 @@ namespace
 
 namespace ChessEngine
 {
+    MoveList SortMoves(const MoveList& moveList)
+    {
+        BoardEvaluator boardEvaluator;
+
+        const auto& comp = [](const Move& move1, const Move& move2) -> bool
+        {
+            if (move1.IsPromotion() && !move2.IsPromotion())
+            {
+                return true;
+            }
+
+            if (move1.IsCapture() && !move2.IsCapture())
+            {
+                return true;
+            }
+
+            if ((move1.IsKingsideCastles() || move1.IsQueensideCastles()) &&
+                !(move2.IsKingsideCastles() || move2.IsQueensideCastles()))
+            {
+                return true;
+            }
+
+            return false;
+        };
+
+        MoveList sorted;
+
+        for (const auto& move : moveList)
+        {
+            sorted.insert(
+                std::find_if(
+                    sorted.cbegin(),
+                    sorted.cend(),
+                    [&comp, &move](const Move& curr) -> bool { return comp(move, curr); }),
+                move);
+        }
+
+        return sorted;
+    }
+
     std::pair<Move, int> Search::SearchPosition(Board& board, const unsigned char maxDepth)
     {
         METRICS_SET_MAX_DEPTH(CollectMetrics, m_metrics, maxDepth);
@@ -37,7 +77,8 @@ namespace ChessEngine
         return searchResult;
     }
 
-    // Implemented as per wikipedia description of alpha-beta pruning: https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+    // Implemented as per wikipedia description of alpha-beta pruning:
+    // https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
     std::pair<Move, int> Search::SearchPositionPruned(
         Board& board,
         const unsigned char maxDepth, 
@@ -64,7 +105,7 @@ namespace ChessEngine
 
         METRICS_GENERATION_START(CollectMetrics, m_metrics);
 
-        const MoveList moveList = MoveGenerator::GenerateMoves(board);
+        const MoveList moveList = SortMoves(MoveGenerator::GenerateMoves(board));
 
         METRICS_GENERATION_STOP(CollectMetrics, m_metrics);
         METRICS_GENERATION_INCREMENT(CollectMetrics, m_metrics, static_cast<int>(moveList.size()));

@@ -10,7 +10,7 @@ namespace ChessEngine
             [](const TranspositionTableEntry& older, const TranspositionTableEntry& newer) -> bool
             {
                 // TODO -- Come up with a better replacement strategy than this
-                return newer.GetDepth() > older.GetDepth();
+                return true;
             };
 
     TranspositionTable::TranspositionTable(size_t maxEntries)
@@ -18,11 +18,9 @@ namespace ChessEngine
     {
     }
 
-    TranspositionTableEntry* TranspositionTable::GetEntry(unsigned int hash)
+    TranspositionTableEntry& TranspositionTable::GetEntry(unsigned int hash)
     {
-        const unsigned int index = hash % m_entries.size();
-
-        return ((m_entries[index].GetHash() == hash) ? &m_entries[index] : nullptr);
+        return m_entries[hash % m_entries.size()];
     }
 
     void TranspositionTable::InsertEntry(const TranspositionTableEntry& entry)

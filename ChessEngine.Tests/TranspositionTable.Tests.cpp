@@ -15,16 +15,16 @@ namespace ChessEngineTests
     {
     public:
         
-        TEST_METHOD(TestGetValidAndInvalidHashes)
+        TEST_METHOD(TestInitialization)
         {
             TranspositionTable table(10);
             table.InsertEntry(TranspositionTableEntry(1U, 0, 0, Move()));
 
-            // Assert that if you try to get an entry with a hash that does exist in the table it returns a valid pointer
-            Assert::IsTrue(table.GetEntry(1U) != nullptr);
+            // Assert that if you try to get an entry with a hash that has been instreted at then the entry is initialized
+            Assert::IsTrue(table.GetEntry(1U).IsInitialized());
 
-            // Assert that if you try to get an entry with a hash that does not exist in the table it returns nullptr
-            Assert::IsTrue(table.GetEntry(2U) == nullptr);
+            // Assert that if you try to get an entry with a hash that has not been inserted at then the entry is NOT initialized
+            Assert::IsFalse(table.GetEntry(2U).IsInitialized());
         }
 
         TEST_METHOD(TestNumEntriesCantExceedMaxEntries)
@@ -40,9 +40,9 @@ namespace ChessEngineTests
             // Assert that the entries wrapped just as expected
             for (unsigned int i = 90; i < 100; i++)
             {
-                TranspositionTableEntry* entry = table.GetEntry(i);
-                Assert::IsTrue(entry != nullptr);
-                Assert::AreEqual(TranspositionTableEntry(i, 0, 0, Move()), *entry);
+                TranspositionTableEntry& entry = table.GetEntry(i);
+                Assert::IsTrue(entry.IsInitialized());
+                Assert::AreEqual(TranspositionTableEntry(i, 0, 0, Move()), entry);
             }
         }
     };

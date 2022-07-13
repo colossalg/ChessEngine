@@ -59,7 +59,7 @@ namespace ChessEngine
 
     std::optional<Move> Game::GetComputerMove()
     {
-        std::pair<Move, int> searchResult = m_search.SearchPosition(m_board, 6);
+        std::pair<Move, int> searchResult = m_search.SearchPosition(m_board, 7);
         Move bestMove = searchResult.first;
         int  bestEval = searchResult.second;
 
@@ -87,6 +87,7 @@ namespace ChessEngine
             auto matchIt = moveMatch.begin();
             matchIt++;
 
+            // BUG: En-passan is not currently working.
             if (moveMatch.size() == 2)
             {
                 const Square init = Helper::SquareFromString(*matchIt);
