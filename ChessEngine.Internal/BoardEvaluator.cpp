@@ -220,7 +220,7 @@ namespace ChessEngine
             );
     }
 
-    inline int BoardEvaluator::EvaluateWhitePawn(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateWhitePawn(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -260,7 +260,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateBlackPawn(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateBlackPawn(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -300,7 +300,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateWhiteRook(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateWhiteRook(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -331,7 +331,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateBlackRook(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateBlackRook(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -362,7 +362,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateWhiteKing(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateWhiteKing(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -409,7 +409,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateBlackKing(const Board& board, const Square square)
+    int BoardEvaluator::EvaluateBlackKing(const Board& board, const Square square) const
     {
         const Piece piece = board.GetPieces()[square];
 
@@ -456,7 +456,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateWhiteKingCover(const Col col)
+    int BoardEvaluator::EvaluateWhiteKingCover(const Col col) const
     {
         const unsigned int index = col + 1;
 
@@ -494,7 +494,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline int BoardEvaluator::EvaluateBlackKingCover(const Col col)
+    int BoardEvaluator::EvaluateBlackKingCover(const Col col) const
     {
         const unsigned int index = col + 1;
 
@@ -532,7 +532,7 @@ namespace ChessEngine
         return evaluation;
     }
 
-    inline void BoardEvaluator::Reset()
+    void BoardEvaluator::Reset()
     {
         m_whitePawnValues = 0;
         m_blackPawnValues = 0;

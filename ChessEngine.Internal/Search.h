@@ -25,6 +25,9 @@ namespace ChessEngine
             int alpha,
             int beta);
 
+        // Sort a list of moves based upon which look the most appealing for the given board
+        MoveList SortMoves(const MoveList& moveList);
+
         BoardEvaluator m_evaluator; // The board evaluator used to evaluate positions during search
 
         SearchMetrics m_metrics;    // The metrics collected during the search

@@ -27,23 +27,23 @@ namespace ChessEngine
     private:
 
         // Evaluate a white/black pawn for bonuses/penalties beyond its base value
-        inline int EvaluateWhitePawn(const Board& board, const Square square);
-        inline int EvaluateBlackPawn(const Board& board, const Square square);
+        int EvaluateWhitePawn(const Board& board, const Square square) const;
+        int EvaluateBlackPawn(const Board& board, const Square square) const;
 
         // Evaluate a white/black rook for bonuses/penalties beyond its base value
-        inline int EvaluateWhiteRook(const Board& board, const Square square);
-        inline int EvaluateBlackRook(const Board& board, const Square square);
+        int EvaluateWhiteRook(const Board& board, const Square square) const;
+        int EvaluateBlackRook(const Board& board, const Square square) const;
 
         // Evaluate a white/black king for bonuses/penalties beyond its base value
-        inline int EvaluateWhiteKing(const Board& board, const Square square);
-        inline int EvaluateBlackKing(const Board& board, const Square square);
+        int EvaluateWhiteKing(const Board& board, const Square square) const;
+        int EvaluateBlackKing(const Board& board, const Square square) const;
 
         // Evaluate the king cover for white/black on a given file
-        inline int EvaluateWhiteKingCover(const Col col);
-        inline int EvaluateBlackKingCover(const Col col);
+        int EvaluateWhiteKingCover(const Col col) const;
+        int EvaluateBlackKingCover(const Col col) const;
 
         // Reset all member variables to their default values
-        inline void Reset();
+        void Reset();
 
         int m_whitePawnValues = 0;  // The value of the white pawns
         int m_blackPawnValues = 0;  // The value of the black pawns

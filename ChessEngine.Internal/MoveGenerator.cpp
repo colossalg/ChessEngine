@@ -57,7 +57,7 @@ namespace ChessEngine
 
         // Helper function checking whether a given square plus an offset from that square is on the board, returning
         // a boolean indicating whether it is or not, and setting the square passed as a reference if so.
-        inline bool CheckMoveLandsOnBoard(const Square init, const char offset, Square& dest)
+        bool CheckMoveLandsOnBoard(const Square init, const char offset, Square& dest)
         {
             const char destIndex120 = Mailbox64[init] + offset;
             const char destIndex64 = Mailbox120[destIndex120];
@@ -74,7 +74,7 @@ namespace ChessEngine
         }
 
         // Helper function returns the destination square which is the sum of a given initial square and offset.
-        inline Square OffsetSquare(const Square init, const char offset)
+        Square OffsetSquare(const Square init, const char offset)
         {
             return Square(static_cast<char>(init) + offset);
         }
@@ -224,7 +224,7 @@ namespace ChessEngine
         return false;
     }
 
-    inline void MoveGenerator::GeneratePawnMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GeneratePawnMoves(MoveList& moveList, const Board& board, const Square init)
     {
         const Row row = Helper::RowFromSquare(init);
         const bool onPlayersRank2 = ((board.GetWhiteToPlay() && row == 1) || (!board.GetWhiteToPlay() && row == 6));
@@ -327,7 +327,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateKnightMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GenerateKnightMoves(MoveList& moveList, const Board& board, const Square init)
     {
         for (auto offset : KnightJumps)
         {
@@ -349,7 +349,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateBishopMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GenerateBishopMoves(MoveList& moveList, const Board& board, const Square init)
     {
         for (auto lineOffset : Diagonals)
         {
@@ -357,7 +357,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateRookMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GenerateRookMoves(MoveList& moveList, const Board& board, const Square init)
     {
         for (auto lineOffset : RanksAndFiles)
         {
@@ -365,7 +365,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateQueenMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GenerateQueenMoves(MoveList& moveList, const Board& board, const Square init)
     {
         for (auto lineOffset : DiagonalsRanksAndFiles)
         {
@@ -373,7 +373,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateKingMoves(MoveList& moveList, const Board& board, const Square init)
+    void MoveGenerator::GenerateKingMoves(MoveList& moveList, const Board& board, const Square init)
     {
         Square dest;
 
@@ -434,7 +434,7 @@ namespace ChessEngine
         }
     }
 
-    inline void MoveGenerator::GenerateMovesAlongLine(MoveList& moveList, const Board& board, const Square init, const char lineOffset)
+    void MoveGenerator::GenerateMovesAlongLine(MoveList& moveList, const Board& board, const Square init, const char lineOffset)
     {
         // Search each square along the given line (diagonal, rank or file) starting at init until either the next square
         // is off the board or the next square is occupied. If the next square is occupied check whether we can capture.
