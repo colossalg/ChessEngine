@@ -1,11 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include "Board.h"
 #include "Definitions.h"
 #include "Helper.h"

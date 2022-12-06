@@ -1,7 +1,5 @@
 #include "pch.h"
 
-#include <optional>
-
 #include "TranspositionTable.h"
 
 namespace ChessEngine

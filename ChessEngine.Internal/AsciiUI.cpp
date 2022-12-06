@@ -2,10 +2,6 @@
 
 #include "AsciiUI.h"
 
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
-
 #include "Board.h"
 #include "Helper.h"
 #include "Piece.h"

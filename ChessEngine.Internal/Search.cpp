@@ -2,10 +2,6 @@
 
 #include "Search.h"
 
-#include <chrono>
-#include <limits>
-#include <tuple>
-
 #include "Board.h"
 #include "Definitions.h"
 #include "Move.h"

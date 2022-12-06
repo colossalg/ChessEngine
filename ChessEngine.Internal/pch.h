@@ -12,12 +12,22 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+#include <exception>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <limits>
 #include <list>
+#include <map>
 #include <optional>
+#include <regex>
 #include <stdexcept>
 #include <string>
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 #endif //PCH_H

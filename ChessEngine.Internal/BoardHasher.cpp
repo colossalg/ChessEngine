@@ -2,9 +2,6 @@
 
 #include "BoardHasher.h"
 
-#include <cstdlib>
-#include <map>
-
 #include "Board.h"
 #include "Helper.h"
 #include "Move.h"

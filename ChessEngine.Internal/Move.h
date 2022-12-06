@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Definitions.h"
 #include "Piece.h"
 

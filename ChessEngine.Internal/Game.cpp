@@ -2,13 +2,6 @@
 
 #include "Game.h"
 
-#include <exception>
-#include <iostream>
-#include <optional>
-#include <regex>
-#include <string>
-#include <tuple>
-
 #include "Helper.h"
 #include "Move.h"
 #include "MoveGenerator.h"

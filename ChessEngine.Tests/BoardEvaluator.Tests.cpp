@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include <string>
-#include <vector>
-
 #include "Board.h"
 #include "BoardEvaluator.h"
 #include "Helper.h"

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include <vector>
-
 #include "Definitions.h"
 #include "Move.h"
 #include "Piece.h"

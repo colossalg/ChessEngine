@@ -43,7 +43,7 @@ namespace ChessEngine
 
     private:
 
-        unsigned int m_hash = 0ULL; // The Zobrist hash for the position corresponding to this entry
+        unsigned int m_hash = 0U;   // The Zobrist hash for the position corresponding to this entry
         bool m_initialized = false; // Whether this entry has been initialized yet or is still empty/default constructed
         unsigned char m_depth = 0U; // The depth of the last evaluation of the position corresponding to this entry
         int m_eval = 0;             // The value of the last evaluation of the position corresponding to this entry
