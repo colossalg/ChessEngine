@@ -173,8 +173,6 @@
     </ClCompile>
     <ClCompile Include="Piece.Tests.cpp" />
     <ClCompile Include="Helper.Tests.cpp" />
-    <ClCompile Include="TranspositionTable.Tests.cpp" />
-    <ClCompile Include="TranspositionTableEntry.Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

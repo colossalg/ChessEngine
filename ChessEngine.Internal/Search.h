@@ -2,7 +2,6 @@
 
 #include "BoardEvaluator.h"
 #include "SearchMetrics.h"
-#include "TranspositionTable.h"
 
 namespace ChessEngine
 {

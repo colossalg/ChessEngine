@@ -169,8 +169,6 @@
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Search.h" />
     <ClInclude Include="SearchMetrics.h" />
-    <ClInclude Include="TranspositionTable.h" />
-    <ClInclude Include="TranspositionTableEntry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsciiUI.cpp" />
@@ -192,8 +190,6 @@
     <ClCompile Include="Search.cpp" />
     <ClCompile Include="SearchMetrics.cpp" />
     <ClCompile Include="Static.cpp" />
-    <ClCompile Include="TranspositionTable.cpp" />
-    <ClCompile Include="TranspositionTableEntry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
