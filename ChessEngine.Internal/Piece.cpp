@@ -10,7 +10,7 @@ namespace ChessEngine
 
         if (isWhite)
         {
-            m_piece |= IsWhiteBitMap;
+            m_piece |= IsWhiteMask;
         }
     }
 
@@ -49,7 +49,7 @@ namespace ChessEngine
 
         if (std::isupper(ascii))
         {
-            m_piece |= IsWhiteBitMap;
+            m_piece |= IsWhiteMask;
         }
     }
 

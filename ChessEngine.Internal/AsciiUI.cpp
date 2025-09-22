@@ -26,10 +26,10 @@ namespace ChessEngine
 
         // The actual board (squares, pieces, rows/columns labels, etc.)
         ss << "   +---+---+---+---+---+---+---+---+  " << "\n";
-        for (unsigned int row = 7; Helper::IsValidRow(row); row--)
+        for (auto row = Row(7); Helper::IsValidRow(row); row--)
         {
             ss << " " << row + 1 << " |";
-            for (unsigned int col = 0; Helper::IsValidCol(col); col++)
+            for (auto col = Col(0); Helper::IsValidCol(col); col++)
             {
                 Square square = Helper::SquareFromRowAndCol(row, col);
                 Piece piece = board.GetPieces()[square];
