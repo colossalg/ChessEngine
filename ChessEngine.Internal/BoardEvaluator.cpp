@@ -366,9 +366,6 @@ namespace ChessEngine
     {
         const Piece piece = board.GetPieces()[square];
 
-        const Row row = Helper::RowFromSquare(square);
-        const Col col = Helper::ColFromSquare(square);
-
         // Reward/penalize the players based upon their king position and safety.
         // This is treated differently for the opening/middle game and end game.
 
@@ -382,6 +379,7 @@ namespace ChessEngine
         {
             evaluation += KingPositionModifiers[square];
 
+            const auto col = Helper::ColFromSquare(square);
             if (col > 4)
             {
                 evaluation += EvaluateWhiteKingCover(5);
@@ -413,9 +411,6 @@ namespace ChessEngine
     {
         const Piece piece = board.GetPieces()[square];
 
-        const Row row = Helper::RowFromSquare(square);
-        const Col col = Helper::ColFromSquare(square);
-
         // Reward/penalize the players based upon their king position and safety.
         // This is treated differently for the opening/middle game and end game.
 
@@ -429,6 +424,7 @@ namespace ChessEngine
         {
             evaluation += KingPositionModifiers[Mirror[square]];
 
+            const auto col = Helper::ColFromSquare(square);
             if (col > 4)
             {
                 evaluation += EvaluateBlackKingCover(5);

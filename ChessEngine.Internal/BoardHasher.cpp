@@ -157,13 +157,17 @@ namespace ChessEngine
             BlackPieceRandNums[type] = Helper::CreateRandomArray<64>();
         }
 
-        unsigned int WhiteToMoveRandNum = static_cast<unsigned int>(rand());
-        unsigned int WhiteKingsideCastlingRandNum = static_cast<unsigned int>(rand());
-        unsigned int WhiteQueensideCastlingRandNum = static_cast<unsigned int>(rand());
-        unsigned int BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
-        unsigned int BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
+        // TODO - This is currently broken, rand() only returns an integer value
+        // in the range [0, 2^16) which will result in an incredible number of
+        // collisions when each board state is hashed into this range.
+        // The hashes should probably be 64-bit, apparently this is the standard.
+        WhiteToPlayRandNum = static_cast<unsigned int>(rand());
+        WhiteKingsideCastlingRandNum = static_cast<unsigned int>(rand());
+        WhiteQueensideCastlingRandNum = static_cast<unsigned int>(rand());
+        BlackKingsideCastlingRandNum = static_cast<unsigned int>(rand());
+        BlackQueensideCastlingRandNum = static_cast<unsigned int>(rand());
 
-        std::array<unsigned int, 8> EnPassantRandNums = Helper::CreateRandomArray<8>();
+        EnPassantRandNums = Helper::CreateRandomArray<8>();
 
         // Prevent initializing the random numbers more than once
         AreRandomNumbersInitialized = true;

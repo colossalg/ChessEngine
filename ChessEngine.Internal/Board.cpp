@@ -291,7 +291,10 @@ namespace ChessEngine
         // Update en passan square
         if (move.IsDoublePawnPush())
         {
-            SetEnPassant(init + (m_whiteToPlay ? +8 : -8));
+            // TODO - See note about removing the Square and EnPassant types in Definitions.h.
+            // If this is done, then this cast can probably be removed.
+            const auto square = static_cast<Square>(static_cast<char>(init) + (m_whiteToPlay ? +8 : -8));
+            SetEnPassant(square);
         }
         else
         {

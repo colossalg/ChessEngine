@@ -52,11 +52,7 @@ namespace ChessEngine
 
     std::optional<Move> Game::GetComputerMove()
     {
-        std::pair<Move, int> searchResult = m_search.SearchPosition(m_board, 7);
-        Move bestMove = searchResult.first;
-        int  bestEval = searchResult.second;
-
-        return bestMove;
+        return m_search.SearchPosition(m_board, 7).first;
     }
 
     std::optional<Move> Game::GetPlayerMove()

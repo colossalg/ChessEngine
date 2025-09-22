@@ -56,6 +56,10 @@ namespace ChessEngine
             std::array<unsigned int, N> arr;
 
             for (auto& number : arr)
+                // TODO - This is currently broken, rand() only returns an integer value
+                // in the range [0, 2^16) which will result in an incredible number of
+                // collisions when each board state is hashed into this range.
+                // The hashes should probably be 64-bit, apparently this is the standard.
                 number = static_cast<unsigned int>(rand());
 
             return arr;

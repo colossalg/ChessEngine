@@ -20,7 +20,7 @@ namespace ChessEngineTests
         // Helper function testing whether a given move is contained within moveList
         void TestListContainsMove(const MoveList& moveList, const Move move, const bool shouldBeContained)
         {
-            auto& moveLoc = std::find(moveList.begin(), moveList.end(), move);
+            auto moveLoc = std::find(moveList.begin(), moveList.end(), move);
 
             std::wstring moveWStr = Helper::StringToWString(move.GetString());
 
